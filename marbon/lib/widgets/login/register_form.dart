@@ -23,13 +23,16 @@ class RegisterForm extends StatelessWidget {
             width: button_width,
             height: button_height,
             child: TextButton(
+              child: const Text(
+                "Register",
+                style: TextStyle(fontSize: 20),
+              ),
               onPressed: () {
                 // 3. 유효성 검사
                 if (_formKey.currentState!.validate()) {
                   Navigator.pushNamed(context, "/register_email");
                 }
               },
-              child: const Text("Register"),
             ),
           ),
         ],

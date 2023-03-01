@@ -4,7 +4,9 @@ import 'package:marbon/size.dart';
 import 'package:marbon/widgets/login/email_pinput.dart';
 
 class ForgetPwEmailPage extends StatelessWidget {
-  const ForgetPwEmailPage({super.key});
+  final _formKey = GlobalKey<FormState>();
+
+  ForgetPwEmailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class ForgetPwEmailPage extends StatelessWidget {
               child: ListView(
                 children: [
                   const Text(
-                    "Enter authentication coder",
+                    "Enter authentication code",
                     style: TextStyle(
                       fontSize: 25,
                       color: dark_green_color,
@@ -54,40 +56,82 @@ class ForgetPwEmailPage extends StatelessWidget {
                   const SizedBox(
                     height: 40,
                   ),
-                  const EmailPinput(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: transparent_color,
-                      foregroundColor: dark_green_color,
-                    ),
-                    child: const Text(
-                      "Resend code",
-                      style: TextStyle(fontSize: 17),
-                    ),
-                    onPressed: () {
-                      // 코드 다시 전송하는 함수
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: button_width,
-                    height: button_height,
-                    child: TextButton(
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {
-                        // 인증코드가 맞는지 확인하고
-                        // 맞으면 이메일로 이전 비밀번호 보내주고 로그인페이지로 이동 (보냈다고 팝업띄우기)
-                        // 인증코드가 틀리다면 잘못된 코드입니다 알림 띄우고 숫자 지우기
-                        Navigator.pushNamed(context, "/login");
-                      },
-                    ),
-                  ),
+                  Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          const EmailPinput(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: transparent_color,
+                              foregroundColor: dark_green_color,
+                            ),
+                            child: const Text(
+                              "Resend code",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            onPressed: () {
+                              // 코드 다시 전송하는 함수
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: button_width,
+                            height: button_height,
+                            child: TextButton(
+                              child: const Text(
+                                "Login",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () {
+                                // 인증코드가 맞는지 확인하고
+                                // 맞으면 이메일로 이전 비밀번호 보내주고 로그인페이지로 이동 (보냈다고 팝업띄우기)
+                                // 인증코드가 틀리다면 잘못된 코드입니다 알림 띄우고 숫자 지우기
+                                if (_formKey.currentState!.validate()) {
+                                  Navigator.pushNamed(context, "/login");
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      )),
+                  // const EmailPinput(),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
+                  // TextButton(
+                  //   style: TextButton.styleFrom(
+                  //     backgroundColor: transparent_color,
+                  //     foregroundColor: dark_green_color,
+                  //   ),
+                  //   child: const Text(
+                  //     "Resend code",
+                  //     style: TextStyle(fontSize: 17),
+                  //   ),
+                  //   onPressed: () {
+                  //     // 코드 다시 전송하는 함수
+                  //   },
+                  // ),
+                  // const SizedBox(height: 20),
+                  // SizedBox(
+                  //   width: button_width,
+                  //   height: button_height,
+                  //   child: TextButton(
+                  //     child: const Text(
+                  //       "Login",
+                  //       style: TextStyle(fontSize: 20),
+                  //     ),
+                  //     onPressed: () {
+                  //       // 인증코드가 맞는지 확인하고
+                  //       // 맞으면 이메일로 이전 비밀번호 보내주고 로그인페이지로 이동 (보냈다고 팝업띄우기)
+                  //       // 인증코드가 틀리다면 잘못된 코드입니다 알림 띄우고 숫자 지우기
+                  //       Navigator.pushNamed(context, "/login");
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),

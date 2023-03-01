@@ -42,13 +42,13 @@ class ForgetPwPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Text(
-                          "Don't worry! Please enter the phone ",
+                          "Don't worry! Please enter the Email ",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 16, color: explain_text_color),
                         ),
                         Text(
-                          "number linked with your account",
+                          "linked with your account",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,

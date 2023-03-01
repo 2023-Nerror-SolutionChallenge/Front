@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         "/register": (context) => const RegisterPage(),
         "/register_email": (context) => RegisterEmailPage(),
         "/forget_pw": (context) => ForgetPwPage(),
-        "/forget_pw_email": (context) => const ForgetPwEmailPage(),
+        "/forget_pw_email": (context) => ForgetPwEmailPage(),
         "/smart_scan": (context) => const SmartScan(),
       },
     );
