@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
-import 'package:marbon/widgets/login_form.dart';
+import 'package:marbon/widgets/login/login_form.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

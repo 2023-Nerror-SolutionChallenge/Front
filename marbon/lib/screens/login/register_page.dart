@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
-import 'package:marbon/widgets/register_form.dart';
+import 'package:marbon/widgets/login/register_form.dart';
 
-import '../size.dart';
+import '../../size.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});

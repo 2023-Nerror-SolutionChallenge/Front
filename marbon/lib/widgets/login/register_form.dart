@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/widgets/input_field.dart';
-import '../size.dart';
+import '../../size.dart';
 
 class RegisterForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+
+  RegisterForm({super.key});
   @override
   Widget build(BuildContext context) {
     return Form(

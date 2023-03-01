@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
+import '../../widgets/input_field.dart';
 
-import '../widgets/input_field.dart';
+class RegisterEmailPage extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>(); // 글로벌 key
 
-class ForgetPwPage extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+  RegisterEmailPage({super.key});
 
-  ForgetPwPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,27 +28,27 @@ class ForgetPwPage extends StatelessWidget {
               child: ListView(
                 children: [
                   const Text(
-                    "Forget password?",
+                    "Register",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 35, color: dark_green_color),
+                    style: TextStyle(
+                      fontSize: 40,
+                      color: dark_green_color,
+                    ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: title_input_gap),
                   SizedBox(
                     height: two_line_text_box,
-                    width: 330,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Text(
-                          "Don't worry! Please enter the phone ",
+                          "We have sent an email to your email account",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 16, color: explain_text_color),
                         ),
                         Text(
-                          "number linked with your account",
+                          "with a verification code!",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
@@ -65,20 +65,19 @@ class ForgetPwPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        const InputField("Email", "email"),
+                        const InputField("  Ex) 1918787", "none"),
                         const SizedBox(height: input_button_gap),
                         SizedBox(
                           width: button_width,
                           height: button_height,
                           child: TextButton(
                             child: const Text(
-                              "Send code",
+                              "Register",
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.pushNamed(
-                                    context, "/forget_pw_email");
+                                Navigator.pushNamed(context, "/login");
                               }
                             },
                           ),

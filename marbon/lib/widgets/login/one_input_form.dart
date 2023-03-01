@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/size.dart';
 
-import 'input_field.dart';
+import '../input_field.dart';
 
 class OneInputForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>(); // 글로벌 key

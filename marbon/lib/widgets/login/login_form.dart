@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
 
-import 'input_field.dart';
+import '../input_field.dart';
 
 class LoginForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();

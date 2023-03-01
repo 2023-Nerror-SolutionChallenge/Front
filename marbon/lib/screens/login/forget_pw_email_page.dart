@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
-import 'package:marbon/widgets/email_pinput.dart';
+import 'package:marbon/widgets/login/email_pinput.dart';
 
 class ForgetPwEmailPage extends StatelessWidget {
   const ForgetPwEmailPage({super.key});
