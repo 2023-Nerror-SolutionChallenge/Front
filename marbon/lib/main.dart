@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/screens/smartscan/smartscan.dart';
+import 'package:marbon/screens/smartscan/smartscan_detail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/smartscan",
       routes: {
         "/smartscan": (context) => const SmartScan(),
+        "/smartscan_detail": (context) => const SmartScanDetail(),
       },
     );
   }
