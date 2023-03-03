@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:marbon/pages/main_page.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super (key: key);
@@ -86,7 +88,8 @@ class _HomePageState extends State<HomePage>{
                         borderRadius: BorderRadius.circular(90.0),
 
                       ),),
-                    onPressed: ()=>Container(),
+                    //Get Started 클릭 시 화면 전환 코드
+                    onPressed: ()=>Get.to(()=>MainPage()) ,
                     child: Text(
                       "Get Statred",
                       style: TextStyle(
