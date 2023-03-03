@@ -54,7 +54,7 @@ class LoginForm extends StatelessWidget {
               onPressed: () {
                 // 3. 유효성 검사
                 if (_formKey.currentState!.validate()) {
-                  Navigator.pushNamed(context, "/smart_scan");
+                  Navigator.pushNamed(context, "/main_screen");
                 }
               },
             ),
