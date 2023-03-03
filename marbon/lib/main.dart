@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/screens/home/home_page.dart';
+import 'package:marbon/screens/login/forget_pw_email_page.dart';
+import 'package:marbon/screens/login/forget_pw_page.dart';
 import 'package:marbon/screens/login/login_page.dart';
 import 'package:get/get.dart';
+import 'package:marbon/screens/login/register_email_page.dart';
+import 'package:marbon/screens/login/register_page.dart';
+import 'package:marbon/screens/main_screen.dart';
+
+import 'color.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,14 +22,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Marbon',
-      theme: ThemeData(     
-        primarySwatch: Colors.blue,
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xffEDEEDD),
+        // 버튼 테마
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: white_90_color,
+            backgroundColor: dark_green_color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(67),
+            ),
+          ),
+        ),
       ),
-      home: HomePage(),
-      initialRoute: "/",
-      getPages: [
-        GetPage(name: "/", page: ()=>LoginPage())
-      ],
+      initialRoute: "/home",
+      routes: {
+        "/home": (context) => const HomePage(),
+        "/login": (context) => const LoginPage(),
+        "/register": (context) => const RegisterPage(),
+        "/register_email": (context) => RegisterEmailPage(),
+        "/forget_pw": (context) => ForgetPwPage(),
+        "/forget_pw_email": (context) => ForgetPwEmailPage(),
+        "/main_screen": (context) => const MainScreen(),
+      },
     );
   }
 }
