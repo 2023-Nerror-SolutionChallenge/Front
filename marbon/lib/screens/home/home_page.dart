@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
+import 'package:marbon/screens/login/login_page.dart';
+import 'package:marbon/screens/login/register_page.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super (key: key);
@@ -86,7 +90,7 @@ class _HomePageState extends State<HomePage>{
                         borderRadius: BorderRadius.circular(90.0),
 
                       ),),
-                    onPressed: ()=>Container(),
+                    onPressed: ()=>Get.to(()=>LoginPage()),
                     child: Text(
                       "Get Statred",
                       style: TextStyle(
