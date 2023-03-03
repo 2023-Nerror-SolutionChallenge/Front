@@ -12,9 +12,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-     
+      title: 'Marbon',
+      theme: ThemeData(     
         primarySwatch: Colors.blue,
       ),
       initialRoute: "/",
@@ -22,5 +21,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
