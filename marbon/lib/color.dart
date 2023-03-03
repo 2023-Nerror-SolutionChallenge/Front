@@ -10,5 +10,4 @@ const Color dark_green_color = Color(0xff0A5227);
 const Color green_color = Color(0xff769A58);
 const Color yellow_green_color = Color(0xffB6BB6F);
 const Color yellow_color = Color(0xffFFE8A6);
-
 const Color placeholder_color = Color(0xffD0D0D0);
