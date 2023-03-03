@@ -17,22 +17,22 @@ class _HomePageState extends State<HomePage>{
       Stack(
         children: [
           Positioned(
-            top: 0,
+            top: 100,
             left: 0,
-            height: 700,
+            height: 400,
             child: Container(
-              height: 700,
+              height: 400,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("round_mail.png"),
+                  image: AssetImage("assets/img/round_mail.png"),
                   fit: BoxFit.cover
                 )
               ),
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 100,
             left: 20,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
