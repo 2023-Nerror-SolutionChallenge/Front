@@ -8,6 +8,8 @@ class SmartScanDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int mailCount = 100;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 40,
@@ -34,20 +36,35 @@ class SmartScanDetail extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            height: 110,
+            height: 120,
             width: double.infinity, // 주지않으면 텍스트의 크기와 동일해짐
             padding: const EdgeInsets.only(
               top: 40,
               left: smartscan_title_left,
             ),
             color: Colors.white,
-            child: const Text(
-              "Smartscan",
-              style: TextStyle(
-                color: text_green_color,
-                fontSize: 35,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Smartscan",
+                  style: TextStyle(
+                    color: text_green_color,
+                    fontSize: 35,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  "총 $mailCount건의 메일이 발견되었습니다.",
+                  style: const TextStyle(
+                    color: text_green_color,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
             ),
           ),
           Container(
@@ -64,38 +81,42 @@ class SmartScanDetail extends StatelessWidget {
           ),
           Expanded(
             // Vertical viewport was given unbounded height error 방지
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: const <Widget>[
-                CurvedListItem(
-                  category: 'Promotion',
-                  mailamount: 100,
-                  prevColor: Colors.white,
-                  color: Color(0xffFFE8A6),
-                  nextColor: Color(0xffB6BB6F),
-                ),
-                CurvedListItem(
-                  category: 'SNS',
-                  mailamount: 49,
-                  prevColor: Color(0xffFFE8A6),
-                  color: Color(0xffB6BB6F),
-                  nextColor: Color(0xff769A58),
-                ),
-                CurvedListItem(
-                  category: 'Bill Payment',
-                  mailamount: 78,
-                  prevColor: Color(0xffB6BB6F),
-                  color: Color(0xff769A58),
-                  nextColor: Color(0xff186235),
-                ),
-                CurvedListItem(
-                  category: 'Pinterest',
-                  mailamount: 78,
-                  prevColor: Color(0xff769A58),
-                  color: Color(0xff186235),
-                  nextColor: Color(0xff186235),
-                ),
-              ],
+            child: ScrollConfiguration(
+              behavior: const ScrollBehavior()
+                  .copyWith(overscroll: false), // 위로 스크롤 금지하도록 하는게 나을듯
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: const <Widget>[
+                  CurvedListItem(
+                    category: 'Promotion',
+                    mailamount: 9999,
+                    prevColor: Colors.white,
+                    color: Color(0xffFFE8A6),
+                    nextColor: Color(0xffB6BB6F),
+                  ),
+                  CurvedListItem(
+                    category: 'SNS',
+                    mailamount: 49,
+                    prevColor: Color(0xffFFE8A6),
+                    color: Color(0xffB6BB6F),
+                    nextColor: Color(0xff769A58),
+                  ),
+                  CurvedListItem(
+                    category: 'Bill Payment',
+                    mailamount: 78,
+                    prevColor: Color(0xffB6BB6F),
+                    color: Color(0xff769A58),
+                    nextColor: Color(0xff186235),
+                  ),
+                  CurvedListItem(
+                    category: 'Pinterest',
+                    mailamount: 78,
+                    prevColor: Color(0xff769A58),
+                    color: Color(0xff186235),
+                    nextColor: Color(0xff186235),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -104,7 +125,7 @@ class SmartScanDetail extends StatelessWidget {
   }
 }
 
-class CurvedListItem extends StatelessWidget {
+class CurvedListItem extends StatefulWidget {
   const CurvedListItem({
     super.key,
     required this.category,
@@ -121,54 +142,123 @@ class CurvedListItem extends StatelessWidget {
   final Color nextColor;
 
   @override
+  State<CurvedListItem> createState() => _CurvedListItemState();
+}
+
+class _CurvedListItemState extends State<CurvedListItem> {
+  @override
   Widget build(BuildContext context) {
+    bool isAllChecked = false;
+    bool panelActive = false;
+
     return Column(
       children: [
         Container(
           // 위쪽커브
-          color: prevColor,
+          color: widget.prevColor,
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: color,
+              color: widget.color,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(50.0),
               ),
             ),
           ),
         ),
-        Container(
-          // 내용
-          height: 50,
-          color: color,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                category,
-                style: const TextStyle(color: Colors.white, fontSize: 12),
+        // 접힘대상
+        ExpansionPanelList(
+          expansionCallback: (panelIndex, isExpanded) {
+            panelActive = !panelActive;
+            setState(() {
+              print(panelIndex);
+            });
+          },
+          children: <ExpansionPanel>[
+            // 기준 panel
+            ExpansionPanel(
+              isExpanded: panelActive, // 인덱스가 안먹혀서 그런듯
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return Container(
+                  height: 50,
+                  color: widget.color,
+                  padding: const EdgeInsets.only(left: 10, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          Checkbox(
+                            side: const BorderSide(
+                              color: text_green_color,
+                            ),
+                            value: isAllChecked,
+                            checkColor: text_green_color,
+                            onChanged: (bool? value) {
+                              setState(
+                                () {
+                                  isAllChecked = value!;
+                                },
+                              );
+                            },
+                          ),
+                          Text(
+                            widget.category,
+                            style: const TextStyle(
+                                color: text_green_color,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 70,
+                        child: Text(
+                          widget.mailamount.toString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              color: text_green_color,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              // 펼쳐질 panel
+              body: Container(
+                color: widget.color,
+                height: mail_list_height * 4,
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: const [
+                    MailListItem(
+                        sender: "헬로 인프런",
+                        title: "(광고) 사이드 프로젝트로 돌멩이 키우는 개발자가 있다?",
+                        content: "키드위님, 안녕하세요! 인프런 콘텐츠 에디터 아셀입니다."),
+                    MailListItem(
+                        sender: "헬로 인프런",
+                        title: "(광고) 사이드 프로젝트로 돌멩이 키우는 개발자가 있다?",
+                        content: "키드위님, 안녕하세요! 인프런 콘텐츠 에디터 아셀입니다."),
+                    MailListItem(
+                        sender: "헬로 인프런",
+                        title: "(광고) 사이드 프로젝트로 돌멩이 키우는 개발자가 있다?",
+                        content: "키드위님, 안녕하세요! 인프런 콘텐츠 에디터 아셀입니다."),
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: 2,
-              ),
-              Text(
-                mailamount.toString(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
-              ),
-              Row(),
-            ],
-          ),
+            ),
+          ],
         ),
         Container(
           // 아랫쪽커브
-          color: nextColor,
+          color: widget.nextColor,
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: color,
+              color: widget.color,
               borderRadius: const BorderRadius.only(
                 bottomRight: Radius.circular(50.0),
               ),
@@ -177,41 +267,84 @@ class CurvedListItem extends StatelessWidget {
         ),
       ],
     );
+  }
+}
 
-    // return Container(
-    //   color: nextColor,
-    //   child: Container(
-    //     decoration: BoxDecoration(
-    //       color: color,
-    //       borderRadius: const BorderRadius.only(
-    //         bottomLeft: Radius.circular(80.0),
-    //       ),
-    //     ),
-    //     padding: const EdgeInsets.only(
-    //       left: 32,
-    //       top: 80.0,
-    //       bottom: 50,
-    //     ),
-    //     child: Column(
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: <Widget>[
-    //           Text(
-    //             category,
-    //             style: const TextStyle(color: Colors.white, fontSize: 12),
-    //           ),
-    //           const SizedBox(
-    //             height: 2,
-    //           ),
-    //           Text(
-    //             mailamount.toString(),
-    //             style: const TextStyle(
-    //                 color: Colors.white,
-    //                 fontSize: 22,
-    //                 fontWeight: FontWeight.bold),
-    //           ),
-    //           Row(),
-    //         ]),
-    //   ),
-    // );
+class MailListItem extends StatefulWidget {
+  const MailListItem(
+      {super.key,
+      required this.sender,
+      required this.title,
+      required this.content});
+
+  final String sender;
+  final String title;
+  final String content;
+
+  @override
+  State<MailListItem> createState() => _MailListItemState();
+}
+
+class _MailListItemState extends State<MailListItem> {
+  @override
+  Widget build(BuildContext context) {
+    bool isChecked = false;
+
+    return Container(
+      height: mail_list_height,
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: [
+              Checkbox(
+                side: const BorderSide(
+                  color: text_green_color,
+                ),
+                value: isChecked,
+                checkColor: text_green_color,
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      isChecked = value!;
+                    },
+                  );
+                },
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.sender,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: text_green_color,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(widget.title,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: text_green_color,
+                        ),
+                        overflow: TextOverflow.ellipsis),
+                    Text(widget.content,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: placeholder_color,
+                        ),
+                        overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

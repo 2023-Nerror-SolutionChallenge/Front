@@ -13,3 +13,4 @@ const double two_line_text_box = 50;
 
 // smartscan
 const double smartscan_title_left = 30;
+const double mail_list_height = 80;

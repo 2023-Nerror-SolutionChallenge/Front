@@ -58,7 +58,7 @@ class SmartScan extends StatelessWidget {
                 width: 300,
                 height: 300,
                 child: Image.asset(
-                  'assets/images/scan.png',
+                  'assets/img/scan.png',
                   fit: BoxFit.fill,
                 ),
               ),
