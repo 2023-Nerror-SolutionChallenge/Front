@@ -31,12 +31,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   pinput: ^2.2.31
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  fluentui_icons: ^1.0.0
   get: ^4.3.0
+  motion_tab_bar: ^0.1.5
 
 dev_dependencies:
   flutter_test:

@@ -6,8 +6,9 @@ import 'package:marbon/screens/login/login_page.dart';
 import 'package:get/get.dart';
 import 'package:marbon/screens/login/register_email_page.dart';
 import 'package:marbon/screens/login/register_page.dart';
-import 'package:marbon/screens/main_screen.dart';
-
+import 'package:marbon/screens/mainscreen/smart_scan.dart';
+import 'package:marbon/tabbar/bottom_bar.dart';
+import 'package:marbon/tabbar/motion_tab_bar.dart';
 import 'color.dart';
 
 void main() {
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Marbon',
+      home: MotionTabBarPage(),
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xffEDEEDD),
         // 버튼 테마
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+     // home: const BottomBar(),
       initialRoute: "/home",
       routes: {
         "/home": (context) => const HomePage(),
@@ -43,8 +46,10 @@ class MyApp extends StatelessWidget {
         "/register_email": (context) => RegisterEmailPage(),
         "/forget_pw": (context) => ForgetPwPage(),
         "/forget_pw_email": (context) => ForgetPwEmailPage(),
-        "/main_screen": (context) => const MainScreen(),
+        "/bottom_bar": (context) =>  BottomBar(),
+        "/smart_scan" : (context) => const SmartScan(),
       },
     );
   }
 }
+
