@@ -7,6 +7,8 @@ import '../../widgets/input_field.dart';
 class ForgetPwPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
+  TextEditingController textController = TextEditingController();
+
   ForgetPwPage({super.key});
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,7 @@ class ForgetPwPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        const InputField("Email", "email"),
+                        InputField("Email", "email", textController),
                         const SizedBox(height: input_button_gap),
                         SizedBox(
                           width: button_width,

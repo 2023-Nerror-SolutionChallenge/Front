@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
-import 'package:marbon/widgets/login/register_form.dart';
+import 'package:quickalert/quickalert.dart';
 
+import '../../service/api_service.dart';
 import '../../size.dart';
+import '../../widgets/input_field.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController nickController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  Image defaultImage = Image.asset("assets/img/signup_default.png");
+
+  RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +42,56 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: title_input_gap),
-                RegisterForm(),
+                // 회원가입폼
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      InputField("Email", "email", emailController),
+                      const SizedBox(height: input_input_gap),
+                      InputField("nickname", "nick", nickController),
+                      const SizedBox(height: input_input_gap),
+                      InputField("Password", "pw", passwordController),
+                      const SizedBox(height: input_button_gap),
+                      // 3. TextButton 추가
+                      SizedBox(
+                        width: button_width,
+                        height: button_height,
+                        child: TextButton(
+                          child: const Text(
+                            "Register",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              await ApiService().postSignup(
+                                  emailController.text.toString(),
+                                  nickController.text.toString(),
+                                  passwordController.text.toString(),
+                                  defaultImage);
+
+                              // 회원가입 정상적으로 이뤄졌다면 인증메일 보내고 그 값은 받아서 다음으로 넘겨주기
+                              String authCode = await ApiService()
+                                  .postEmail(emailController.toString());
+
+                              if (context.mounted) return;
+                              Navigator.pushNamed(context, "/register_email",
+                                  arguments: {
+                                    "code": authCode
+                                  }); // 인증번호를 register_email에 인자로 전달
+
+                              // 실패라면 다시 회원가입하라고 알리기
+                              QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.error,
+                                  text: "Signup Failed! Try again");
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 120,
                 ),

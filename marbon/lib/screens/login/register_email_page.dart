@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
+import 'package:quickalert/quickalert.dart';
 import '../../widgets/input_field.dart';
+
+var logger = Logger();
 
 class RegisterEmailPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>(); // 글로벌 key
+
+  TextEditingController textController = TextEditingController();
 
   RegisterEmailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // 전 회원가입 페이지에서 인자로 보내준 인증 코드 가져오기
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    final String authCode = arguments["code"];
+    logger.d(authCode); // authcode 나오나 확인해볼 것ㄴ
+
     return Scaffold(
       body: Column(
         children: [
@@ -65,7 +77,7 @@ class RegisterEmailPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        const InputField("  Ex) 1918787", "none"),
+                        InputField("  Ex) fs18dx4", "none", textController),
                         const SizedBox(height: input_button_gap),
                         SizedBox(
                           width: button_width,
@@ -75,9 +87,27 @@ class RegisterEmailPage extends StatelessWidget {
                               "Register",
                               style: TextStyle(fontSize: 20),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.pushNamed(context, "/login");
+                                if (authCode == textController.toString()) {
+                                  // 등록 완료됨을 띄우고 okay 누르면 로그인창으로 넘기기
+                                  QuickAlert.show(
+                                    context: context,
+                                    type: QuickAlertType.success,
+                                    text: "Signup Completed Successfully",
+                                    onConfirmBtnTap: () {
+                                      Navigator.pushNamed(context, "/login");
+                                    },
+                                  );
+                                } else {
+                                  // 인증번호 일치하지 않는다고 알리기
+                                  // ++ 입력된 값 자동으로 지워주는것도 추가
+                                  QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.warning,
+                                      text:
+                                          "Please Check your verification code");
+                                }
                               }
                             },
                           ),
