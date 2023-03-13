@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marbon/screens/smartscan/smartscan.dart';
+import 'package:marbon/screens/smartscan/smartscan_delete.dart';
 import 'package:marbon/screens/smartscan/smartscan_detail.dart';
 
 void main() {
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/smartscan": (context) => const SmartScan(),
         "/smartscan_detail": (context) => const SmartScanDetail(),
+        "/smartscan_delete": (context) => const SmartScanDelete(),
       },
     );
   }

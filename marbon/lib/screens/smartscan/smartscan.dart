@@ -14,14 +14,11 @@ class SmartScan extends StatelessWidget {
       child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: <Color>[
-                gradient1_color,
-                gradient2_color,
-                gradient3_color
-              ],
-              tileMode: TileMode.mirror),
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: <Color>[gradient1_color, gradient2_color, gradient3_color],
+            tileMode: TileMode.mirror,
+          ),
         ),
         child: Scaffold(
           backgroundColor: transparent_color,

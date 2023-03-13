@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:marbon/size.dart';
 
 import '../../color.dart';
+import '../../models/mail_category.dart';
 
-class SmartScanDetail extends StatelessWidget {
+class SmartScanDetail extends StatefulWidget {
   const SmartScanDetail({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    int mailCount = 100;
+  State<SmartScanDetail> createState() => _SmartScanDetailState();
+}
 
+class _SmartScanDetailState extends State<SmartScanDetail> {
+  final List<MailCategory> _mails = generateMailCategory(jsonMailData);
+  final int mailCount = 100; // mails lenth 만큼 반복하면서 _mails.
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 40,
@@ -21,15 +27,21 @@ class SmartScanDetail extends StatelessWidget {
         actions: <Widget>[
           IconButton(
               // 선택 전부 취소
-              onPressed: () {},
+              onPressed: () {
+                //체크박스 전부 취소되도록
+              },
               icon: const Icon(Icons.cancel_presentation_outlined)),
           IconButton(
               // 선택 삭제
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, "/smartscan_delete");
+              },
               icon: const Icon(Icons.check_box_outlined)),
           IconButton(
               // 전체 삭제
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, "/smartscan_delete");
+              },
               icon: const Icon(Icons.delete_forever)),
         ],
       ),
@@ -68,7 +80,7 @@ class SmartScanDetail extends StatelessWidget {
             ),
           ),
           Container(
-            color: const Color(0xffFFE8A6),
+            color: yellow_color,
             child: Container(
               height: 50,
               decoration: const BoxDecoration(
@@ -81,41 +93,9 @@ class SmartScanDetail extends StatelessWidget {
           ),
           Expanded(
             // Vertical viewport was given unbounded height error 방지
-            child: ScrollConfiguration(
-              behavior: const ScrollBehavior()
-                  .copyWith(overscroll: false), // 위로 스크롤 금지하도록 하는게 나을듯
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                children: const <Widget>[
-                  CurvedListItem(
-                    category: 'Promotion',
-                    mailamount: 9999,
-                    prevColor: Colors.white,
-                    color: Color(0xffFFE8A6),
-                    nextColor: Color(0xffB6BB6F),
-                  ),
-                  CurvedListItem(
-                    category: 'SNS',
-                    mailamount: 49,
-                    prevColor: Color(0xffFFE8A6),
-                    color: Color(0xffB6BB6F),
-                    nextColor: Color(0xff769A58),
-                  ),
-                  CurvedListItem(
-                    category: 'Bill Payment',
-                    mailamount: 78,
-                    prevColor: Color(0xffB6BB6F),
-                    color: Color(0xff769A58),
-                    nextColor: Color(0xff186235),
-                  ),
-                  CurvedListItem(
-                    category: 'Pinterest',
-                    mailamount: 78,
-                    prevColor: Color(0xff769A58),
-                    color: Color(0xff186235),
-                    nextColor: Color(0xff186235),
-                  ),
-                ],
+            child: SingleChildScrollView(
+              child: Container(
+                child: _buildExpansionPanel(),
               ),
             ),
           ),
@@ -123,88 +103,47 @@ class SmartScanDetail extends StatelessWidget {
       ),
     );
   }
-}
 
-class CurvedListItem extends StatefulWidget {
-  const CurvedListItem({
-    super.key,
-    required this.category,
-    required this.mailamount,
-    required this.prevColor,
-    required this.color,
-    required this.nextColor,
-  });
+  Widget _buildExpansionPanel() {
+    int index = 0;
 
-  final String category;
-  final int mailamount;
-  final Color prevColor;
-  final Color color;
-  final Color nextColor;
-
-  @override
-  State<CurvedListItem> createState() => _CurvedListItemState();
-}
-
-class _CurvedListItemState extends State<CurvedListItem> {
-  @override
-  Widget build(BuildContext context) {
-    bool isAllChecked = false;
-    bool panelActive = false;
-
-    return Column(
-      children: [
-        Container(
-          // 위쪽커브
-          color: widget.prevColor,
-          child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: widget.color,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50.0),
-              ),
-            ),
-          ),
-        ),
-        // 접힘대상
-        ExpansionPanelList(
-          expansionCallback: (panelIndex, isExpanded) {
-            panelActive = !panelActive;
-            setState(() {
-              print(panelIndex);
-            });
-          },
-          children: <ExpansionPanel>[
-            // 기준 panel
-            ExpansionPanel(
-              isExpanded: panelActive, // 인덱스가 안먹혀서 그런듯
-              canTapOnHeader: true,
-              headerBuilder: (context, isExpanded) {
-                return Container(
+    return ExpansionPanelList(
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          _mails[index].isExpanded = !isExpanded;
+        });
+      },
+      children: _mails.map<ExpansionPanel>((MailCategory mailCategory) {
+        index += 1;
+        return ExpansionPanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return Column(
+              children: [
+                Container(
+                  // 위쪽커브
+                  color: color_list[index - 1],
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: color_list[index],
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(50.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
                   height: 50,
-                  color: widget.color,
+                  color: color_list[index],
                   padding: const EdgeInsets.only(left: 10, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Row(
                         children: [
-                          Checkbox(
-                            side: const BorderSide(
-                              color: text_green_color,
-                            ),
-                            value: isAllChecked,
-                            checkColor: text_green_color,
-                            onChanged: (bool? value) {
-                              setState(
-                                () {
-                                  isAllChecked = value!;
-                                },
-                              );
-                            },
-                          ),
+                          //체크박스자리
                           Text(
-                            widget.category,
+                            mailCategory.category!,
                             style: const TextStyle(
                                 color: text_green_color,
                                 fontSize: 25,
@@ -215,7 +154,7 @@ class _CurvedListItemState extends State<CurvedListItem> {
                       SizedBox(
                         width: 70,
                         child: Text(
-                          widget.mailamount.toString(),
+                          mailCategory.mailamount.toString(), // 메일 총 갯수
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               color: text_green_color,
@@ -225,71 +164,42 @@ class _CurvedListItemState extends State<CurvedListItem> {
                       ),
                     ],
                   ),
-                );
-              },
-              // 펼쳐질 panel
-              body: Container(
-                color: widget.color,
-                height: mail_list_height * 4,
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: const [
-                    MailListItem(
-                        sender: "헬로 인프런",
-                        title: "(광고) 사이드 프로젝트로 돌멩이 키우는 개발자가 있다?",
-                        content: "키드위님, 안녕하세요! 인프런 콘텐츠 에디터 아셀입니다."),
-                    MailListItem(
-                        sender: "헬로 인프런",
-                        title: "(광고) 사이드 프로젝트로 돌멩이 키우는 개발자가 있다?",
-                        content: "키드위님, 안녕하세요! 인프런 콘텐츠 에디터 아셀입니다."),
-                    MailListItem(
-                        sender: "헬로 인프런",
-                        title: "(광고) 사이드 프로젝트로 돌멩이 키우는 개발자가 있다?",
-                        content: "키드위님, 안녕하세요! 인프런 콘텐츠 에디터 아셀입니다."),
-                  ],
                 ),
-              ),
-            ),
-          ],
-        ),
-        Container(
-          // 아랫쪽커브
-          color: widget.nextColor,
-          child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: widget.color,
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(50.0),
-              ),
-            ),
-          ),
-        ),
-      ],
+                Container(
+                  // 아랫쪽커브
+                  color: color_list[index > _mails.length ? index + 1 : index],
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: color_list[index],
+                      borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(50.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          body: Container(
+              // 받은 색상으로 해야함
+              color: color_list[index],
+              height: mail_list_height * 4,
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                // mailCategory.mails 는 리스트이고 이걸 반복하면서 mailitem에 넣어야함
+                children:
+                    mailCategory.mails!.map((m) => _buildMailItem(m)).toList(),
+              )),
+          isExpanded: mailCategory.isExpanded,
+          canTapOnHeader: true,
+        );
+      }).toList(),
     );
   }
-}
 
-class MailListItem extends StatefulWidget {
-  const MailListItem(
-      {super.key,
-      required this.sender,
-      required this.title,
-      required this.content});
-
-  final String sender;
-  final String title;
-  final String content;
-
-  @override
-  State<MailListItem> createState() => _MailListItemState();
-}
-
-class _MailListItemState extends State<MailListItem> {
-  @override
-  Widget build(BuildContext context) {
-    bool isChecked = false;
-
+  // 카테고리별 메일내용
+  Widget _buildMailItem(Mails mails) {
     return Container(
       height: mail_list_height,
       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -298,20 +208,7 @@ class _MailListItemState extends State<MailListItem> {
         children: <Widget>[
           Row(
             children: [
-              Checkbox(
-                side: const BorderSide(
-                  color: text_green_color,
-                ),
-                value: isChecked,
-                checkColor: text_green_color,
-                onChanged: (bool? value) {
-                  setState(
-                    () {
-                      isChecked = value!;
-                    },
-                  );
-                },
-              ),
+              // 체크박스 추가해야함
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
@@ -319,20 +216,20 @@ class _MailListItemState extends State<MailListItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.sender,
+                      mails.author!,
                       style: const TextStyle(
                         fontSize: 15,
                         color: text_green_color,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(widget.title,
+                    Text(mails.title!,
                         style: const TextStyle(
                           fontSize: 15,
                           color: text_green_color,
                         ),
                         overflow: TextOverflow.ellipsis),
-                    Text(widget.content,
+                    Text(mails.content!,
                         style: const TextStyle(
                           fontSize: 15,
                           color: placeholder_color,
@@ -347,4 +244,147 @@ class _MailListItemState extends State<MailListItem> {
       ),
     );
   }
+}
+
+// json mail data 임시
+List<dynamic> jsonMailData = [
+  {
+    "category": "promotion",
+    "mailamount": 999,
+    "mails": [
+      {
+        "id": 1,
+        "author": "WISET",
+        "title": "네이버페이와 삼성페이가 손잡을 줄이야",
+        "content": "안녕하세요, 요즘IT입니다. 👋"
+      },
+      {
+        "id": 2,
+        "author": "GDSC Event Platform",
+        "title": "You're now registered for GDSC Sookmyung 10분 세미나 ",
+        "content":
+            "You have successfully registered for GDSC Sookmyung 10분 세미나 + 팀별 "
+      },
+      {
+        "id": 3,
+        "author": "프로그래머스",
+        "title": "[프로그래머스] 이용약관 개정 안내",
+        "content": "안녕하세요, 프로그래머스입니다."
+      },
+      {
+        "id": 4,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      }
+    ]
+  },
+  {
+    "category": "SNS",
+    "mailamount": 104,
+    "mails": [
+      {
+        "id": 5,
+        "author": "WISET",
+        "title": "네이버페이와 삼성페이가 손잡을 줄이야",
+        "content": "안녕하세요, 요즘IT입니다. 👋"
+      },
+      {
+        "id": 6,
+        "author": "GDSC Event Platform",
+        "title": "You're now registered for GDSC Sookmyung 10분 세미나 ",
+        "content":
+            "You have successfully registered for GDSC Sookmyung 10분 세미나 + 팀별 "
+      },
+      {
+        "id": 7,
+        "author": "프로그래머스",
+        "title": "[프로그래머스] 이용약관 개정 안내",
+        "content": "안녕하세요, 프로그래머스입니다."
+      },
+      {
+        "id": 8,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      }
+    ]
+  },
+  {
+    "category": "bill payment",
+    "mailamount": 88,
+    "mails": [
+      {
+        "id": 9,
+        "author": "WISET",
+        "title": "네이버페이와 삼성페이가 손잡을 줄이야",
+        "content": "안녕하세요, 요즘IT입니다. 👋"
+      },
+      {
+        "id": 10,
+        "author": "GDSC Event Platform",
+        "title": "You're now registered for GDSC Sookmyung 10분 세미나 ",
+        "content":
+            "You have successfully registered for GDSC Sookmyung 10분 세미나 + 팀별 "
+      },
+      {
+        "id": 11,
+        "author": "프로그래머스",
+        "title": "[프로그래머스] 이용약관 개정 안내",
+        "content": "안녕하세요, 프로그래머스입니다."
+      },
+      {
+        "id": 12,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      }
+    ]
+  },
+  {
+    "category": "From pinterest",
+    "mailamount": 21,
+    "mails": [
+      {
+        "id": 13,
+        "author": "WISET",
+        "title": "네이버페이와 삼성페이가 손잡을 줄이야",
+        "content": "안녕하세요, 요즘IT입니다. 👋"
+      },
+      {
+        "id": 14,
+        "author": "GDSC Event Platform",
+        "title": "You're now registered for GDSC Sookmyung 10분 세미나 ",
+        "content":
+            "You have successfully registered for GDSC Sookmyung 10분 세미나 + 팀별 "
+      },
+      {
+        "id": 15,
+        "author": "프로그래머스",
+        "title": "[프로그래머스] 이용약관 개정 안내",
+        "content": "안녕하세요, 프로그래머스입니다."
+      },
+      {
+        "id": 16,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      }
+    ]
+  }
+];
+
+// json 형태의 자료를 mailCategory 모델로 변환
+List<MailCategory> generateMailCategory(List<dynamic> mailDatas) {
+  List<MailCategory> mailCategories = [];
+
+  for (var mailData in mailDatas) {
+    // json을 웹툰 인스턴스로 만들어주는 코드
+    mailCategories.add(MailCategory.fromJson(mailData));
+  }
+  return mailCategories;
 }
