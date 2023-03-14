@@ -5,7 +5,9 @@ import 'package:marbon/screens/login/forget_pw_page.dart';
 import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/screens/login/register_email_page.dart';
 import 'package:marbon/screens/login/register_page.dart';
-import 'package:marbon/screens/smart_scan.dart';
+import 'package:marbon/screens/home/home_page.dart';
+import 'package:get/get.dart';
+import 'package:marbon/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Marbon',
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xffEDEEDD),
@@ -32,14 +34,15 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: "/login",
+      initialRoute: "/home",
       routes: {
-        "/login": (context) => LoginPage(),
-        "/register": (context) => RegisterPage(),
+        "/home": (context) => const HomePage(),
         "/register_email": (context) => RegisterEmailPage(),
         "/forget_pw": (context) => ForgetPwPage(),
         "/forget_pw_email": (context) => ForgetPwEmailPage(),
-        "/smart_scan": (context) => const SmartScan(),
+        "/main_screen": (context) => const MainScreen(),
+        "/login": (context) => LoginPage(),
+        "/register": (context) => RegisterPage(),
       },
     );
   }
