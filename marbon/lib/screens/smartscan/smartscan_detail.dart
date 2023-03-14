@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/size.dart';
+import 'package:provider/provider.dart';
 
 import '../../color.dart';
 import '../../models/mail_category.dart';
@@ -13,7 +14,17 @@ class SmartScanDetail extends StatefulWidget {
 
 class _SmartScanDetailState extends State<SmartScanDetail> {
   final List<MailCategory> _mails = generateMailCategory(jsonMailData);
-  final int mailCount = 100; // mails lenth 만큼 반복하면서 _mails.
+  int mailCount = 0;
+
+  @override
+  void initState() {
+    // 초기에 메일갯수 셈
+    super.initState();
+    for (int i = 0; i < _mails.length; i++) {
+      mailCount += _mails.elementAt(i).mails!.length;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,17 +40,46 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
               // 선택 전부 취소
               onPressed: () {
                 //체크박스 전부 취소되도록
+                setState(() {
+                  // 카테고리 안의 메일들을 하나씩 돌면서 모두 추가
+                  for (int i = 0; i < _mails.length; i++) {
+                    for (int j = 0;
+                        j < _mails.elementAt(i).mails!.length;
+                        j++) {
+                      _mails.elementAt(i).mails!.elementAt(j).isChecked = false;
+                    }
+                    _mails.elementAt(i).isChecked = false;
+                  }
+                  context.read<Checks>().clearItem();
+                });
               },
               icon: const Icon(Icons.cancel_presentation_outlined)),
           IconButton(
               // 선택 삭제
               onPressed: () {
+                //  context.read<Checks> 에 있는 값들 삭제요청 보낸 후 안의 data값 삭제
+
                 Navigator.pushNamed(context, "/smartscan_delete");
               },
               icon: const Icon(Icons.check_box_outlined)),
           IconButton(
               // 전체 삭제
               onPressed: () {
+                setState(() {
+                  // 카테고리 안의 메일들을 하나씩 돌면서 모두 추가
+                  for (int i = 0; i < _mails.length; i++) {
+                    for (int j = 0;
+                        j < _mails.elementAt(i).mails!.length;
+                        j++) {
+                      var newMail =
+                          Mails(id: _mails.elementAt(i).mails!.elementAt(j).id);
+                      context.read<Checks>().addItem(newMail);
+                    }
+                  }
+                });
+
+                // 해당값들 모두 삭제해달라고 요청 보낸후  context.read<Checks> 의 data 모두 삭제
+
                 Navigator.pushNamed(context, "/smartscan_delete");
               },
               icon: const Icon(Icons.delete_forever)),
@@ -147,7 +187,41 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
                     children: <Widget>[
                       Row(
                         children: [
-                          //체크박스자리
+                          Checkbox(
+                              value: mailCategory.isChecked,
+                              onChanged: (value) {
+                                setState(() {
+                                  // 체크여부 변동
+                                  mailCategory.isChecked = value!;
+
+                                  // 체크상태 업데이트
+                                  if (mailCategory.isChecked) {
+                                    //카테고리 전체선택
+                                    for (int i = 0;
+                                        i < mailCategory.mails!.length;
+                                        i++) {
+                                      var newMail = Mails(
+                                          id: mailCategory.mails!
+                                              .elementAt(i)
+                                              .id);
+                                      context.read<Checks>().addItem(newMail);
+                                      mailCategory.mails!
+                                          .elementAt(i)
+                                          .isChecked = true;
+                                    }
+                                  } else {
+                                    for (int i = 0;
+                                        i < mailCategory.mails!.length;
+                                        i++) {
+                                      context.read<Checks>().removeItem(
+                                          mailCategory.mails!.elementAt(i).id);
+                                      mailCategory.mails!
+                                          .elementAt(i)
+                                          .isChecked = false;
+                                    }
+                                  }
+                                });
+                              }),
                           Text(
                             mailCategory.category!,
                             style: const TextStyle(
@@ -160,7 +234,7 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
                       SizedBox(
                         width: 70,
                         child: Text(
-                          mailCategory.mailamount.toString(), // 메일 총 갯수
+                          mailCategory.mails!.length.toString(), // 메일 총 갯수
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               color: text_green_color,
@@ -196,8 +270,9 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
               child: ListView(
                 scrollDirection: Axis.vertical,
                 // mailCategory.mails 는 리스트이고 이걸 반복하면서 mailitem에 넣어야함
-                children:
-                    mailCategory.mails!.map((m) => _buildMailItem(m)).toList(),
+                children: mailCategory.mails!
+                    .map((m) => _buildMailItem(m, mailCategory))
+                    .toList(),
               )),
           isExpanded: mailCategory.isExpanded,
           canTapOnHeader: true,
@@ -207,7 +282,7 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
   }
 
   // 카테고리별 메일내용
-  Widget _buildMailItem(Mails mails) {
+  Widget _buildMailItem(Mails mails, MailCategory mc) {
     return Container(
       height: mail_list_height,
       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -216,7 +291,34 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
         children: <Widget>[
           Row(
             children: [
-              // 체크박스 추가해야함
+              Checkbox(
+                value: mails.isChecked,
+                onChanged: (value) {
+                  setState(() {
+                    // 체크여부 변동
+                    mails.isChecked = value!;
+
+                    // 체크상태 업데이트
+                    if (mails.isChecked) {
+                      // 해당 메일 체크 및 전체 체크면 카테고리의 체크도 킬 것 & provider의 값 조정
+                      var newMail = Mails(id: mails.id);
+                      context.read<Checks>().addItem(newMail);
+                      var flag = true;
+                      for (int i = 0; i < mc.mails!.length; i++) {
+                        if (mc.mails!.elementAt(i).isChecked == false) {
+                          flag = false;
+                          break;
+                        }
+                      }
+                      mc.isChecked = flag ? true : false;
+                    } else {
+                      // 해당 메일의 체크 끄고 카테고리의 체크도 끌 것  & provider의 값 조정
+                      context.read<Checks>().removeItem(mails.id);
+                      mc.isChecked = false;
+                    }
+                  });
+                },
+              ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
@@ -258,7 +360,6 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
 List<dynamic> jsonMailData = [
   {
     "category": "promotion",
-    "mailamount": 999,
     "mails": [
       {
         "id": 1,
@@ -285,12 +386,32 @@ List<dynamic> jsonMailData = [
         "title": "Only a few days left in your GitKraken Client trial!",
         "content":
             "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      },
+      {
+        "id": 24,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      },
+      {
+        "id": 25,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      },
+      {
+        "id": 26,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
       }
     ]
   },
   {
     "category": "SNS",
-    "mailamount": 104,
     "mails": [
       {
         "id": 5,
@@ -317,12 +438,25 @@ List<dynamic> jsonMailData = [
         "title": "Only a few days left in your GitKraken Client trial!",
         "content":
             "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      },
+      {
+        "id": 100,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
+      },
+      {
+        "id": 89,
+        "author": "GitKraken",
+        "title": "Only a few days left in your GitKraken Client trial!",
+        "content":
+            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
       }
     ]
   },
   {
     "category": "bill payment",
-    "mailamount": 88,
     "mails": [
       {
         "id": 9,
@@ -354,7 +488,6 @@ List<dynamic> jsonMailData = [
   },
   {
     "category": "From pinterest",
-    "mailamount": 21,
     "mails": [
       {
         "id": 13,
@@ -395,4 +528,47 @@ List<MailCategory> generateMailCategory(List<dynamic> mailDatas) {
     mailCategories.add(MailCategory.fromJson(mailData));
   }
   return mailCategories;
+}
+
+// 메일 체크시 구현되어야 할 기능 구현
+class Checks extends ChangeNotifier {
+  bool _disposed = false; // 메모리 해제
+  List<Mails> data = []; // 생성될 데이터 변수 선언
+  List<Mails> get _data => data;
+
+  // 메모리 누수 방지
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  // 메모리 해제가 아닐시 notifyListeners 호출
+  @override
+  notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
+  }
+
+  // 메일 선택 추가 (data에 없는 경우만 mail 리스트에 추가)
+  void addItem(value) {
+    var index = data.indexWhere((item) => item.id == value.id);
+    if (index == -1) {
+      data.add(value);
+      notifyListeners();
+    }
+  }
+
+  // 메일 선택 해제
+  void removeItem(value) {
+    data.removeWhere((item) => item.id == value);
+    notifyListeners();
+  }
+
+  // 메일 선택 전체 해제
+  void clearItem() {
+    data.clear();
+    notifyListeners();
+  }
 }

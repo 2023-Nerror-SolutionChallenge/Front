@@ -1,15 +1,17 @@
 class MailCategory {
   String? category;
-  int? mailamount;
   List<Mails>? mails;
   bool isExpanded = false;
+  bool isChecked = false;
 
   MailCategory(
-      {this.category, this.mailamount, this.mails, this.isExpanded = false});
+      {this.category,
+      this.mails,
+      this.isExpanded = false,
+      this.isChecked = false});
 
   MailCategory.fromJson(Map<String, dynamic> json) {
     category = json['category'];
-    mailamount = json['mailamount'];
     if (json['mails'] != null) {
       mails = <Mails>[];
       json['mails'].forEach((v) {
@@ -21,7 +23,6 @@ class MailCategory {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['category'] = category;
-    data['mailamount'] = mailamount;
     if (mails != null) {
       data['mails'] = mails!.map((v) => v.toJson()).toList();
     }
@@ -34,8 +35,14 @@ class Mails {
   String? author;
   String? title;
   String? content;
+  bool isChecked = false;
 
-  Mails({required this.id, this.author, this.title, this.content});
+  Mails(
+      {required this.id,
+      this.author,
+      this.title,
+      this.content,
+      this.isChecked = true});
 
   Mails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
