@@ -80,7 +80,7 @@ class LoginPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.pushNamed(context, "/smartscan");
+                                Navigator.pushNamed(context, "/bottom_bar");
                               }
                             },
                             // onPressed: () async {
