@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
+
+import 'package:get/get.dart';
+import 'package:marbon/screens/home/home_page.dart';
+
 import 'package:marbon/screens/login/forget_pw_email_page.dart';
 import 'package:marbon/screens/login/forget_pw_page.dart';
 import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/screens/login/register_email_page.dart';
 import 'package:marbon/screens/login/register_page.dart';
 import 'package:marbon/screens/home/home_page.dart';
-import 'package:get/get.dart';
+
 import 'package:marbon/tabbar/bottom_bar.dart';
 import 'package:marbon/tabbar/motion_tab_bar.dart';
 import 'package:marbon/screens/smartscan/smartscan.dart';
