@@ -105,27 +105,33 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
   }
 
   Widget _buildExpansionPanel() {
-    int index = 0;
+    int headerIndex = 0;
+    int contentIndex = 0;
 
     return ExpansionPanelList(
+      // ExpansionPanel의 gap을 줄이기 위함 (위쪽gap)
+      expandedHeaderPadding: const EdgeInsets.only(
+        bottom: 1,
+      ),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _mails[index].isExpanded = !isExpanded;
         });
       },
       children: _mails.map<ExpansionPanel>((MailCategory mailCategory) {
-        index += 1;
+        contentIndex += 1;
         return ExpansionPanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
+            headerIndex += 1;
             return Column(
               children: [
                 Container(
                   // 위쪽커브
-                  color: color_list[index - 1],
+                  color: color_list[headerIndex - 1],
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: color_list[index],
+                      color: color_list[headerIndex],
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(50.0),
                       ),
@@ -134,7 +140,7 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
                 ),
                 Container(
                   height: 50,
-                  color: color_list[index],
+                  color: color_list[headerIndex],
                   padding: const EdgeInsets.only(left: 10, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,11 +173,13 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
                 ),
                 Container(
                   // 아랫쪽커브
-                  color: color_list[index > _mails.length ? index + 1 : index],
+                  color: color_list[headerIndex < _mails.length
+                      ? headerIndex + 1
+                      : headerIndex],
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: color_list[index],
+                      color: color_list[headerIndex],
                       borderRadius: const BorderRadius.only(
                         bottomRight: Radius.circular(50.0),
                       ),
@@ -183,7 +191,7 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
           },
           body: Container(
               // 받은 색상으로 해야함
-              color: color_list[index],
+              color: color_list[contentIndex],
               height: mail_list_height * 4,
               child: ListView(
                 scrollDirection: Axis.vertical,
