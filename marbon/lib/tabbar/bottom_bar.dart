@@ -8,13 +8,11 @@ import '../screens/mainscreen/main_screen.dart';
 import '../screens/smartscan/smartscan.dart';
 
 class BottomBar extends StatelessWidget {
-  BottomNavigationController bottomNavigationController = Get.put(BottomNavigationController());
+  BottomNavigationController bottomNavigationController =
+      Get.put(BottomNavigationController());
   BottomBar({Key? key}) : super(key: key);
 
-
-
   final screens = [
-    MainScreen(),
     const SmartScan(),
     const MyPage(),
   ];
@@ -23,40 +21,36 @@ class BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(
-            () => IndexedStack(
+        () => IndexedStack(
           index: bottomNavigationController.selectedIndex.value,
           children: screens,
         ),
       ),
       bottomNavigationBar: Obx(() => BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
-        selectedItemColor: Color(0xff5C823D),
-        unselectedItemColor: Color(0xff5C823D),
-        showSelectedLabels: true,
-        // showUnselectedLabels: false,
-        onTap: (index) {
-          bottomNavigationController.changeIndex(index);
-        },
-        currentIndex: bottomNavigationController.selectedIndex.value,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.mark_email_read),
-            label: "SmartScan",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.contact_page),
-            label: "MyPage",
-          )
-        ],
-      )),
+            type: BottomNavigationBarType.shifting,
+            selectedItemColor: const Color(0xff5C823D),
+            unselectedItemColor: const Color(0xff5C823D),
+            showSelectedLabels: true,
+            // showUnselectedLabels: false,
+            onTap: (index) {
+              bottomNavigationController.changeIndex(index);
+            },
+            currentIndex: bottomNavigationController.selectedIndex.value,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: "Home",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.mark_email_read),
+                label: "SmartScan",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.contact_page),
+                label: "MyPage",
+              )
+            ],
+          )),
     );
   }
-
-
-
-
 }

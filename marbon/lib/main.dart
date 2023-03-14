@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:marbon/color.dart';
+
 import 'package:get/get.dart';
 import 'package:marbon/screens/home/home_page.dart';
+
 import 'package:marbon/screens/login/forget_pw_email_page.dart';
 import 'package:marbon/screens/login/forget_pw_page.dart';
 import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/screens/login/register_email_page.dart';
 import 'package:marbon/screens/login/register_page.dart';
+import 'package:marbon/screens/home/home_page.dart';
+
 import 'package:marbon/tabbar/bottom_bar.dart';
 import 'package:marbon/tabbar/motion_tab_bar.dart';
-import 'color.dart';
-
 import 'package:marbon/screens/smartscan/smartscan.dart';
 import 'package:marbon/screens/smartscan/smartscan_delete.dart';
 import 'package:marbon/screens/smartscan/smartscan_detail.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => Checks()),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Checks()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -46,22 +51,19 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-     // home: const BottomBar(),
       initialRoute: "/home",
       routes: {
         "/home": (context) => const HomePage(),
-        "/login": (context) => const LoginPage(),
-        "/register": (context) => const RegisterPage(),
         "/register_email": (context) => RegisterEmailPage(),
         "/forget_pw": (context) => ForgetPwPage(),
         "/forget_pw_email": (context) => ForgetPwEmailPage(),
-        "/bottom_bar": (context) =>  BottomBar(),
+        "/login": (context) => LoginPage(),
+        "/register": (context) => RegisterPage(),
+        "/bottom_bar": (context) => BottomBar(),
         "/smartscan": (context) => const SmartScan(),
         "/smartscan_detail": (context) => const SmartScanDetail(),
         "/smartscan_delete": (context) => const SmartScanDelete(),
-
       },
     );
   }
 }
-

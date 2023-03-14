@@ -8,8 +8,9 @@ const int minNick = 2; // nick 최소 글자수
 class InputField extends StatelessWidget {
   final String text;
   final String icon;
+  final TextEditingController textController;
 
-  const InputField(this.text, this.icon, {super.key});
+  const InputField(this.text, this.icon, this.textController, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class InputField extends StatelessWidget {
           style: const TextStyle(
             color: placeholder_color,
           ),
+          controller: textController,
           // 경고 문구
           validator: (value) {
             if ((value?.length)! < 1) {
@@ -63,6 +65,11 @@ class InputField extends StatelessWidget {
           },
           // 텍스트필드의 값이 비밀번호일 경우 *로 가리기
           obscureText: text == "Password" ? true : false,
+          keyboardType: icon == "email"
+              ? TextInputType.emailAddress
+              : icon == "none"
+                  ? TextInputType.number
+                  : TextInputType.text,
           decoration: InputDecoration(
             hintStyle: const TextStyle(
               color: placeholder_color,
