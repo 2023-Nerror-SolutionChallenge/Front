@@ -78,17 +78,23 @@ class LoginPage extends StatelessWidget {
                               "Login",
                               style: TextStyle(fontSize: 20),
                             ),
-                            onPressed: () async {
+                            onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                final flag = await ApiService().postLogin(
-                                    emailController.text.toString(),
-                                    passwordController.text.toString());
-                                if (flag) {
-                                  if (context.mounted) return;
-                                  Navigator.pushNamed(context, "/smart_scan");
-                                }
+                                Navigator.pushNamed(context, "/smartscan");
                               }
                             },
+                            // onPressed: () async {
+                            //   if (_formKey.currentState!.validate()) {
+                            //     if (context.mounted) return;
+                            //     Navigator.pushNamed(context, "/smartscan");
+                            //     final flag = await ApiService().postLogin(
+                            //         emailController.text.toString(),
+                            //         passwordController.text.toString());
+                            //     if (flag) {
+                            //
+                            //     }
+                            //   }
+                            // },
                           ),
                         ),
                       ],
