@@ -4,6 +4,7 @@ import '../controller/bottom_navigation_controller.dart';
 import 'package:get/get.dart';
 import 'package:motion_tab_bar/motiontabbar.dart';
 
+import '../screens/mainscreen/main_screen.dart';
 import '../screens/smartscan/smartscan.dart';
 
 class MotionTabBarPage extends StatelessWidget {
@@ -13,6 +14,7 @@ class MotionTabBarPage extends StatelessWidget {
       Get.put(BottomNavigationController());
 
   final screens = [
+    MainScreen(),
     const SmartScan(),
     const MyPage(),
   ];
