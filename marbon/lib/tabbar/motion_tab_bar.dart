@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:marbon/screens/mainscreen/smart_scan.dart';
 import 'package:marbon/screens/mypage/my_page.dart';
 import '../controller/bottom_navigation_controller.dart';
 import '../screens/mainscreen/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:motion_tab_bar/motiontabbar.dart';
+
+import '../screens/smartscan/smartscan.dart';
 
 class MotionTabBarPage extends StatelessWidget {
   MotionTabBarPage({Key? key}) : super(key: key);
