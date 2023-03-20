@@ -61,6 +61,7 @@ class MyApp extends StatelessWidget {
         "/forget_pw_email": (context) => ForgetPwEmailPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
+        "/mainscreen" : (context)=> MainScreen(),
         "/bottom_bar": (context) => BottomBar(),
         "/smartscan": (context) => const SmartScan(),
         "/smartscan_detail": (context) => const SmartScanDetail(),
