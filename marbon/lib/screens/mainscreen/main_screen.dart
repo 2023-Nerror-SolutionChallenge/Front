@@ -32,7 +32,34 @@ class _MainScreenState extends State<MainScreen>{
                 circularStrokeCap: CircularStrokeCap.round,
 
               ),
+              Row(mainAxisAlignment: MainAxisAlignment.center,
+                children:[
+                  Container(
+                    child: Text("탄소배출감소"),
 
+                  ),
+                  Container(
+                    child: Text("7.624 kg"),
+
+                  ),
+                ]
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                    Container(
+                      child: Text("Total"),
+
+                    ),
+                    Container(
+                      child: Text("2016 건"),
+
+                    ),
+
+                  ]
+
+
+              ),
 
 
               LinearPercentIndicator(
