@@ -16,7 +16,7 @@ class MotionTabBarPage extends StatelessWidget {
   final screens = [
     MainScreen(),
     const SmartScan(),
-    const MyPage(),
+    MyPage(),
   ];
 
   @override

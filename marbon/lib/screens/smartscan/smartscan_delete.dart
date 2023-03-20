@@ -96,8 +96,9 @@ class SmartScanDelete extends StatelessWidget {
                         fontSize: 18,
                       ),
                     ),
-                    onPressed: () =>
-                        {Navigator.pushNamed(context, "/smartscan")}),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/smartscan");
+                    }),
               ),
             ],
           ),

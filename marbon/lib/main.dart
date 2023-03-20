@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:marbon/color.dart';
 
 import 'package:get/get.dart';
+import 'package:marbon/color.dart';
 import 'package:marbon/screens/home/home_page.dart';
 
 import 'package:marbon/screens/login/forget_pw_email_page.dart';
@@ -9,7 +9,9 @@ import 'package:marbon/screens/login/forget_pw_page.dart';
 import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/screens/login/register_email_page.dart';
 import 'package:marbon/screens/login/register_page.dart';
-import 'package:marbon/screens/mainscreen/main_screen.dart';
+import 'package:marbon/screens/mypage/change_pw1.dart';
+import 'package:marbon/screens/mypage/change_pw2.dart';
+import 'package:marbon/screens/mypage/change_pw3.dart';
 
 import 'package:marbon/tabbar/bottom_bar.dart';
 import 'package:marbon/tabbar/motion_tab_bar.dart';
@@ -63,6 +65,9 @@ class MyApp extends StatelessWidget {
         "/smartscan": (context) => const SmartScan(),
         "/smartscan_detail": (context) => const SmartScanDetail(),
         "/smartscan_delete": (context) => const SmartScanDelete(),
+        "/change_pw1": (context) => ChangePw1(),
+        "/change_pw2": (context) => ChangePw2(),
+        "/change_pw3": (context) => ChangePw3(),
       },
     );
   }
