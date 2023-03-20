@@ -9,6 +9,7 @@ import 'package:marbon/screens/login/forget_pw_page.dart';
 import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/screens/login/register_email_page.dart';
 import 'package:marbon/screens/login/register_page.dart';
+import 'package:marbon/screens/mainscreen/main_screen.dart';
 import 'package:marbon/screens/mypage/change_pw1.dart';
 import 'package:marbon/screens/mypage/change_pw2.dart';
 import 'package:marbon/screens/mypage/change_pw3.dart';
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
         "/forget_pw_email": (context) => ForgetPwEmailPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
-        "/mainscreen" : (context)=> MainScreen(),
+        "/mainscreen": (context) => const MainScreen(),
         "/bottom_bar": (context) => BottomBar(),
         "/smartscan": (context) => const SmartScan(),
         "/smartscan_detail": (context) => const SmartScanDetail(),
