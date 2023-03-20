@@ -85,13 +85,13 @@ class _HomePageState extends State<HomePage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: Color(0xffffffff),
+                        backgroundColor: const Color(0xffffffff),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, "/bottom_bar");
+                        Navigator.pushNamed(context, "/login");
                       },
                       child: const Text(
                         "Get Statred",
