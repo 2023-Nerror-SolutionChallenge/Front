@@ -10,6 +10,7 @@ const double main_padding_size = 10;
 const double circle_start = 120;
 const double circle_radius = 170;
 const double two_line_text_box = 50;
+const double toolbar_height = 50;
 
 // smartscan
 const double smartscan_title_left = 30;

@@ -11,6 +11,7 @@ const Color green_color = Color(0xff769A58);
 const Color yellow_green_color = Color(0xffB6BB6F);
 const Color yellow_color = Color(0xffFFE8A6);
 const Color placeholder_color = Color(0xffD0D0D0);
+const Color unselected_color = Color.fromARGB(255, 122, 121, 121);
 
 // smartscan
 const Color gradient1_color = Color(0xccFDE69E);

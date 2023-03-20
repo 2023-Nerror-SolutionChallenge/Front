@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../controller/bottom_navigation_controller.dart';
 import '../screens/mypage/my_page.dart';
 import '../screens/mainscreen/main_screen.dart';
@@ -15,7 +13,7 @@ class BottomBar extends StatelessWidget {
   final screens = [
     MainScreen(),
     const SmartScan(),
-    const MyPage(),
+    MyPage(),
   ];
 
   @override
