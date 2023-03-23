@@ -50,11 +50,16 @@ class AddMailPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
-                  children: const [
+                  children: [
+
+                   // ClipRect(
+                       // child: Image.asset("assets/img/google.png"),
+                   // ),
                     Text(
                       "Google",
                       style: TextStyle(fontSize: 17),
                     ),
+
                   ],
                 ),
                 IconButton(
@@ -70,16 +75,13 @@ class AddMailPage extends StatelessWidget {
           ),
           Container(width: 500,
               child: Divider(color: Colors.grey, thickness: 1.0)),
-
-
-
-
           SizedBox(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
-                  children: const [
+                  children: [
+
                     Text(
                       "iCloud",
                       style: TextStyle(fontSize: 17),

@@ -55,9 +55,9 @@ class AddMailAddressPage extends StatelessWidget {
                     ),
                   ],
                 ),
+
               ],
             ),
-
           ),
 
           const SizedBox(

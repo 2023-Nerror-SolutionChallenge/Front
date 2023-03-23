@@ -281,8 +281,10 @@ class MyPage extends StatelessWidget {
                         Navigator.pushNamed(c, "/add_mail");
                       },
                       child:
+
                       const Text(
                         "+ Add Mail",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,
