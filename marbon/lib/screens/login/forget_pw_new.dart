@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:marbon/color.dart';
-import 'package:marbon/screens/login/register_email_page.dart';
 import 'package:marbon/size.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 
+import '../../color.dart';
 import '../../widgets/input_field.dart';
 
-class ForgetPwEmailPage extends StatelessWidget {
+class ForgetPwNew extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   TextEditingController textController = TextEditingController();
 
-  ForgetPwEmailPage({super.key});
+  ForgetPwNew({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-    final String authCode = arguments["code"];
-    logger.d(authCode);
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: toolbar_height,
         shadowColor: transparent_color,
-        backgroundColor: transparent_color,
+        backgroundColor: Colors.white,
         iconTheme: const IconThemeData(
           color: text_green_color,
         ),
@@ -32,7 +24,7 @@ class ForgetPwEmailPage extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(
-            height: 20,
+            height: circle_start,
           ),
           Expanded(
             child: Container(
@@ -45,11 +37,8 @@ class ForgetPwEmailPage extends StatelessWidget {
               ),
               child: ListView(
                 children: [
-                  const SizedBox(
-                    height: circle_start,
-                  ),
                   const Text(
-                    "Enter authentication code",
+                    "Settings Password",
                     style: TextStyle(
                       fontSize: 25,
                       color: dark_green_color,
@@ -66,11 +55,19 @@ class ForgetPwEmailPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Text(
-                          "Enter the verification Code that we have sent via the Email",
+                          "Please Enter your new password",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 16, color: explain_text_color),
                         ),
+                        Text(
+                          "8~16 length, letters and numbers combination",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: explain_text_color,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -81,7 +78,7 @@ class ForgetPwEmailPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        InputField("  Ex) fs18dx4", "none", textController),
+                        InputField("Password", "pw", textController),
                         const SizedBox(height: input_button_gap),
                         SizedBox(
                           width: button_width,
@@ -91,21 +88,12 @@ class ForgetPwEmailPage extends StatelessWidget {
                               "Confirm",
                               style: TextStyle(fontSize: 20),
                             ),
-
-                            // 기존에 만들어둔거 사용하기
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                if (authCode ==
-                                    textController.text.toString()) {
-                                  Navigator.pushNamed(
-                                      context, "/forget_pw_new");
-                                } else {
-                                  QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.warning,
-                                      text:
-                                          "Please Check your verification code");
-                                } // + 입력된 값 자동으로 지워주는것도 추가
+                                // pw를 바꾸는 api 성공하면 성공했다 알람띄우고 이동
+                                // textController.text.toString() 값을 비밀번호로 수정하는 api
+                                Navigator.popUntil(
+                                    context, ModalRoute.withName('/login'));
                               }
                             },
                           ),

@@ -11,7 +11,7 @@ class RegisterPage extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
   TextEditingController nickController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  Image defaultImage = Image.asset("assets/img/signup_default.png");
+  String defaultImage = "testfile.png";
 
   RegisterPage({super.key});
 
@@ -63,22 +63,25 @@ class RegisterPage extends StatelessWidget {
                             style: TextStyle(fontSize: 20),
                           ),
                           onPressed: () async {
+                            logger.d("@@@@@@@@@@@@@@@진입");
                             if (_formKey.currentState!.validate()) {
                               await ApiService().postSignup(
-                                  emailController.text.toString(),
-                                  nickController.text.toString(),
-                                  passwordController.text.toString(),
-                                  defaultImage);
+                                emailController.text.toString(),
+                                nickController.text.toString(),
+                                passwordController.text.toString(),
+                              );
 
                               // 회원가입 정상적으로 이뤄졌다면 인증메일 보내고 그 값은 받아서 다음으로 넘겨주기
                               String authCode = await ApiService()
-                                  .postEmail(emailController.toString());
+                                  .postEmail(emailController.text.toString());
 
+                              logger.d("postemail 완료 $authCode");
                               if (context.mounted) return;
-                              Navigator.pushNamed(context, "/register_email",
-                                  arguments: {
-                                    "code": authCode
-                                  }); // 인증번호를 register_email에 인자로 전달
+                              Navigator.pushNamed(
+                                context,
+                                "/register_email",
+                                arguments: {"code": authCode},
+                              ); // 인증번호를 register_email에 인자로 전달
 
                               // 실패라면 다시 회원가입하라고 알리기
                               QuickAlert.show(

@@ -23,6 +23,14 @@ class RegisterEmailPage extends StatelessWidget {
     logger.d(authCode); // authcode 나오나 확인해볼 것ㄴ
 
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: toolbar_height,
+        shadowColor: transparent_color,
+        backgroundColor: transparent_color,
+        iconTheme: const IconThemeData(
+          color: text_green_color,
+        ),
+      ),
       body: Column(
         children: [
           const SizedBox(
@@ -89,8 +97,9 @@ class RegisterEmailPage extends StatelessWidget {
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                if (authCode == textController.toString()) {
-                                  // 등록 완료됨을 띄우고 okay 누르면 로그인창으로 넘기기
+                                if (authCode ==
+                                    textController.text.toString()) {
+                                  // 등록 완료됨을 띄우고 okay -> 로그인창
                                   QuickAlert.show(
                                     context: context,
                                     type: QuickAlertType.success,
@@ -100,13 +109,12 @@ class RegisterEmailPage extends StatelessWidget {
                                     },
                                   );
                                 } else {
-                                  // 인증번호 일치하지 않는다고 알리기
-                                  // ++ 입력된 값 자동으로 지워주는것도 추가
                                   QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.warning,
-                                      text:
-                                          "Please Check your verification code");
+                                    context: context,
+                                    type: QuickAlertType.warning,
+                                    text: "Please Check your verification code",
+                                  );
+                                  // + 입력된 값 자동으로 지워주는것도 추가
                                 }
                               }
                             },

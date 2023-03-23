@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
-import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
 
 class LoginPage extends StatelessWidget {
@@ -83,15 +83,18 @@ class LoginPage extends StatelessWidget {
                                 Navigator.pushNamed(context, "/bottom_bar");
                               }
                             },
+                            // 로그인 성공시 해당 정보들을 받아서 getX에 등록하기
                             // onPressed: () async {
                             //   if (_formKey.currentState!.validate()) {
                             //     if (context.mounted) return;
-                            //     Navigator.pushNamed(context, "/smartscan");
-                            //     final flag = await ApiService().postLogin(
+                            //     Navigator.pushNamed(context, "/bottomBar");
+                            //     final returnData = await ApiService().postLogin(
                             //         emailController.text.toString(),
                             //         passwordController.text.toString());
-                            //     if (flag) {
-                            //
+                            //     if (returnData) {
+
+                            //       //받아온값을 해당 인자에 넣어주기
+                            //       // Get.find<UserController>().upadateUserInform(nick: nick, pw: pw, deleteCount: deleteCount, totalCount: totalCount, badges: badges)
                             //     }
                             //   }
                             // },
@@ -137,4 +140,32 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class UserController extends GetxController {
+  String _nick = "";
+  String _pw = "";
+  List<String> _badges = [];
+  int _deleteCount = 0;
+  int _totalCount = 0;
+
+  void upadateUserInform(
+      {required String nick,
+      required String pw,
+      required int deleteCount,
+      required int totalCount,
+      required List<String> badges}) {
+    _nick = nick;
+    _pw = pw;
+    _badges = badges;
+    _deleteCount = deleteCount;
+    _totalCount = totalCount;
+  }
+
+  //   STARTERS("시작이 반"),
+  //   ENVIRONMENTAL_TUTELARY("환경 수호자"),
+  //   EARTH_TUTELARY("지구의 수호자"),
+  //   MAIL_RICH("메일 부자"),
+  //   MARBON_MARATHONER("말본 마라토너"),
+  //   ENVIRONMENTAL_MODEL("환경 모범생");
 }
