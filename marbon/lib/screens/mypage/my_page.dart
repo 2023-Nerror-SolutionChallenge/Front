@@ -7,6 +7,7 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tab_container/tab_container.dart';
 
+
 class MyPage extends StatelessWidget {
   var nick = "Song Kim".obs;
   // 뱃지 소유 여부 -> 가짐1 안가짐0
@@ -55,7 +56,7 @@ class MyPage extends StatelessWidget {
                     _BuildBadgeContainer(
                         constrains.maxHeight * 0.6, constrains.maxWidth * 0.9),
                     _BuildMymailsContainer(
-                        constrains.maxHeight * 0.6, constrains.maxWidth * 0.9),
+                        constrains.maxHeight * 0.6, constrains.maxWidth * 0.9, context),
                     _BuildSettingsContainer(constrains.maxHeight * 0.6,
                         constrains.maxWidth * 0.9, context),
                   ],
@@ -245,11 +246,59 @@ class MyPage extends StatelessWidget {
     );
   }
 
-  Widget _BuildMymailsContainer(double h, double w) {
-    return Container(
-      child: const Text('메일계정관련'),
+  Widget _BuildMymailsContainer(double h, double w, BuildContext c) {
+    return Scaffold(
+
+      backgroundColor: const Color(0xffedeedd),
+      body: Stack(
+
+        children: [
+          Positioned(
+
+              bottom: 100,
+              left: 20,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Container(
+                    width: 150,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(90),
+                        color: const Color(0xffffffff)),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: const Color(0xffffffff),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(90.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(c, "/add_mail");
+                      },
+                      child:
+
+                      const Text(
+                        "+ Add Mail",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  )
+                ],
+              ))
+        ],
+      ),
     );
   }
+
 
   Widget _BuildSettingsContainer(double h, double w, BuildContext c) {
     return Container(

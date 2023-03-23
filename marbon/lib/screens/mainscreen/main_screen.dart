@@ -52,6 +52,8 @@ class _MainScreenState extends State<MainScreen> {
                 progressColor: const Color(0xff369C33),
                 backgroundColor: const Color(0xffD0D0D0),
               ),
+
+
               Container(
                 height: 130,
                 width: MediaQuery.of(context).size.width - 20,
@@ -63,6 +65,7 @@ class _MainScreenState extends State<MainScreen> {
                       bottomLeft: Radius.circular(30),
                       topLeft: Radius.circular(30)),
                 ),
+
                 child: Container(
                   margin: const EdgeInsets.only(top: 10, left: 10),
                   child: Row(
