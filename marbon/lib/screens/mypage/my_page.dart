@@ -248,27 +248,51 @@ class MyPage extends StatelessWidget {
 
   Widget _BuildMymailsContainer(double h, double w, BuildContext c) {
     return Scaffold(
-
       backgroundColor: const Color(0xffedeedd),
       body: Stack(
-
         children: [
           Positioned(
-
-              bottom: 100,
-              left: 20,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const SizedBox(
-                    height: 40,
+                  Container(
+                    height: 100,
+                    width: MediaQuery.of(c).size.width - 20,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                          topLeft: Radius.circular(30)),
+                    ),
+
                   ),
                   Container(
-                    width: 150,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(90),
-                        color: const Color(0xffffffff)),
+                    height: 100,
+                    width: MediaQuery.of(c).size.width - 20,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                          topLeft: Radius.circular(30)),
+                    ),
+
+                  ),
+
+                  Container(
+                    width: MediaQuery.of(c).size.width - 20,
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                          topLeft: Radius.circular(30)),
+                    ),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -281,15 +305,24 @@ class MyPage extends StatelessWidget {
                         Navigator.pushNamed(c, "/add_mail");
                       },
                       child:
+                        Container(
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage("assets/img/plus.png"),
+                                  fit: BoxFit.none)),
 
-                      const Text(
-                        "+ Add Mail",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700),
-                      ),
+                        ),
+
+
+
+                      // const Text(
+                      //   "+ Add Mail",
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //       color: Colors.black,
+                      //       fontSize: 18,
+                      //       fontWeight: FontWeight.w700),
+                      // ),
                     ),
                   )
                 ],

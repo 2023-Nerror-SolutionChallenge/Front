@@ -28,21 +28,22 @@ class _MainScreenState extends State<MainScreen> {
                 backgroundColor: const Color(0xffC4C78C),
                 circularStrokeCap: CircularStrokeCap.round,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Container(
-                  child: const Text("탄소배출감소"),
-                ),
-                Container(
-                  child: const Text("7.624 kg"),
-                ),
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Container(
-                  child: const Text("Total"),
-                ),
-                Container(
-                  child: const Text("2016 건"),
-                ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child:
+                      const Text("탄소배출감소"),
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/img/line.png"),
+                              fit: BoxFit.none)),
+                    ),
+                    Container(
+                      child: const Text("Total"),
+                    )
               ]),
               LinearPercentIndicator(
                 animation: true,

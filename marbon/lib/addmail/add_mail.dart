@@ -45,7 +45,7 @@ class AddMailPage extends StatelessWidget {
               child: Divider(color: Colors.black, thickness: 3.0)),
 
 
-          SizedBox(
+          Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -53,12 +53,16 @@ class AddMailPage extends StatelessWidget {
                   children: [
 
                    // ClipRect(
-                       // child: Image.asset("assets/img/google.png"),
-                   // ),
+                   //      child:
+                   //      Image.asset("assets/img/google.png"),
+                   //
+                   //  ),
+
                     Text(
                       "Google",
                       style: TextStyle(fontSize: 17),
                     ),
+
 
                   ],
                 ),
