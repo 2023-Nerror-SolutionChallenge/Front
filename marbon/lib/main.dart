@@ -23,6 +23,7 @@ import 'package:marbon/screens/smartscan/smartscan_detail.dart';
 import 'package:provider/provider.dart';
 
 import 'addmail/add_mailaddress.dart';
+import 'addmail/add_mailserver.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(); //추가!
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
         "/change_pw3": (context) => ChangePw3(),
         "/add_mail": (context)=> AddMailPage(),
         "/add_mailaddress" : (context)=> AddMailAddressPage(),
+        "/mail_server" : (context) => AddMailServerPage(),
       },
     );
   }

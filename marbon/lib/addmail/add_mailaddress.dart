@@ -80,8 +80,13 @@ class AddMailAddressPage extends StatelessWidget {
 
             ),
           ),
-
-
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/mail_server");
+            },
+            icon: const Icon(Icons.check),
+            iconSize: 30,
+          ),
         ])
     );
   }
