@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:marbon/addmail/add_mail.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/screens/home/home_page.dart';
 
@@ -21,6 +22,10 @@ import 'package:marbon/screens/smartscan/smartscan_delete.dart';
 import 'package:marbon/screens/smartscan/smartscan_detail.dart';
 import 'package:provider/provider.dart';
 
+import 'addmail/add_mailaddress.dart';
+
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(); //추가!
 void main() {
   runApp(
     MultiProvider(
@@ -70,6 +75,8 @@ class MyApp extends StatelessWidget {
         "/change_pw1": (context) => ChangePw1(),
         "/change_pw2": (context) => ChangePw2(),
         "/change_pw3": (context) => ChangePw3(),
+        "/add_mail": (context)=> AddMailPage(),
+        "/add_mailaddress" : (context)=> AddMailAddressPage(),
       },
     );
   }
