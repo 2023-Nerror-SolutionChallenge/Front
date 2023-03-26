@@ -102,7 +102,7 @@ class ForgetPwEmailPage extends StatelessWidget {
                                 } else {
                                   QuickAlert.show(
                                       context: context,
-                                      type: QuickAlertType.warning,
+                                      type: QuickAlertType.error,
                                       text:
                                           "Please Check your verification code");
                                 } // + 입력된 값 자동으로 지워주는것도 추가

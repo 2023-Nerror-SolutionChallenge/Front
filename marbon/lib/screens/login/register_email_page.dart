@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
 import 'package:quickalert/quickalert.dart';
+import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
 
 var logger = Logger();
@@ -20,7 +21,11 @@ class RegisterEmailPage extends StatelessWidget {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
     final String authCode = arguments["code"];
-    logger.d(authCode); // authcode 나오나 확인해볼 것ㄴ
+    final String email = arguments["email"];
+    final String nick = arguments["nick"];
+    final String pw = arguments["pw"];
+    late String accessToken;
+    late String refreshToken;
 
     return Scaffold(
       appBar: AppBar(
@@ -100,14 +105,32 @@ class RegisterEmailPage extends StatelessWidget {
                                 if (authCode ==
                                     textController.text.toString()) {
                                   // 등록 완료됨을 띄우고 okay -> 로그인창
-                                  QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.success,
-                                    text: "Signup Completed Successfully",
-                                    onConfirmBtnTap: () {
-                                      Navigator.pushNamed(context, "/login");
-                                    },
-                                  );
+
+                                  var tokens = await ApiService()
+                                      .postSignup(email, nick, pw);
+
+                                  accessToken = tokens["accessToken"];
+                                  refreshToken = tokens["refreshToken"];
+
+                                  if (accessToken == "" && refreshToken == "") {
+                                    // 토큰없음
+                                    QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.error,
+                                      text:
+                                          "Member registration failed. Retry Plz",
+                                    );
+                                  } else {
+                                    // 토큰있음
+                                    QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.success,
+                                      text: "Signup Completed Successfully",
+                                      onConfirmBtnTap: () {
+                                        Navigator.pushNamed(context, "/login");
+                                      },
+                                    );
+                                  }
                                 } else {
                                   QuickAlert.show(
                                     context: context,

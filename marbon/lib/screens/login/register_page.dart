@@ -63,31 +63,28 @@ class RegisterPage extends StatelessWidget {
                             style: TextStyle(fontSize: 20),
                           ),
                           onPressed: () async {
-                            logger.d("@@@@@@@@@@@@@@@진입");
                             if (_formKey.currentState!.validate()) {
-                              await ApiService().postSignup(
-                                emailController.text.toString(),
-                                nickController.text.toString(),
-                                passwordController.text.toString(),
-                              );
-
-                              // 회원가입 정상적으로 이뤄졌다면 인증메일 보내고 그 값은 받아서 다음으로 넘겨주기
                               String authCode = await ApiService()
                                   .postEmail(emailController.text.toString());
 
-                              logger.d("postemail 완료 $authCode");
-                              if (context.mounted) return;
                               Navigator.pushNamed(
                                 context,
                                 "/register_email",
-                                arguments: {"code": authCode},
+                                arguments: {
+                                  "code": authCode,
+                                  "email": emailController.text.toString(),
+                                  "nick": nickController.text.toString(),
+                                  "pw": passwordController.text.toString()
+                                },
                               ); // 인증번호를 register_email에 인자로 전달
 
                               // 실패라면 다시 회원가입하라고 알리기
-                              QuickAlert.show(
-                                  context: context,
-                                  type: QuickAlertType.error,
-                                  text: "Signup Failed! Try again");
+                              if (authCode.isEmpty) {
+                                QuickAlert.show(
+                                    context: context,
+                                    type: QuickAlertType.warning,
+                                    text: "Signup Failed! Try again");
+                              }
                             }
                           },
                         ),

@@ -14,8 +14,12 @@ class ApiService {
       final url = Uri.parse('$baseUrl/auth/login');
       final response = await http.post(
         url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
         body: jsonEncode({
-          // jsonEncode 빼고 넣을 것이나/ jsonEncode 넣을것이냐/ header 넣을것이냐
           "id": email,
           "password": password,
         }),
@@ -23,21 +27,43 @@ class ApiService {
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        logger.d(data["msg"]);
+        var head = response.headers;
+        String accessToken = head["access_token"].toString();
+        String refreshToken = head["refresh_token"].toString();
+
+        // 뱃지 정보를 리스트로 가공
+        List<int> badgeList = [0, 0, 0, 0, 0, 0];
+        var badgeMatch = [
+          "MAIL_RICH",
+          "STARTERS",
+          "ENVIRONMENTAL_MODEL",
+          "ENVIRONMENTAL_TUTELARY",
+          "EARTH_TUTELARY",
+          "MARBON_MARATHONER"
+        ];
+        if (data['badgeList'] != null) {
+          data['badgeList'].forEach(
+              (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
+        }
+
         return {
+          "flag": true,
           "nick": data['nickname'],
           "pw": data['password'],
           "deleteCount": data["deleteCount"],
           "totalCount": data['totalCount'],
-          "badgeList": data["badgeList"],
+          "mailAccounts": data["accountList"],
+          "badgeList": badgeList,
+          "accessToken": accessToken,
+          "refreshToken": refreshToken
         };
       } else {
         logger.d('등록되지 않은 이메일이거나 틀린 번호입니다');
-        return null;
+        return {"flag": false};
       }
     } catch (e) {
       logger.d(e.toString());
-      return false;
+      return {"flag": false};
     }
   }
 
@@ -47,6 +73,11 @@ class ApiService {
       final url = Uri.parse('$baseUrl/auth/signup');
       final response = await http.post(
         url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
         body: jsonEncode({
           "id": email,
           "password": password,
@@ -55,13 +86,18 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        logger.d(data["msg"].toString());
-        // access, refresh 토큰 헤더에 넣어 응답한거 넘겨야 할 듯
+        //var data = jsonDecode(response.body.toString());
+        var head = response.headers;
+        String accessToken = head["access_token"].toString();
+        String refreshToken = head["refresh_token"].toString();
+
+        return {"accessToken": accessToken, "refreshToken": refreshToken};
       } else if (response.statusCode == 409) {
         logger.d("중복 닉네임 혹은 이미 가입되어 있음");
+        return {"accessToken": "", "refreshToken": ""};
       } else {
         logger.d('오류 ${response.statusCode}');
+        return {"accessToken": "", "refreshToken": ""};
       }
     } catch (e) {
       logger.d(e.toString());
@@ -72,25 +108,27 @@ class ApiService {
   Future<dynamic> postEmail(String email) async {
     try {
       final url = Uri.parse('$baseUrl/auth/confirm');
-      final response = await http.post(url,
-          headers: <String, String>{
-            "Access-Control-Allow-Origin": "*",
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+          {
+            "email": email,
           },
-          body: jsonEncode(
-            {
-              "id": email,
-            },
-          ));
+        ),
+      );
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         logger.d(data["AuthenticationCode"]);
         return data["AuthenticationCode"];
       } else {
-        logger.d("실패 : ${response.statusCode}");
         logger.d((response.body).toString());
+        return "";
       }
     } catch (e) {
       logger.d("Error : ${e.toString()}");
