@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
 import '../../service/api_service.dart';
@@ -78,23 +79,30 @@ class LoginPage extends StatelessWidget {
                               "Login",
                               style: TextStyle(fontSize: 20),
                             ),
-                            onPressed: () {
+
+                            //로그인 성공시 해당 정보들을 받아서 getX에 등록하기
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.pushNamed(context, "/bottom_bar");
+                                final returnData = await ApiService().postLogin(
+                                    emailController.text.toString(),
+                                    passwordController.text.toString());
+                                if (returnData["flag"]) {
+                                  Get.find<UserController>().upadateUserInform(
+                                    nick: returnData["nick"],
+                                    pw: returnData["pw"],
+                                    accessToken: returnData["accessToken"],
+                                    refreshToken: returnData["refreshToken"],
+                                    deleteCount: returnData["deleteCount"],
+                                    totalCount: returnData['totalCount'],
+                                    badges: returnData["badgeList"],
+                                    mailAccounts: returnData["mailAccounts"],
+                                  );
+
+                                  Navigator.pushNamed(context, "/bottom_bar");
+                                  // Navigator.pushNamed(context, "/bottomBar", arguments: returnData);
+                                }
                               }
                             },
-                            // onPressed: () async {
-                            //   if (_formKey.currentState!.validate()) {
-                            //     if (context.mounted) return;
-                            //     Navigator.pushNamed(context, "/smartscan");
-                            //     final flag = await ApiService().postLogin(
-                            //         emailController.text.toString(),
-                            //         passwordController.text.toString());
-                            //     if (flag) {
-                            //
-                            //     }
-                            //   }
-                            // },
                           ),
                         ),
                       ],
@@ -136,5 +144,44 @@ class LoginPage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class UserController extends GetxController {
+  String _nick = "";
+  String _pw = "";
+  String _accessToken = "";
+  String _refreshToken = "";
+  int _deleteCount = 0;
+  int _totalCount = 0;
+  List<int> _badges = [];
+  List<dynamic> _mailAccounts = [];
+
+  get nick => _nick;
+  get pw => _pw;
+  get accessToken => _accessToken;
+  get refreshToken => _refreshToken;
+  get deleteCount => _deleteCount;
+  get totalCount => _totalCount;
+  get badges => _badges;
+  get mailAccounts => _mailAccounts;
+
+  void upadateUserInform(
+      {required String nick,
+      required String pw,
+      required String accessToken,
+      required String refreshToken,
+      required int deleteCount,
+      required int totalCount,
+      required List<int> badges,
+      required List<dynamic> mailAccounts}) {
+    _nick = nick;
+    _pw = pw;
+    _accessToken = accessToken;
+    _refreshToken = refreshToken;
+    _deleteCount = deleteCount;
+    _totalCount = totalCount;
+    _badges = badges;
+    _mailAccounts = mailAccounts;
   }
 }

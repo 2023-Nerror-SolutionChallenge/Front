@@ -75,7 +75,10 @@ class InputField extends StatelessWidget {
               color: placeholder_color,
             ),
             prefixIcon: icon == "none"
-                ? null // 앞에 if 조건문으로 none아닐경우 PrefixIcon 주는건 못하나..?
+                ? const Icon(
+                    Icons.wordpress,
+                    color: transparent_color,
+                  )
                 : icon == "pw"
                     ? const Icon(
                         Icons.lock_outline,

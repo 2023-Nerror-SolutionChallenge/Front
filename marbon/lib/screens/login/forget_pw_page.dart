@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
 
+import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
 
 class ForgetPwPage extends StatelessWidget {
@@ -13,10 +14,18 @@ class ForgetPwPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: toolbar_height,
+        shadowColor: transparent_color,
+        backgroundColor: transparent_color,
+        iconTheme: const IconThemeData(
+          color: text_green_color,
+        ),
+      ),
       body: Column(
         children: [
           const SizedBox(
-            height: circle_start,
+            height: 20,
           ),
           Expanded(
             child: Container(
@@ -29,6 +38,9 @@ class ForgetPwPage extends StatelessWidget {
               ),
               child: ListView(
                 children: [
+                  const SizedBox(
+                    height: toolbar_height,
+                  ),
                   const Text(
                     "Forget password?",
                     textAlign: TextAlign.center,
@@ -77,10 +89,23 @@ class ForgetPwPage extends StatelessWidget {
                               "Send code",
                               style: TextStyle(fontSize: 20),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.pushNamed(
-                                    context, "/forget_pw_email");
+                                String authCode = await ApiService()
+                                    .postEmail(textController.text.toString());
+
+                                logger.d("postemail 완료 => CODE : $authCode");
+
+                                if (authCode != "") {
+                                  // if (context.mounted) return;  // Don't use 'BuildContext's across async gaps 이지만 이 조건문을 쓰면 안넘어가져서 쓰면 안될 것 같음
+                                  Navigator.pushNamed(
+                                    context,
+                                    "/forget_pw_email",
+                                    arguments: {"code": authCode},
+                                  );
+                                } else {
+                                  logger.d("인증코드가 정상적으로 오지 않았음");
+                                }
                               }
                             },
                           ),

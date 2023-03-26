@@ -6,6 +6,7 @@ import 'package:marbon/color.dart';
 import 'package:marbon/screens/home/home_page.dart';
 
 import 'package:marbon/screens/login/forget_pw_email_page.dart';
+import 'package:marbon/screens/login/forget_pw_new.dart';
 import 'package:marbon/screens/login/forget_pw_page.dart';
 import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/screens/login/register_email_page.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final userController = Get.put(UserController());
     return GetMaterialApp(
       title: 'Marbon',
       home: MotionTabBarPage(),
@@ -66,6 +68,7 @@ class MyApp extends StatelessWidget {
         "/register_email": (context) => RegisterEmailPage(),
         "/forget_pw": (context) => ForgetPwPage(),
         "/forget_pw_email": (context) => ForgetPwEmailPage(),
+        "/forget_pw_new": (context) => ForgetPwNew(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
         "/mainscreen": (context) => const MainScreen(),
