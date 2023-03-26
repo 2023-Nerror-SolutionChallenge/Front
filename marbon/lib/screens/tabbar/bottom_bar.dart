@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controller/bottom_navigation_controller.dart';
-import '../screens/mypage/my_page.dart';
-import '../screens/mainscreen/main_screen.dart';
-import '../screens/smartscan/smartscan.dart';
+import '../../controller/bottom_navigation_controller.dart';
+import '../mypage/my_page.dart';
+import '../mainscreen/main_screen.dart';
+import '../smartscan/smartscan.dart';
 
 class BottomBar extends StatelessWidget {
   BottomNavigationController bottomNavigationController =
@@ -11,7 +11,7 @@ class BottomBar extends StatelessWidget {
   BottomBar({Key? key}) : super(key: key);
 
   final screens = [
-    MainScreen(),
+    const MainScreen(),
     const SmartScan(),
     MyPage(),
   ];
