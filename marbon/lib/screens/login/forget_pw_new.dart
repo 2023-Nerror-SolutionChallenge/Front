@@ -103,6 +103,13 @@ class ForgetPwNew extends StatelessWidget {
                                     email, textController.text.toString());
 
                                 if (flag) {
+                                  await QuickAlert.show(
+                                    context: context,
+                                    type: QuickAlertType.success,
+                                    confirmBtnColor: text_green_color,
+                                    text: 'Change password successfully',
+                                  );
+
                                   Navigator.popUntil(
                                       context, ModalRoute.withName('/login'));
                                 } else {

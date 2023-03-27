@@ -88,6 +88,7 @@ class LoginPage extends StatelessWidget {
                                     passwordController.text.toString());
                                 if (returnData["flag"]) {
                                   Get.find<UserController>().upadateUserInform(
+                                    id: returnData["id"],
                                     nick: returnData["nick"],
                                     pw: returnData["pw"],
                                     accessToken: returnData["accessToken"],
@@ -148,6 +149,7 @@ class LoginPage extends StatelessWidget {
 }
 
 class UserController extends GetxController {
+  String _id = "";
   String _nick = "";
   String _pw = "";
   String _accessToken = "";
@@ -157,6 +159,7 @@ class UserController extends GetxController {
   List<int> _badges = [];
   List<dynamic> _mailAccounts = [];
 
+  get id => _id;
   get nick => _nick;
   get pw => _pw;
   get accessToken => _accessToken;
@@ -167,7 +170,8 @@ class UserController extends GetxController {
   get mailAccounts => _mailAccounts;
 
   void upadateUserInform(
-      {required String nick,
+      {required String id,
+      required String nick,
       required String pw,
       required String accessToken,
       required String refreshToken,
@@ -175,6 +179,7 @@ class UserController extends GetxController {
       required int totalCount,
       required List<int> badges,
       required List<dynamic> mailAccounts}) {
+    _id = id;
     _nick = nick;
     _pw = pw;
     _accessToken = accessToken;
