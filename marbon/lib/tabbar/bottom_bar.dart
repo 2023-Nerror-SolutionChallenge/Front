@@ -11,7 +11,7 @@ class BottomBar extends StatelessWidget {
   BottomBar({Key? key}) : super(key: key);
 
   final screens = [
-    MainScreen(),
+    const MainScreen(),
     const SmartScan(),
     MyPage(),
   ];

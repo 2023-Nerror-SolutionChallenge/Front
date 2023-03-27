@@ -90,7 +90,7 @@ class RegisterEmailPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        InputField("  Ex) fs18dx4", "none", textController),
+                        InputField("Ex) fs18dx4", "none", textController),
                         const SizedBox(height: input_button_gap),
                         SizedBox(
                           width: button_width,

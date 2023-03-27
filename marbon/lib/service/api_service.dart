@@ -26,7 +26,9 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        logger.d(data);
+
         var head = response.headers;
         String accessToken = head["access_token"].toString();
         String refreshToken = head["refresh_token"].toString();
@@ -86,11 +88,10 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        //var data = jsonDecode(response.body.toString());
         var head = response.headers;
         String accessToken = head["access_token"].toString();
         String refreshToken = head["refresh_token"].toString();
-
+        logger.d(jsonDecode(response.body.toString()));
         return {"accessToken": accessToken, "refreshToken": refreshToken};
       } else if (response.statusCode == 409) {
         logger.d("중복 닉네임 혹은 이미 가입되어 있음");
@@ -132,6 +133,36 @@ class ApiService {
       }
     } catch (e) {
       logger.d("Error : ${e.toString()}");
+    }
+  }
+
+  Future<bool> modifyPassword(String email, password) async {
+    try {
+      final url = Uri.parse('$baseUrl/auth/signup');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "id": email,
+          "password": password,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        logger.d(data);
+        return true;
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return false;
     }
   }
 }

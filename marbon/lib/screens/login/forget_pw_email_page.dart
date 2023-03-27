@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
-import 'package:marbon/screens/login/register_email_page.dart';
 import 'package:marbon/size.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -18,7 +17,6 @@ class ForgetPwEmailPage extends StatelessWidget {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
     final String authCode = arguments["code"];
-    logger.d(authCode);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,18 +44,15 @@ class ForgetPwEmailPage extends StatelessWidget {
               child: ListView(
                 children: [
                   const SizedBox(
-                    height: circle_start,
+                    height: toolbar_height,
                   ),
                   const Text(
-                    "Enter authentication code",
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: dark_green_color,
-                    ),
+                    "Authentication",
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 35, color: dark_green_color),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   SizedBox(
                     height: two_line_text_box,
@@ -66,11 +61,19 @@ class ForgetPwEmailPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Text(
-                          "Enter the verification Code that we have sent via the Email",
+                          "Enter the verification Code",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 16, color: explain_text_color),
                         ),
+                        Text(
+                          "that we have sent via the Email 📧",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: explain_text_color,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -81,7 +84,7 @@ class ForgetPwEmailPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        InputField("  Ex) fs18dx4", "none", textController),
+                        InputField("Ex) fs18dx4", "none", textController),
                         const SizedBox(height: input_button_gap),
                         SizedBox(
                           width: button_width,
@@ -98,7 +101,12 @@ class ForgetPwEmailPage extends StatelessWidget {
                                 if (authCode ==
                                     textController.text.toString()) {
                                   Navigator.pushNamed(
-                                      context, "/forget_pw_new");
+                                    context,
+                                    "/forget_pw_new",
+                                    arguments: {
+                                      "email": textController.text.toString()
+                                    },
+                                  );
                                 } else {
                                   QuickAlert.show(
                                       context: context,
