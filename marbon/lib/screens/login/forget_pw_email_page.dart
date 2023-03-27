@@ -17,6 +17,7 @@ class ForgetPwEmailPage extends StatelessWidget {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
     final String authCode = arguments["code"];
+    final String email = arguments["email"];
 
     return Scaffold(
       appBar: AppBar(
@@ -103,9 +104,7 @@ class ForgetPwEmailPage extends StatelessWidget {
                                   Navigator.pushNamed(
                                     context,
                                     "/forget_pw_new",
-                                    arguments: {
-                                      "email": textController.text.toString()
-                                    },
+                                    arguments: {"email": email},
                                   );
                                 } else {
                                   QuickAlert.show(

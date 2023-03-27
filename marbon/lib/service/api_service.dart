@@ -27,8 +27,6 @@ class ApiService {
 
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
-        logger.d(data);
-
         var head = response.headers;
         String accessToken = head["access_token"].toString();
         String refreshToken = head["refresh_token"].toString();
@@ -48,8 +46,11 @@ class ApiService {
               (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
         }
 
+        logger.d("Login Nick => ${data["nickname"]}");
+
         return {
           "flag": true,
+          "id": data['id'],
           "nick": data['nickname'],
           "pw": data['password'],
           "deleteCount": data["deleteCount"],
@@ -138,7 +139,35 @@ class ApiService {
 
   Future<bool> modifyPassword(String email, password) async {
     try {
-      final url = Uri.parse('$baseUrl/auth/signup');
+      final url = Uri.parse('$baseUrl/auth/modify/pw');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "id": email.toString(),
+          "password": password.toString(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> modifyNick(String email, nick) async {
+    try {
+      final url = Uri.parse('$baseUrl/auth/modify/nickname');
       final response = await http.post(
         url,
         headers: <String, String>{
@@ -148,13 +177,11 @@ class ApiService {
         },
         body: jsonEncode({
           "id": email,
-          "password": password,
+          "nickname": nick,
         }),
       );
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        logger.d(data);
         return true;
       } else {
         logger.d('오류 ${response.statusCode}');

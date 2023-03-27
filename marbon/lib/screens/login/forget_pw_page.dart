@@ -94,14 +94,15 @@ class ForgetPwPage extends StatelessWidget {
                                 String authCode = await ApiService()
                                     .postEmail(textController.text.toString());
 
-                                logger.d("postemail 완료 => CODE : $authCode");
-
                                 if (authCode != "") {
                                   // if (context.mounted) return;  // Don't use 'BuildContext's across async gaps 이지만 이 조건문을 쓰면 안넘어가져서 쓰면 안될 것 같음
                                   Navigator.pushNamed(
                                     context,
                                     "/forget_pw_email",
-                                    arguments: {"code": authCode},
+                                    arguments: {
+                                      "code": authCode,
+                                      "email": textController.text.toString()
+                                    },
                                   );
                                 } else {
                                   logger.d("인증코드가 정상적으로 오지 않았음");

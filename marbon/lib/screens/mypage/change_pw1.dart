@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/size.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../color.dart';
 import '../../widgets/input_field.dart';
@@ -12,11 +14,14 @@ class ChangePw1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    final String authCode = arguments["code"];
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: toolbar_height,
         shadowColor: transparent_color,
-        backgroundColor: Colors.white,
+        backgroundColor: transparent_color,
         iconTheme: const IconThemeData(
           color: text_green_color,
         ),
@@ -27,7 +32,7 @@ class ChangePw1 extends StatelessWidget {
             height: circle_start - 50,
           ),
           const Text(
-            "New password?",
+            "Authentication",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 35,
@@ -44,12 +49,12 @@ class ChangePw1 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: const [
                 Text(
-                  "Would you like to change your password?",
+                  "We have sent an email to your email account",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, color: explain_text_color),
                 ),
                 Text(
-                  "Put your Email linked with your account!",
+                  "with a verification code!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -66,19 +71,29 @@ class ChangePw1 extends StatelessWidget {
             key: _formKey,
             child: Column(
               children: [
-                InputField("Email", "email", textController),
+                InputField("Ex) fs18dx4", "none", textController),
                 const SizedBox(height: input_button_gap),
                 SizedBox(
                   width: button_width,
                   height: button_height,
                   child: TextButton(
                     child: const Text(
-                      "Send code",
+                      "Confirm",
                       style: TextStyle(fontSize: 20),
                     ),
+
+                    // 기존에 만들어둔거 사용하기
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushNamed(context, "/change_pw2");
+                        if (authCode == textController.text.toString()) {
+                          Navigator.pushNamed(context, "/change_pw2");
+                        } else {
+                          // ++ 입력된 값 자동으로 지워주는것도 추가
+                          QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.warning,
+                              text: "Please Check your verification code");
+                        }
                       }
                     },
                   ),

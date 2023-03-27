@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/size.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../color.dart';
+import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
 
 class ChangePw2 extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   TextEditingController textController = TextEditingController();
-
-  // api로 auth 코드 async로 가져올것
-  final String authCode = "123456";
 
   ChangePw2({super.key});
 
@@ -21,7 +21,7 @@ class ChangePw2 extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: toolbar_height,
         shadowColor: transparent_color,
-        backgroundColor: Colors.white,
+        backgroundColor: transparent_color,
         iconTheme: const IconThemeData(
           color: text_green_color,
         ),
@@ -32,7 +32,7 @@ class ChangePw2 extends StatelessWidget {
             height: circle_start - 50,
           ),
           const Text(
-            "Authentication",
+            "Settings Password",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 35,
@@ -49,12 +49,12 @@ class ChangePw2 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: const [
                 Text(
-                  "We have sent an email to your email account",
+                  "Please Enter your new password",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, color: explain_text_color),
                 ),
                 Text(
-                  "with a verification code!",
+                  "8~16 length, letters and numbers combination",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -71,7 +71,7 @@ class ChangePw2 extends StatelessWidget {
             key: _formKey,
             child: Column(
               children: [
-                InputField("  Ex) fs18dx4", "none", textController),
+                InputField("Password", "pw", textController),
                 const SizedBox(height: input_button_gap),
                 SizedBox(
                   width: button_width,
@@ -81,20 +81,29 @@ class ChangePw2 extends StatelessWidget {
                       "Confirm",
                       style: TextStyle(fontSize: 20),
                     ),
-
-                    // 기존에 만들어둔거 사용하기
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        if (authCode == textController.text.toString()) {
-                          // 등록 완료됨을 띄우고 okay 누르면 로그인창으로 넘기기
-                          Navigator.pushNamed(context, "/change_pw3");
+                        // pw를 바꾸는 api 성공하면 성공했다 알람띄우고 이동
+                        logger.d(Get.find<UserController>().id);
+                        bool flag = await ApiService().modifyPassword(
+                            Get.find<UserController>().id,
+                            textController.text.toString());
+
+                        if (flag) {
+                          await QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.success,
+                            confirmBtnColor: text_green_color,
+                            text: 'Change password successfully',
+                          );
+
+                          Navigator.popUntil(
+                              context, ModalRoute.withName('/bottom_bar'));
                         } else {
-                          // 인증번호 일치하지 않는다고 알리기
-                          // ++ 입력된 값 자동으로 지워주는것도 추가
                           QuickAlert.show(
                               context: context,
-                              type: QuickAlertType.warning,
-                              text: "Please Check your verification code");
+                              type: QuickAlertType.error,
+                              text: "Failed to save password. Retry!");
                         }
                       }
                     },

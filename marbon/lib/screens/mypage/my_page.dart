@@ -9,22 +9,23 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tab_container/tab_container.dart';
 
-class MyPage extends StatelessWidget {
-  var nick = "Song Kim".obs;
-  var logger = Logger();
+import '../../service/api_service.dart';
 
-  // 뱃지 소유 여부 -> 가짐1 안가짐0
-  final List<int> HaveBadge = [1, 1, 0, 1, 0, 0];
+class MyPage extends StatelessWidget {
+  var nick = "nickname".obs;
+
+  var logger = Logger();
+  final List<int> HaveBadge = Get.find<UserController>().badges;
 
   final _lightController = ValueNotifier<bool>(false);
   MyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    logger.d(Get.find<UserController>()
-        .mailAccounts); // 이걸로 로그인시 가져온 정보 불러오면됨 수정도 가능
-
     Get.put(NickController());
+    if (Get.find<UserController>().nick != null) {
+      Get.find<NickController>().setNick(Get.find<UserController>().nick);
+    }
     return LayoutBuilder(
       builder: (context, constrains) => Column(
         children: [
@@ -141,7 +142,6 @@ class MyPage extends StatelessWidget {
       barrierDismissible: true,
       confirmBtnText: 'Save',
       confirmBtnColor: text_green_color,
-      // customAsset: 'assets/custom.gif',
       widget: TextFormField(
         decoration: const InputDecoration(
           alignLabelWithHint: true,
@@ -168,15 +168,27 @@ class MyPage extends StatelessWidget {
         Navigator.pop(context);
         await Future.delayed(const Duration(milliseconds: 500));
         if ((newNick.length) > minNick) {
-          await QuickAlert.show(
-            context: context,
-            type: QuickAlertType.success,
-            confirmBtnColor: text_green_color,
-            confirmBtnText: "OK",
-            text: "Your Nickname has been saved!",
-          );
+          bool flag = await ApiService()
+              .modifyNick(Get.find<UserController>().id, newNick);
+
+          if (flag) {
+            await QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              confirmBtnColor: text_green_color,
+              confirmBtnText: "OK",
+              text: "Your Nickname has been saved!",
+            );
+            Get.find<NickController>().setNick(newNick);
+          } else {
+            await QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              confirmBtnColor: text_green_color,
+              text: 'Failed to modify nickname',
+            );
+          }
         }
-        Get.find<NickController>().setNick(newNick);
       },
     );
   }
@@ -357,8 +369,21 @@ class MyPage extends StatelessWidget {
                   ],
                 ),
                 IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(c, "/change_pw1");
+                  onPressed: () async {
+                    logger.d(Get.find<UserController>().id);
+                    String authCode = await ApiService()
+                        .postEmail(Get.find<UserController>().id);
+                    if (authCode != "") {
+                      logger
+                          .d("${Get.find<UserController>().id}  :  $authCode");
+                      Navigator.pushNamed(
+                        c,
+                        "/change_pw1",
+                        arguments: {"code": authCode},
+                      );
+                    } else {
+                      logger.d("인증코드가 정상적으로 오지 않았음");
+                    }
                   },
                   icon: const Icon(Icons.navigate_next_outlined),
                   iconSize: 30,

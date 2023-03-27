@@ -14,7 +14,6 @@ import 'package:marbon/screens/login/register_page.dart';
 import 'package:marbon/screens/mainscreen/main_screen.dart';
 import 'package:marbon/screens/mypage/change_pw1.dart';
 import 'package:marbon/screens/mypage/change_pw2.dart';
-import 'package:marbon/screens/mypage/change_pw3.dart';
 
 import 'package:marbon/screens/tabbar/bottom_bar.dart';
 import 'package:marbon/screens/tabbar/motion_tab_bar.dart';
@@ -78,7 +77,6 @@ class MyApp extends StatelessWidget {
         "/smartscan_delete": (context) => const SmartScanDelete(),
         "/change_pw1": (context) => ChangePw1(),
         "/change_pw2": (context) => ChangePw2(),
-        "/change_pw3": (context) => ChangePw3(),
         "/add_mail": (context) => const AddMailPage(),
         "/add_mailaddress": (context) => const AddMailAddressPage(),
         "/mail_server": (context) => const AddMailServerPage(),
