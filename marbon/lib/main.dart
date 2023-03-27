@@ -16,8 +16,8 @@ import 'package:marbon/screens/mypage/change_pw1.dart';
 import 'package:marbon/screens/mypage/change_pw2.dart';
 import 'package:marbon/screens/mypage/change_pw3.dart';
 
-import 'package:marbon/tabbar/bottom_bar.dart';
-import 'package:marbon/tabbar/motion_tab_bar.dart';
+import 'package:marbon/screens/tabbar/bottom_bar.dart';
+import 'package:marbon/screens/tabbar/motion_tab_bar.dart';
 import 'package:marbon/screens/smartscan/smartscan.dart';
 import 'package:marbon/screens/smartscan/smartscan_delete.dart';
 import 'package:marbon/screens/smartscan/smartscan_detail.dart';
@@ -26,8 +26,8 @@ import 'package:provider/provider.dart';
 import 'addmail/add_mailaddress.dart';
 import 'addmail/add_mailserver.dart';
 
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(); //추가!
+final GlobalKey<NavigatorState> navigatorKey =
+    GlobalKey<NavigatorState>(); //추가!
 void main() {
   runApp(
     MultiProvider(
@@ -79,9 +79,9 @@ class MyApp extends StatelessWidget {
         "/change_pw1": (context) => ChangePw1(),
         "/change_pw2": (context) => ChangePw2(),
         "/change_pw3": (context) => ChangePw3(),
-        "/add_mail": (context)=> AddMailPage(),
-        "/add_mailaddress" : (context)=> AddMailAddressPage(),
-        "/mail_server" : (context) => AddMailServerPage(),
+        "/add_mail": (context) => const AddMailPage(),
+        "/add_mailaddress": (context) => const AddMailAddressPage(),
+        "/mail_server": (context) => const AddMailServerPage(),
       },
     );
   }
