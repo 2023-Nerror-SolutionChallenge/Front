@@ -47,7 +47,7 @@ class ForgetPwPage extends StatelessWidget {
                     style: TextStyle(fontSize: 35, color: dark_green_color),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   SizedBox(
                     height: two_line_text_box,
@@ -56,7 +56,7 @@ class ForgetPwPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Text(
-                          "Don't worry! Please enter the Email ",
+                          "😇 Don't worry! Please enter the Email ",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 16, color: explain_text_color),

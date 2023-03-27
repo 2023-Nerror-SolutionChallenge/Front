@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
+import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/widgets/input_field.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tab_container/tab_container.dart';
 
-
 class MyPage extends StatelessWidget {
   var nick = "Song Kim".obs;
+  var logger = Logger();
+
   // 뱃지 소유 여부 -> 가짐1 안가짐0
   final List<int> HaveBadge = [1, 1, 0, 1, 0, 0];
 
@@ -18,6 +21,9 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logger.d(Get.find<UserController>()
+        .mailAccounts); // 이걸로 로그인시 가져온 정보 불러오면됨 수정도 가능
+
     Get.put(NickController());
     return LayoutBuilder(
       builder: (context, constrains) => Column(
@@ -55,8 +61,8 @@ class MyPage extends StatelessWidget {
                   children: [
                     _BuildBadgeContainer(
                         constrains.maxHeight * 0.6, constrains.maxWidth * 0.9),
-                    _BuildMymailsContainer(
-                        constrains.maxHeight * 0.6, constrains.maxWidth * 0.9, context),
+                    _BuildMymailsContainer(constrains.maxHeight * 0.6,
+                        constrains.maxWidth * 0.9, context),
                     _BuildSettingsContainer(constrains.maxHeight * 0.6,
                         constrains.maxWidth * 0.9, context),
                   ],
@@ -253,85 +259,77 @@ class MyPage extends StatelessWidget {
         children: [
           Positioned(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    height: 100,
-                    width: MediaQuery.of(c).size.width - 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                          bottomLeft: Radius.circular(30),
-                          topLeft: Radius.circular(30)),
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: 100,
+                width: MediaQuery.of(c).size.width - 20,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                      bottomLeft: Radius.circular(30),
+                      topLeft: Radius.circular(30)),
+                ),
+              ),
+              Container(
+                height: 100,
+                width: MediaQuery.of(c).size.width - 20,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                      bottomLeft: Radius.circular(30),
+                      topLeft: Radius.circular(30)),
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(c).size.width - 20,
+                height: 100,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                      bottomLeft: Radius.circular(30),
+                      topLeft: Radius.circular(30)),
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    backgroundColor: const Color(0xffffffff),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(90.0),
                     ),
-
                   ),
-                  Container(
-                    height: 100,
-                    width: MediaQuery.of(c).size.width - 20,
+                  onPressed: () {
+                    Navigator.pushNamed(c, "/add_mail");
+                  },
+                  child: Container(
                     decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                          bottomLeft: Radius.circular(30),
-                          topLeft: Radius.circular(30)),
-                    ),
-
+                        image: DecorationImage(
+                            image: AssetImage("assets/img/plus.png"),
+                            fit: BoxFit.none)),
                   ),
 
-                  Container(
-                    width: MediaQuery.of(c).size.width - 20,
-                    height: 100,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                          bottomLeft: Radius.circular(30),
-                          topLeft: Radius.circular(30)),
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: const Color(0xffffffff),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(90.0),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(c, "/add_mail");
-                      },
-                      child:
-                        Container(
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage("assets/img/plus.png"),
-                                  fit: BoxFit.none)),
-
-                        ),
-
-
-
-                      // const Text(
-                      //   "+ Add Mail",
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //       color: Colors.black,
-                      //       fontSize: 18,
-                      //       fontWeight: FontWeight.w700),
-                      // ),
-                    ),
-                  )
-                ],
-              ))
+                  // const Text(
+                  //   "+ Add Mail",
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(
+                  //       color: Colors.black,
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.w700),
+                  // ),
+                ),
+              )
+            ],
+          ))
         ],
       ),
     );
   }
-
 
   Widget _BuildSettingsContainer(double h, double w, BuildContext c) {
     return Container(

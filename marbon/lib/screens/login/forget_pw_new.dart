@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/size.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../color.dart';
+import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
 
 class ForgetPwNew extends StatelessWidget {
@@ -12,11 +15,14 @@ class ForgetPwNew extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    final String email = arguments["email"];
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: toolbar_height,
         shadowColor: transparent_color,
-        backgroundColor: Colors.white,
+        backgroundColor: transparent_color,
         iconTheme: const IconThemeData(
           color: text_green_color,
         ),
@@ -24,7 +30,7 @@ class ForgetPwNew extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(
-            height: circle_start,
+            height: 20,
           ),
           Expanded(
             child: Container(
@@ -37,16 +43,16 @@ class ForgetPwNew extends StatelessWidget {
               ),
               child: ListView(
                 children: [
+                  const SizedBox(
+                    height: toolbar_height,
+                  ),
                   const Text(
                     "Settings Password",
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: dark_green_color,
-                    ),
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 35, color: dark_green_color),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   SizedBox(
                     height: two_line_text_box,
@@ -55,13 +61,13 @@ class ForgetPwNew extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Text(
-                          "Please Enter your new password",
+                          "Please Enter your new password 🔑",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 16, color: explain_text_color),
                         ),
                         Text(
-                          "8~16 length, letters and numbers combination",
+                          "8~16 length, letters + numbers combination",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
@@ -88,12 +94,24 @@ class ForgetPwNew extends StatelessWidget {
                               "Confirm",
                               style: TextStyle(fontSize: 20),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 // pw를 바꾸는 api 성공하면 성공했다 알람띄우고 이동
                                 // textController.text.toString() 값을 비밀번호로 수정하는 api
-                                Navigator.popUntil(
-                                    context, ModalRoute.withName('/login'));
+
+                                bool flag = await ApiService().modifyPassword(
+                                    email, textController.text.toString());
+
+                                if (flag) {
+                                  Navigator.popUntil(
+                                      context, ModalRoute.withName('/login'));
+                                } else {
+                                  QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.error,
+                                      text:
+                                          "There is no account or something wrong Retry!");
+                                }
                               }
                             },
                           ),
