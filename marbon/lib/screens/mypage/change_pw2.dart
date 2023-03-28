@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/size.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../color.dart';
+import '../../controller/userController.dart';
 import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
 import '../../widgets/two_line_text.dart';
@@ -82,7 +82,7 @@ class ChangePw2 extends StatelessWidget {
                           );
 
                           Navigator.popUntil(
-                              context, ModalRoute.withName('/bottom_bar'));
+                              context, ModalRoute.withName('/bottom_tab_bar'));
                         } else {
                           QuickAlert.show(
                               context: context,

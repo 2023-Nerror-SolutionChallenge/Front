@@ -3,12 +3,13 @@ import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
-import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/widgets/input_field.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tab_container/tab_container.dart';
 
+import '../../controller/nickController.dart';
+import '../../controller/userController.dart';
 import '../../service/api_service.dart';
 
 class MyPage extends StatelessWidget {
@@ -23,6 +24,8 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(NickController());
+
+    logger.d("NICK  : ${Get.find<UserController>().nick}");
     if (Get.find<UserController>().nick != null) {
       Get.find<NickController>().setNick(Get.find<UserController>().nick);
     }
@@ -180,6 +183,7 @@ class MyPage extends StatelessWidget {
               text: "Your Nickname has been saved!",
             );
             Get.find<NickController>().setNick(newNick);
+            Get.find<UserController>().setNick(newNick);
           } else {
             await QuickAlert.show(
               context: context,
@@ -431,14 +435,5 @@ class MyPage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class NickController extends GetxController {
-  RxString nick = "Song Kim".obs;
-
-  void setNick(String newNick) {
-    nick.value = newNick;
-    update();
   }
 }

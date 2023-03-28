@@ -47,7 +47,7 @@ dependencies:
   percent_indicator: ^3.4.0
   fluentui_icons: ^1.0.0
   get: ^4.3.0
-  motion_tab_bar: ^0.1.5
+  flashy_tab_bar2: ^0.0.6
 
 dev_dependencies:
   flutter_test:
