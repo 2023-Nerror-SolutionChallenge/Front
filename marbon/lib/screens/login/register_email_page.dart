@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
+import 'package:marbon/widgets/two_line_text.dart';
 import 'package:quickalert/quickalert.dart';
 import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
@@ -39,7 +40,7 @@ class RegisterEmailPage extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(
-            height: circle_start,
+            height: 20,
           ),
           Expanded(
             child: Container(
@@ -52,36 +53,21 @@ class RegisterEmailPage extends StatelessWidget {
               ),
               child: ListView(
                 children: [
+                  const SizedBox(
+                    height: toolbar_height,
+                  ),
                   const Text(
                     "Register",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 40,
-                      color: dark_green_color,
-                    ),
+                        fontSize: 40,
+                        color: dark_green_color,
+                        fontWeight: FontWeight.w800),
                   ),
-                  const SizedBox(height: title_input_gap),
-                  SizedBox(
-                    height: two_line_text_box,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "We have sent an email to your email account",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 16, color: explain_text_color),
-                        ),
-                        Text(
-                          "with a verification code!",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: explain_text_color,
-                          ),
-                        )
-                      ],
-                    ),
+                  const SizedBox(height: title_txt_gap),
+                  twoLineText(
+                    "We have sent an email to your account",
+                    "with a verification code!",
                   ),
                   const SizedBox(
                     height: 40,
@@ -98,7 +84,8 @@ class RegisterEmailPage extends StatelessWidget {
                           child: TextButton(
                             child: const Text(
                               "Register",
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
@@ -107,13 +94,12 @@ class RegisterEmailPage extends StatelessWidget {
                                   // 등록 완료됨을 띄우고 okay -> 로그인창
 
                                   var tokens = await ApiService()
-                                      .postSignup(email, nick, pw);
+                                      .postSignup(email, pw, nick);
 
                                   accessToken = tokens["accessToken"];
                                   refreshToken = tokens["refreshToken"];
 
                                   if (accessToken == "" && refreshToken == "") {
-                                    // 토큰없음
                                     QuickAlert.show(
                                       context: context,
                                       type: QuickAlertType.error,
@@ -121,7 +107,7 @@ class RegisterEmailPage extends StatelessWidget {
                                           "Member registration failed. Retry Plz",
                                     );
                                   } else {
-                                    // 토큰있음
+                                    // 가입성공
                                     QuickAlert.show(
                                       context: context,
                                       type: QuickAlertType.success,

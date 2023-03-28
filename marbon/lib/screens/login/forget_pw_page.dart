@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
+import 'package:marbon/widgets/two_line_text.dart';
 
 import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
@@ -42,38 +43,22 @@ class ForgetPwPage extends StatelessWidget {
                     height: toolbar_height,
                   ),
                   const Text(
-                    "Forget password?",
+                    "Forget Password?",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 35, color: dark_green_color),
+                    style: TextStyle(
+                        fontSize: 32,
+                        color: dark_green_color,
+                        fontWeight: FontWeight.w800),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 32,
                   ),
-                  SizedBox(
-                    height: two_line_text_box,
-                    width: 330,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "😇 Don't worry! Please enter the Email ",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 16, color: explain_text_color),
-                        ),
-                        Text(
-                          "linked with your account",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: explain_text_color,
-                          ),
-                        )
-                      ],
-                    ),
+                  twoLineText(
+                    "Don't worry 😇 Please enter the Email",
+                    "linked with your account",
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: title_txt_gap,
                   ),
                   Form(
                     key: _formKey,
@@ -87,7 +72,8 @@ class ForgetPwPage extends StatelessWidget {
                           child: TextButton(
                             child: const Text(
                               "Send code",
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {

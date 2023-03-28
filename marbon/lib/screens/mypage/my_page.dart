@@ -49,11 +49,11 @@ class MyPage extends StatelessWidget {
                   selectedTextStyle: const TextStyle(
                       color: green_color,
                       fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.w800),
                   unselectedTextStyle: const TextStyle(
                       color: unselected_color,
                       fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.w800),
                   tabs: const [
                     "BADGES",
                     "MY MAILS",
@@ -106,8 +106,8 @@ class MyPage extends StatelessWidget {
                   Get.find<NickController>().nick.value.toString(),
                   style: const TextStyle(
                       color: text_green_color,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
+                      fontSize: 25,
+                      fontWeight: FontWeight.w800),
                 );
               }),
               IconButton(
@@ -364,13 +364,16 @@ class MyPage extends StatelessWidget {
                     SizedBox(width: 20),
                     Text(
                       "Change Password",
-                      style: TextStyle(fontSize: 17, color: yellow_green_color),
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: yellow_green_color,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
                 IconButton(
                   onPressed: () async {
-                    logger.d(Get.find<UserController>().id);
                     String authCode = await ApiService()
                         .postEmail(Get.find<UserController>().id);
                     if (authCode != "") {
@@ -408,7 +411,11 @@ class MyPage extends StatelessWidget {
                     SizedBox(width: 20),
                     Text(
                       "Dark Mode",
-                      style: TextStyle(fontSize: 17, color: yellow_green_color),
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: yellow_green_color,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
