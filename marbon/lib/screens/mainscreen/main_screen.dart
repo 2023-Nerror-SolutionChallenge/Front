@@ -4,8 +4,9 @@ import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+import '../../controller/countController.dart';
+import '../../controller/userController.dart';
 import '../../size.dart';
-import '../login/login_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -30,9 +31,9 @@ class _MainScreenState extends State<MainScreen> {
           .setLevel(Get.find<UserController>().currentLevel);
     }
 
-    var deletePercent = Get.find<CountController>()._totalCount.value != 0
-        ? (Get.find<CountController>()._deleteCount.value) /
-            (Get.find<CountController>()._totalCount.value)
+    var deletePercent = Get.find<CountController>().totalCount != 0
+        ? (Get.find<CountController>().deleteCount.value) /
+            (Get.find<CountController>().totalCount.value)
         : 0.0;
 
     return LayoutBuilder(
@@ -41,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
           padding: const EdgeInsets.only(
               left: mainscreen_padding_width / 2,
               right: mainscreen_padding_width / 2,
-              top: 50,
+              top: 60,
               bottom: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -84,11 +85,11 @@ class _MainScreenState extends State<MainScreen> {
                 children: [
                   _buildHalfContainer(
                       constrains,
-                      "📫 ${Get.find<CountController>()._totalCount}",
+                      "📫 ${Get.find<CountController>().totalCount}",
                       "전체 메일 갯수"),
                   _buildHalfContainer(
                       constrains,
-                      "🌲 ${Get.find<CountController>()._currentLevel}",
+                      "🌲 ${Get.find<CountController>().currentLevel}",
                       "현재 당신의 레벨"),
                 ],
               )
@@ -120,7 +121,7 @@ class _MainScreenState extends State<MainScreen> {
                 height: total_delete_text_gap,
               ),
               Text(
-                "${Get.find<CountController>()._deleteCount.value} 건",
+                "${Get.find<CountController>().deleteCount} 건",
                 style: const TextStyle(
                     color: green_color,
                     fontSize: 18,
@@ -154,7 +155,7 @@ class _MainScreenState extends State<MainScreen> {
                 height: total_delete_text_gap,
               ),
               Text(
-                "${(Get.find<CountController>()._deleteCount.value) * 0.004}  kg",
+                "${(Get.find<CountController>().deleteCount.value) * 0.004}  kg",
                 style: const TextStyle(
                     color: green_color,
                     fontSize: 18,
@@ -252,26 +253,5 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
-  }
-}
-
-class CountController extends GetxController {
-  final _deleteCount = 0.obs;
-  final _totalCount = 0.obs;
-  final _currentLevel = 0.obs;
-
-  void setDeleteCount(int deleteCount) {
-    _deleteCount.value = deleteCount;
-    update();
-  }
-
-  void setTotalCount(int totalCount) {
-    _totalCount.value = totalCount;
-    update();
-  }
-
-  void setLevel(int level) {
-    _currentLevel.value = level;
-    update();
   }
 }

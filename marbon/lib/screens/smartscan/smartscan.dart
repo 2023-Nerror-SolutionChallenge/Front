@@ -53,12 +53,9 @@ class SmartScan extends StatelessWidget {
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
                 SizedBox(
-                  width: 300,
-                  height: 300,
+                  width: constrains.maxHeight - (300 + 140 + 15),
+                  height: constrains.maxHeight - (300 + 140 + 15),
                   child: Image.asset(
                     'assets/img/scan.png',
                     fit: BoxFit.fill,

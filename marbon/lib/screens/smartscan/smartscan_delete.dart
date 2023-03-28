@@ -108,7 +108,7 @@ class SmartScanDelete extends StatelessWidget {
                       ),
                       onPressed: () {
                         Navigator.popUntil(
-                            context, ModalRoute.withName('/bottom_bar'));
+                            context, ModalRoute.withName('/bottom_tab_bar'));
                       }),
                 ),
               ],
