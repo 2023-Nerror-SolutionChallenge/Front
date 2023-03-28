@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
-import 'package:flutter_dismissible_tile/flutter_dismissible_tile.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
@@ -14,15 +13,23 @@ import '../../controller/nickController.dart';
 import '../../controller/userController.dart';
 import '../../service/api_service.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
+  const MyPage({super.key});
+
+  @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
   var nick = "nickname".obs;
 
   var logger = Logger();
+
   final List<int> HaveBadge = Get.find<UserController>().badges;
+
   final List<dynamic> accounts = Get.find<UserController>().mailAccounts;
 
   final _lightController = ValueNotifier<bool>(false);
-  MyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +39,7 @@ class MyPage extends StatelessWidget {
     if (Get.find<UserController>().nick != null) {
       Get.find<NickController>().setNick(Get.find<UserController>().nick);
     }
+
     return LayoutBuilder(
       builder: (context, constrains) => Column(
         children: [
@@ -68,8 +76,11 @@ class MyPage extends StatelessWidget {
                   children: [
                     _BuildBadgeContainer(
                         constrains.maxHeight * 0.6, constrains.maxWidth * 0.9),
-                    _BuildMymailsContainer(constrains.maxHeight * 0.6,
-                        constrains.maxWidth * 0.9, context),
+                    _BuildMymailsContainer(
+                      constrains.maxHeight * 0.6,
+                      constrains.maxWidth * 0.9,
+                      context,
+                    ),
                     _BuildSettingsContainer(constrains.maxHeight * 0.6,
                         constrains.maxWidth * 0.9, context),
                   ],
@@ -272,27 +283,21 @@ class MyPage extends StatelessWidget {
   }
 
   Widget _BuildMymailsContainer(double h, double w, BuildContext c) {
-    logger.d(accounts);
-    return Container(
-      padding: EdgeInsets.only(top: h * 0.05),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: List.generate(
-            accounts.length + 1,
-            (index) {
-              return index < accounts.length
-                  ? _mailContainer(w, accounts[index])
-                  : _addMailContainer(w, c);
-            },
-          ),
-        ),
+    List<int> items = List<int>.generate(accounts.length, (int index) => index);
+    return Center(
+      child: ListView.builder(
+        itemCount: accounts.length + 1,
+        itemBuilder: (BuildContext context, int index) {
+          return index < accounts.length
+              ? _mailContainer(w, accounts[index], index, items)
+              : _addMailContainer(w, c);
+        },
       ),
     );
   }
 
-  Widget _mailContainer(double width, String account) {
+  Widget _mailContainer(
+      double width, String account, int index, List<int> items) {
     late String company;
     late Widget logo;
     String mailCompany =
@@ -324,50 +329,64 @@ class MyPage extends StatelessWidget {
         company = "기타(IMAP)";
         logo = logoImage("imap");
     }
-    return Container(
-        height: 120,
-        alignment: Alignment.center,
-        child: DismissibleTile(
-          key: UniqueKey(),
-          borderRadius: const BorderRadius.all(Radius.circular(30)),
-          delayBeforeResize: const Duration(milliseconds: 1000),
-          rtlDismissedColor: green_color,
-          rtlOverlayIndent: 30,
-          // This is where you can call your async function which will update
-          // your data.
-          confirmDismiss: (direction) => Future.delayed(
-            const Duration(seconds: 1),
-            () => true,
+    return Dismissible(
+      key: ValueKey<int>(items[index]),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        // 이부분에 api 넣으면 됨!!
+
+        setState(() {
+          items.removeAt(index);
+        });
+      },
+      background: Container(color: transparent_color),
+      secondaryBackground: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 30.0),
+        margin: const EdgeInsets.only(top: 5, bottom: 5),
+        color: green_color,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: const [
+            Icon(Icons.delete, color: Colors.white),
+            SizedBox(width: 10),
+            Text("Delete",
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Colors.white)),
+          ],
+        ),
+      ),
+      child: Container(
+        height: 110,
+        alignment: Alignment.topCenter,
+        child: Container(
+          height: 100,
+          width: width,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
-          rtlOverlay: const _SlidableOverlay(
-            title: 'Delete',
-            iconData: Icons.delete,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(width: 40),
+              logo,
+              const SizedBox(width: 25),
+              Text(
+                company,
+                style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800),
+              ),
+            ],
           ),
-          child: Container(
-            height: 100,
-            width: width,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(width: 40),
-                logo,
-                const SizedBox(width: 25),
-                Text(
-                  company,
-                  style: const TextStyle(
-                      fontSize: 24,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w800),
-                ),
-              ],
-            ),
-          ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _addMailContainer(double width, BuildContext c) {
@@ -382,7 +401,11 @@ class MyPage extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(30)),
         ),
         child: IconButton(
-          icon: const Icon(Icons.add_circle_outline),
+          icon: const Icon(
+            Icons.add_circle_outline,
+            color: green_color,
+            size: 50,
+          ),
           onPressed: () {
             Navigator.pushNamed(c, "/add_mail");
           },
