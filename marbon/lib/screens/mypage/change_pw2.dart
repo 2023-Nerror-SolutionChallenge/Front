@@ -68,7 +68,6 @@ class ChangePw2 extends StatelessWidget {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         // pw를 바꾸는 api 성공하면 성공했다 알람띄우고 이동
-                        logger.d(Get.find<UserController>().id);
                         bool flag = await ApiService().modifyPassword(
                             Get.find<UserController>().id,
                             textController.text.toString());

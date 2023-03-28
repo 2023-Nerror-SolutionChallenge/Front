@@ -46,7 +46,6 @@ class ApiService {
               (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
         }
 
-        logger.d("Login Nick => ${data["nickname"]}");
         logger.d("deleteCount ${data['deletedCount']}");
 
         return {
@@ -94,7 +93,6 @@ class ApiService {
         var head = response.headers;
         String accessToken = head["access_token"].toString();
         String refreshToken = head["refresh_token"].toString();
-        logger.d(jsonDecode(response.body.toString()));
         return {"accessToken": accessToken, "refreshToken": refreshToken};
       } else if (response.statusCode == 409) {
         logger.d("중복 닉네임 혹은 이미 가입되어 있음");

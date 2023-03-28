@@ -31,9 +31,9 @@ class _MainScreenState extends State<MainScreen> {
           .setLevel(Get.find<UserController>().currentLevel);
     }
 
-    var deletePercent = Get.find<CountController>().totalCount != 0
-        ? (Get.find<CountController>().deleteCount.value) /
-            (Get.find<CountController>().totalCount.value)
+    double deletePercent = Get.find<CountController>().totalCount != 0
+        ? ((Get.find<CountController>().deleteCount.value) /
+            (Get.find<CountController>().totalCount.value))
         : 0.0;
 
     return LayoutBuilder(
@@ -78,8 +78,11 @@ class _MainScreenState extends State<MainScreen> {
               const SizedBox(height: total_delete_container_gap),
               _buildTotalDelete(constrains),
               const SizedBox(height: total_delete_container_gap),
-              _buildPercentContainer(constrains, "$deletePercent %",
-                  "전체메일에서 삭제된 메일 만큼의 비율", deletePercent),
+              _buildPercentContainer(
+                  constrains,
+                  "${double.parse(deletePercent.toStringAsFixed(3)) * 100} %",
+                  "전체메일에서 삭제된 메일 만큼의 비율",
+                  deletePercent),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
