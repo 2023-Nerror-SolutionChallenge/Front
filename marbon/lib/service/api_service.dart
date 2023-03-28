@@ -47,14 +47,16 @@ class ApiService {
         }
 
         logger.d("Login Nick => ${data["nickname"]}");
+        logger.d("deleteCount ${data['deletedCount']}");
 
         return {
           "flag": true,
           "id": data['id'],
           "nick": data['nickname'],
           "pw": data['password'],
-          "deleteCount": data["deleteCount"],
+          "deleteCount": data["deletedCount"],
           "totalCount": data['totalCount'],
+          "currentLevel": data['currentLevel'],
           "mailAccounts": data["accountList"],
           "badgeList": badgeList,
           "accessToken": accessToken,

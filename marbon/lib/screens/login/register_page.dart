@@ -37,9 +37,9 @@ class RegisterPage extends StatelessWidget {
                   "Register",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 40,
-                    color: dark_green_color,
-                  ),
+                      fontSize: 40,
+                      color: dark_green_color,
+                      fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: title_input_gap),
                 // 회원가입폼
@@ -60,7 +60,8 @@ class RegisterPage extends StatelessWidget {
                         child: TextButton(
                           child: const Text(
                             "Register",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600),
                           ),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
@@ -93,14 +94,18 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 120,
+                  height: 70,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       "Already have an account?",
-                      style: TextStyle(fontSize: 18, color: dark_green_color),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: dark_green_color,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
@@ -109,9 +114,9 @@ class RegisterPage extends StatelessWidget {
                       child: const Text(
                         "Login Now",
                         style: TextStyle(
-                          fontSize: 18,
-                          color: yellow_green_color,
-                        ),
+                            fontSize: 16,
+                            color: yellow_green_color,
+                            fontWeight: FontWeight.w600),
                       ),
                       onPressed: () {
                         Navigator.pop(context);

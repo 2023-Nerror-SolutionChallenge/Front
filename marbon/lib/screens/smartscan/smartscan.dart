@@ -47,7 +47,7 @@ class SmartScan extends StatelessWidget {
                         style: TextStyle(
                           color: text_green_color,
                           fontSize: 40,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     )
@@ -81,9 +81,9 @@ class SmartScan extends StatelessWidget {
                       child: const Text(
                         "scanning",
                         style: TextStyle(
-                          color: text_green_color,
-                          fontSize: 18,
-                        ),
+                            color: text_green_color,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
                       ),
                       onPressed: () =>
                           {Navigator.pushNamed(context, "/smartscan_detail")}),

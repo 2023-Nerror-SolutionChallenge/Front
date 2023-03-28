@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
       home: MotionTabBarPage(),
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xffEDEEDD),
+        fontFamily: 'NaverNanumSquareNeo',
         // 버튼 테마
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
