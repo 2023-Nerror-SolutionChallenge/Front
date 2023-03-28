@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
+import '../../controller/userController.dart';
 import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
 
@@ -34,7 +35,11 @@ class LoginPage extends StatelessWidget {
                   const Text(
                     "Login",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 40, color: dark_green_color),
+                    style: TextStyle(
+                      fontSize: 40,
+                      color: dark_green_color,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   const SizedBox(height: title_input_gap),
                   // 로그인폼
@@ -46,29 +51,26 @@ class LoginPage extends StatelessWidget {
                         const SizedBox(height: input_input_gap),
                         InputField("Password", "pw", passwordController),
                         const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: transparent_color,
-                                foregroundColor: dark_green_color,
-                              ),
-                              child: const Text(
-                                "Forget Password?",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  "/forget_pw",
-                                );
-                              },
+                        Container(
+                          height: 40,
+                          padding: const EdgeInsets.only(right: 40),
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: transparent_color,
+                              foregroundColor: dark_green_color,
                             ),
-                            const SizedBox(
-                              width: 30,
-                            )
-                          ],
+                            child: const Text(
+                              "Forget Password?",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                "/forget_pw",
+                              );
+                            },
+                          ),
                         ),
                         const SizedBox(height: 30),
                         SizedBox(
@@ -77,7 +79,8 @@ class LoginPage extends StatelessWidget {
                           child: TextButton(
                             child: const Text(
                               "Login",
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
                             ),
 
                             //로그인 성공시 해당 정보들을 받아서 getX에 등록하기
@@ -95,11 +98,12 @@ class LoginPage extends StatelessWidget {
                                     refreshToken: returnData["refreshToken"],
                                     deleteCount: returnData["deleteCount"],
                                     totalCount: returnData['totalCount'],
+                                    currentLevel: returnData['currentLevel'],
                                     badges: returnData["badgeList"],
                                     mailAccounts: returnData["mailAccounts"],
                                   );
-
-                                  Navigator.pushNamed(context, "/bottom_bar");
+                                  Navigator.pushNamed(
+                                      context, "/bottom_tab_bar");
                                   // Navigator.pushNamed(context, "/bottomBar", arguments: returnData);
                                 }
                               }
@@ -109,7 +113,7 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 180),
+                  const SizedBox(height: 135),
                   Row(
                     // 계정 추가 텍스트버튼
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -117,9 +121,9 @@ class LoginPage extends StatelessWidget {
                       const Text(
                         "Don’t have an account?",
                         style: TextStyle(
-                          fontSize: 18,
-                          color: dark_green_color,
-                        ),
+                            fontSize: 16,
+                            color: dark_green_color,
+                            fontWeight: FontWeight.w400),
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
@@ -128,9 +132,9 @@ class LoginPage extends StatelessWidget {
                         child: const Text(
                           "Register Now",
                           style: TextStyle(
-                            fontSize: 18,
-                            color: yellow_green_color,
-                          ),
+                              fontSize: 16,
+                              color: yellow_green_color,
+                              fontWeight: FontWeight.w600),
                         ),
                         onPressed: () {
                           Navigator.pushNamed(context, "/register");
@@ -145,48 +149,5 @@ class LoginPage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class UserController extends GetxController {
-  String _id = "";
-  String _nick = "";
-  String _pw = "";
-  String _accessToken = "";
-  String _refreshToken = "";
-  int _deleteCount = 0;
-  int _totalCount = 0;
-  List<int> _badges = [];
-  List<dynamic> _mailAccounts = [];
-
-  get id => _id;
-  get nick => _nick;
-  get pw => _pw;
-  get accessToken => _accessToken;
-  get refreshToken => _refreshToken;
-  get deleteCount => _deleteCount;
-  get totalCount => _totalCount;
-  get badges => _badges;
-  get mailAccounts => _mailAccounts;
-
-  void upadateUserInform(
-      {required String id,
-      required String nick,
-      required String pw,
-      required String accessToken,
-      required String refreshToken,
-      required int deleteCount,
-      required int totalCount,
-      required List<int> badges,
-      required List<dynamic> mailAccounts}) {
-    _id = id;
-    _nick = nick;
-    _pw = pw;
-    _accessToken = accessToken;
-    _refreshToken = refreshToken;
-    _deleteCount = deleteCount;
-    _totalCount = totalCount;
-    _badges = badges;
-    _mailAccounts = mailAccounts;
   }
 }

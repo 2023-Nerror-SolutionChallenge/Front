@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+import 'package:marbon/color.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+
+import '../../controller/countController.dart';
+import '../../controller/userController.dart';
+import '../../size.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -9,214 +16,240 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  var logger = Logger();
   @override
   Widget build(BuildContext context) {
+    Get.put(CountController());
+    Get.find<CountController>()
+        .setDeleteCount(Get.find<UserController>().deleteCount);
+    if (Get.find<UserController>().totalCount != null) {
+      Get.find<CountController>()
+          .setTotalCount(Get.find<UserController>().totalCount);
+    }
+    if (Get.find<UserController>().currentLevel != null) {
+      Get.find<CountController>()
+          .setLevel(Get.find<UserController>().currentLevel);
+    }
+
+    var deletePercent = Get.find<CountController>().totalCount != 0
+        ? (Get.find<CountController>().deleteCount.value) /
+            (Get.find<CountController>().totalCount.value)
+        : 0.0;
+
     return LayoutBuilder(
       builder: (context, constrains) => Center(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.only(
+              left: mainscreen_padding_width / 2,
+              right: mainscreen_padding_width / 2,
+              top: 60,
+              bottom: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              CircularPercentIndicator(
-                animation: true,
-                animationDuration: 10000,
-                radius: 200,
-                lineWidth: 15,
-                percent: 0.8,
-                progressColor: const Color(0xff5C823D),
-                backgroundColor: const Color(0xffC4C78C),
-                circularStrokeCap: CircularStrokeCap.round,
+              Stack(
+                // 원형 프로그래스바
+                children: [
+                  CircularPercentIndicator(
+                    animation: true,
+                    animationDuration: 1000,
+                    radius: 200,
+                    lineWidth: 15,
+                    percent: 0.8,
+                    progressColor: green_color,
+                    backgroundColor: yellow_green_color,
+                    circularStrokeCap: CircularStrokeCap.round,
+                  ),
+                  Positioned(
+                    top: 50,
+                    left: 50,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100 * 0.3),
+                      child: Image.asset(
+                        'assets/img/marbon.png',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: total_delete_container_gap),
+              _buildTotalDelete(constrains),
+              const SizedBox(height: total_delete_container_gap),
+              _buildPercentContainer(constrains, "$deletePercent %",
+                  "전체메일에서 삭제된 메일 만큼의 비율", deletePercent),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child:
-                      const Text("탄소배출감소"),
-                    ),
-                    Container(
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage("assets/img/line.png"),
-                              fit: BoxFit.none)),
-                    ),
-                    Container(
-                      child: const Text("Total"),
-                    )
-              ]),
-              LinearPercentIndicator(
-                animation: true,
-                animationDuration: 10000,
-                lineHeight: 30,
-                percent: 0.8,
-                progressColor: const Color(0xff369C33),
-                backgroundColor: const Color(0xffD0D0D0),
-              ),
-
-
-              Container(
-                height: 130,
-                width: MediaQuery.of(context).size.width - 20,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-
-                child: Container(
-                  margin: const EdgeInsets.only(top: 10, left: 10),
-                  child: Row(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    "98 %",
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        color: Color(0xff369C33),
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                  SizedBox(
-                                    height: 7,
-                                  ),
-                                  Text(
-                                    "최대 98%의 메일을 정리할 수 있어요.",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 130,
-                width: MediaQuery.of(context).size.width - 20,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-                child: Container(
-                  margin: const EdgeInsets.only(top: 10, left: 10),
-                  child: Row(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    "24.195 %",
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        color: Color(0xff369C33),
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                  SizedBox(
-                                    height: 7,
-                                  ),
-                                  Text(
-                                    "메일을 삭제한 비율이 현재 24.195 % 입니다.",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 130,
-                width: MediaQuery.of(context).size.width - 20,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-                child: Container(
-                  margin: const EdgeInsets.only(top: 10, left: 10),
-                  child: Row(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    "3024개",
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        color: Color(0xff369C33),
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                  SizedBox(
-                                    height: 7,
-                                  ),
-                                  Text(
-                                    "총 메일 개수는 3024개 입니다.",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildHalfContainer(
+                      constrains,
+                      "📫 ${Get.find<CountController>().totalCount}",
+                      "전체 메일 갯수"),
+                  _buildHalfContainer(
+                      constrains,
+                      "🌲 ${Get.find<CountController>().currentLevel}",
+                      "현재 당신의 레벨"),
+                ],
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTotalDelete(BoxConstraints c) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        SizedBox(
+          width: (c.maxWidth - line_img_width - mainscreen_padding_width) / 2,
+          height: total_delete_height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "전체 삭제 메일",
+                style: TextStyle(
+                    color: unselected_color,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(
+                height: total_delete_text_gap,
+              ),
+              Text(
+                "${Get.find<CountController>().deleteCount} 건",
+                style: const TextStyle(
+                    color: green_color,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: line_img_width,
+          height: total_delete_height,
+          child: Image.asset(
+            'assets/img/divide.png',
+            fit: BoxFit.contain,
+          ),
+        ),
+        SizedBox(
+          width: (c.maxWidth - line_img_width - mainscreen_padding_width) / 2,
+          height: total_delete_height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "탄소 배출 감소",
+                style: TextStyle(
+                    color: unselected_color,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(
+                height: total_delete_text_gap,
+              ),
+              Text(
+                "${(Get.find<CountController>().deleteCount.value) * 0.004}  kg",
+                style: const TextStyle(
+                    color: green_color,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPercentContainer(
+      BoxConstraints c, String title, String explain, double percentNum) {
+    return Container(
+      height: 130,
+      width: c.maxWidth - mainscreen_padding_width,
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 15),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+      ),
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                  color: green_color,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              explain,
+              style: const TextStyle(
+                  color: unselected_color,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            LinearPercentIndicator(
+              animation: true,
+              animationDuration: 1000,
+              lineHeight: 30,
+              percent: percentNum,
+              progressColor: green_color,
+              backgroundColor: background_color,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHalfContainer(BoxConstraints c, String title, String explain) {
+    return Container(
+      height: 130,
+      width: (c.maxWidth - mainscreen_padding_width - halfcontainer_gap) / 2,
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 15),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+      ),
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: green_color,
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              explain,
+              style: const TextStyle(
+                color: unselected_color,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
         ),
       ),
     );

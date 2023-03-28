@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/size.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../color.dart';
+import '../../controller/userController.dart';
 import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
+import '../../widgets/two_line_text.dart';
 
 class ChangePw2 extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -29,40 +30,23 @@ class ChangePw2 extends StatelessWidget {
       body: ListView(
         children: [
           const SizedBox(
-            height: circle_start - 50,
+            height: circle_start - 70,
           ),
           const Text(
-            "Settings Password",
+            " 🔐 Settings",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 35,
-                color: dark_green_color,
-                fontWeight: FontWeight.bold),
+              fontSize: 35,
+              color: dark_green_color,
+              fontWeight: FontWeight.w800,
+            ),
           ),
           const SizedBox(
-            height: 20,
+            height: title_txt_gap,
           ),
-          SizedBox(
-            height: two_line_text_box,
-            width: 330,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
-                Text(
-                  "Please Enter your new password",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: explain_text_color),
-                ),
-                Text(
-                  "8~16 length, letters and numbers combination",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: explain_text_color,
-                  ),
-                )
-              ],
-            ),
+          twoLineText(
+            "Please Enter your new password",
+            "8~16 length, letters + numbers combination",
           ),
           const SizedBox(
             height: 40,
@@ -98,7 +82,7 @@ class ChangePw2 extends StatelessWidget {
                           );
 
                           Navigator.popUntil(
-                              context, ModalRoute.withName('/bottom_bar'));
+                              context, ModalRoute.withName('/bottom_tab_bar'));
                         } else {
                           QuickAlert.show(
                               context: context,

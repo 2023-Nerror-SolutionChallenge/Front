@@ -5,6 +5,7 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../color.dart';
 import '../../widgets/input_field.dart';
+import '../../widgets/two_line_text.dart';
 
 class ChangePw1 extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -29,40 +30,23 @@ class ChangePw1 extends StatelessWidget {
       body: ListView(
         children: [
           const SizedBox(
-            height: circle_start - 50,
+            height: circle_start - 70,
           ),
           const Text(
             "Authentication",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 35,
-                color: dark_green_color,
-                fontWeight: FontWeight.bold),
+              fontSize: 35,
+              color: dark_green_color,
+              fontWeight: FontWeight.w800,
+            ),
           ),
           const SizedBox(
-            height: 20,
+            height: title_txt_gap,
           ),
-          SizedBox(
-            height: two_line_text_box,
-            width: 330,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
-                Text(
-                  "We have sent an email to your email account",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: explain_text_color),
-                ),
-                Text(
-                  "with a verification code!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: explain_text_color,
-                  ),
-                )
-              ],
-            ),
+          twoLineText(
+            "We have sent an email to your account",
+            "with a verification code! 🧑🏻‍💻",
           ),
           const SizedBox(
             height: 40,
@@ -79,7 +63,10 @@ class ChangePw1 extends StatelessWidget {
                   child: TextButton(
                     child: const Text(
                       "Confirm",
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
 
                     // 기존에 만들어둔거 사용하기

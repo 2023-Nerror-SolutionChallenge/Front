@@ -47,18 +47,15 @@ class SmartScan extends StatelessWidget {
                         style: TextStyle(
                           color: text_green_color,
                           fontSize: 40,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
                 SizedBox(
-                  width: 300,
-                  height: 300,
+                  width: constrains.maxHeight - (300 + 140 + 15),
+                  height: constrains.maxHeight - (300 + 140 + 15),
                   child: Image.asset(
                     'assets/img/scan.png',
                     fit: BoxFit.fill,
@@ -81,9 +78,9 @@ class SmartScan extends StatelessWidget {
                       child: const Text(
                         "scanning",
                         style: TextStyle(
-                          color: text_green_color,
-                          fontSize: 18,
-                        ),
+                            color: text_green_color,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
                       ),
                       onPressed: () =>
                           {Navigator.pushNamed(context, "/smartscan_detail")}),

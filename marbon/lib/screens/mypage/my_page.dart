@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:flutter_dismissible_tile/flutter_dismissible_tile.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
-import 'package:marbon/screens/login/login_page.dart';
 import 'package:marbon/widgets/input_field.dart';
+import 'package:marbon/widgets/logo_img.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tab_container/tab_container.dart';
 
+import '../../controller/nickController.dart';
+import '../../controller/userController.dart';
 import '../../service/api_service.dart';
 
 class MyPage extends StatelessWidget {
@@ -16,6 +19,7 @@ class MyPage extends StatelessWidget {
 
   var logger = Logger();
   final List<int> HaveBadge = Get.find<UserController>().badges;
+  final List<dynamic> accounts = Get.find<UserController>().mailAccounts;
 
   final _lightController = ValueNotifier<bool>(false);
   MyPage({super.key});
@@ -23,6 +27,8 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(NickController());
+
+    logger.d("NICK  : ${Get.find<UserController>().nick}");
     if (Get.find<UserController>().nick != null) {
       Get.find<NickController>().setNick(Get.find<UserController>().nick);
     }
@@ -49,11 +55,11 @@ class MyPage extends StatelessWidget {
                   selectedTextStyle: const TextStyle(
                       color: green_color,
                       fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.w800),
                   unselectedTextStyle: const TextStyle(
                       color: unselected_color,
                       fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.w800),
                   tabs: const [
                     "BADGES",
                     "MY MAILS",
@@ -106,8 +112,8 @@ class MyPage extends StatelessWidget {
                   Get.find<NickController>().nick.value.toString(),
                   style: const TextStyle(
                       color: text_green_color,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
+                      fontSize: 25,
+                      fontWeight: FontWeight.w800),
                 );
               }),
               IconButton(
@@ -180,6 +186,7 @@ class MyPage extends StatelessWidget {
               text: "Your Nickname has been saved!",
             );
             Get.find<NickController>().setNick(newNick);
+            Get.find<UserController>().setNick(newNick);
           } else {
             await QuickAlert.show(
               context: context,
@@ -265,83 +272,121 @@ class MyPage extends StatelessWidget {
   }
 
   Widget _BuildMymailsContainer(double h, double w, BuildContext c) {
-    return Scaffold(
-      backgroundColor: const Color(0xffedeedd),
-      body: Stack(
-        children: [
-          Positioned(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 10, left: 10),
-                height: 100,
-                width: MediaQuery.of(c).size.width - 20,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10, left: 10),
-                height: 100,
-                width: MediaQuery.of(c).size.width - 20,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10, left: 10),
-                width: MediaQuery.of(c).size.width - 20,
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    backgroundColor: const Color(0xffffffff),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(c, "/add_mail");
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/img/plus.png"),
-                            fit: BoxFit.none)),
-                  ),
+    logger.d(accounts);
+    return Container(
+      padding: EdgeInsets.only(top: h * 0.05),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: List.generate(
+            accounts.length + 1,
+            (index) {
+              return index < accounts.length
+                  ? _mailContainer(w, accounts[index])
+                  : _addMailContainer(w, c);
+            },
+          ),
+        ),
+      ),
+    );
+  }
 
-                  // const Text(
-                  //   "+ Add Mail",
-                  //   textAlign: TextAlign.center,
-                  //   style: TextStyle(
-                  //       color: Colors.black,
-                  //       fontSize: 18,
-                  //       fontWeight: FontWeight.w700),
-                  // ),
+  Widget _mailContainer(double width, String account) {
+    late String company;
+    late Widget logo;
+    String mailCompany =
+        account.substring(account.indexOf("@") + 1, account.indexOf("."));
+
+    switch (mailCompany) {
+      // 메일 회사에 맞는 회사 및 로고 이미지 지정
+      case "naver":
+        company = "Naver";
+        logo = logoImage("naver");
+        break;
+      case "gmail":
+        company = "Google";
+        logo = logoImage("google");
+        break;
+      case "hanmail":
+        company = "Daum";
+        logo = logoImage("daum");
+        break;
+      case "icloud":
+        company = "iCloud";
+        logo = logoImage("apple");
+        break;
+      case "mac":
+        company = "iCloud";
+        logo = logoImage("apple");
+        break;
+      default:
+        company = "기타(IMAP)";
+        logo = logoImage("imap");
+    }
+    return Container(
+        height: 120,
+        alignment: Alignment.center,
+        child: DismissibleTile(
+          key: UniqueKey(),
+          borderRadius: const BorderRadius.all(Radius.circular(30)),
+          delayBeforeResize: const Duration(milliseconds: 1000),
+          rtlDismissedColor: green_color,
+          rtlOverlayIndent: 30,
+          // This is where you can call your async function which will update
+          // your data.
+          confirmDismiss: (direction) => Future.delayed(
+            const Duration(seconds: 1),
+            () => true,
+          ),
+          rtlOverlay: const _SlidableOverlay(
+            title: 'Delete',
+            iconData: Icons.delete,
+          ),
+          child: Container(
+            height: 100,
+            width: width,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(width: 40),
+                logo,
+                const SizedBox(width: 25),
+                Text(
+                  company,
+                  style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800),
                 ),
-              )
-            ],
-          ))
-        ],
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Widget _addMailContainer(double width, BuildContext c) {
+    return Container(
+      height: 120,
+      alignment: Alignment.center,
+      child: Container(
+        width: width,
+        height: 100,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+        ),
+        child: IconButton(
+          icon: const Icon(Icons.add_circle_outline),
+          onPressed: () {
+            Navigator.pushNamed(c, "/add_mail");
+          },
+        ),
       ),
     );
   }
@@ -367,13 +412,16 @@ class MyPage extends StatelessWidget {
                     SizedBox(width: 20),
                     Text(
                       "Change Password",
-                      style: TextStyle(fontSize: 17, color: yellow_green_color),
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: yellow_green_color,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
                 IconButton(
                   onPressed: () async {
-                    logger.d(Get.find<UserController>().id);
                     String authCode = await ApiService()
                         .postEmail(Get.find<UserController>().id);
                     if (authCode != "") {
@@ -411,7 +459,11 @@ class MyPage extends StatelessWidget {
                     SizedBox(width: 20),
                     Text(
                       "Dark Mode",
-                      style: TextStyle(fontSize: 17, color: yellow_green_color),
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: yellow_green_color,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -430,11 +482,37 @@ class MyPage extends StatelessWidget {
   }
 }
 
-class NickController extends GetxController {
-  RxString nick = "Song Kim".obs;
+class _SlidableOverlay extends StatelessWidget {
+  const _SlidableOverlay({
+    required this.title,
+    required this.iconData,
+  });
 
-  void setNick(String newNick) {
-    nick.value = newNick;
-    update();
+  final String title;
+  final IconData iconData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          iconData,
+          color: Colors.white,
+          size: 40,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 15,
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marbon/addmail/add_mail.dart';
 import 'package:marbon/color.dart';
+import 'package:marbon/screens/bottomBar/bottom_tab_bar.dart';
 import 'package:marbon/screens/home/home_page.dart';
 
 import 'package:marbon/screens/login/forget_pw_email_page.dart';
@@ -15,8 +16,6 @@ import 'package:marbon/screens/mainscreen/main_screen.dart';
 import 'package:marbon/screens/mypage/change_pw1.dart';
 import 'package:marbon/screens/mypage/change_pw2.dart';
 
-import 'package:marbon/screens/tabbar/bottom_bar.dart';
-import 'package:marbon/screens/tabbar/motion_tab_bar.dart';
 import 'package:marbon/screens/smartscan/smartscan.dart';
 import 'package:marbon/screens/smartscan/smartscan_delete.dart';
 import 'package:marbon/screens/smartscan/smartscan_detail.dart';
@@ -24,6 +23,7 @@ import 'package:provider/provider.dart';
 
 import 'addmail/add_mailaddress.dart';
 import 'addmail/add_mailserver.dart';
+import 'controller/userController.dart';
 
 final GlobalKey<NavigatorState> navigatorKey =
     GlobalKey<NavigatorState>(); //추가!
@@ -47,9 +47,10 @@ class MyApp extends StatelessWidget {
     final userController = Get.put(UserController());
     return GetMaterialApp(
       title: 'Marbon',
-      home: MotionTabBarPage(),
+      home: const HomePage(),
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xffEDEEDD),
+        fontFamily: 'NaverNanumSquareNeo',
         // 버튼 테마
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
         "/mainscreen": (context) => const MainScreen(),
-        "/bottom_bar": (context) => BottomBar(),
+        "/bottom_tab_bar": (context) => const BottomTabBar(),
         "/smartscan": (context) => const SmartScan(),
         "/smartscan_detail": (context) => const SmartScanDetail(),
         "/smartscan_delete": (context) => const SmartScanDelete(),

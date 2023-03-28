@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marbon/size.dart';
+import 'package:marbon/widgets/two_line_text.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
@@ -47,35 +48,20 @@ class ForgetPwNew extends StatelessWidget {
                     height: toolbar_height,
                   ),
                   const Text(
-                    "Settings Password",
+                    " 🔐 Settings",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 35, color: dark_green_color),
+                    style: TextStyle(
+                      fontSize: 35,
+                      color: dark_green_color,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: title_txt_gap,
                   ),
-                  SizedBox(
-                    height: two_line_text_box,
-                    width: 330,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "Please Enter your new password 🔑",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 16, color: explain_text_color),
-                        ),
-                        Text(
-                          "8~16 length, letters + numbers combination",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: explain_text_color,
-                          ),
-                        )
-                      ],
-                    ),
+                  twoLineText(
+                    "Please Enter your new password",
+                    "8~16 length, letters + numbers combination",
                   ),
                   const SizedBox(
                     height: 40,
@@ -92,7 +78,8 @@ class ForgetPwNew extends StatelessWidget {
                           child: TextButton(
                             child: const Text(
                               "Confirm",
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {

@@ -47,14 +47,16 @@ class ApiService {
         }
 
         logger.d("Login Nick => ${data["nickname"]}");
+        logger.d("deleteCount ${data['deletedCount']}");
 
         return {
           "flag": true,
           "id": data['id'],
           "nick": data['nickname'],
           "pw": data['password'],
-          "deleteCount": data["deleteCount"],
+          "deleteCount": data["deletedCount"],
           "totalCount": data['totalCount'],
+          "currentLevel": data['currentLevel'],
           "mailAccounts": data["accountList"],
           "badgeList": badgeList,
           "accessToken": accessToken,
@@ -192,7 +194,8 @@ class ApiService {
       return false;
     }
   }
-  Future<dynamic> addMail(String id, username, password, host, port) async{
+
+  Future<dynamic> addMail(String id, username, password, host, port) async {
     try {
       final url = Uri.parse('$baseUrl/mailbox/add');
       final response = await http.post(
@@ -206,17 +209,16 @@ class ApiService {
           {
             "id": id,
             "username": username,
-            "password" : password,
-            "host" : host,
-            "port" : port,
+            "password": password,
+            "host": host,
+            "port": port,
           },
         ),
       );
       if (response.statusCode == 200) {
         logger.d(jsonDecode(response.body.toString()));
         return true;
-      }
-     else {
+      } else {
         logger.d('오류 ${response.statusCode}');
         return false;
       }
