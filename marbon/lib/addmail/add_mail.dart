@@ -11,6 +11,7 @@ class AddMailPage extends StatelessWidget {
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(
         ),
+
       ),
       body:
       ListView(
@@ -39,10 +40,13 @@ class AddMailPage extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
           const SizedBox(
-            height: 20,
+            height: 5,
           ),
           Container(width: 500,
               child: Divider(color: Colors.black, thickness: 3.0)),
+          const SizedBox(
+            height: 20,
+          ),
 
 
           Container(
@@ -174,7 +178,8 @@ class AddMailPage extends StatelessWidget {
                   ],
                 ),
                 IconButton(
-                  onPressed: () {
+                  onPressed: () async {
+
                     Navigator.pushNamed(context, "/add_mailaddress");
                   },
                   icon: const Icon(Icons.navigate_next_outlined),

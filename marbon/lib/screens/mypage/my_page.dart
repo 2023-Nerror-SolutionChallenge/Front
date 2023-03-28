@@ -274,6 +274,7 @@ class MyPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
+                margin: const EdgeInsets.only(top: 10, left: 10),
                 height: 100,
                 width: MediaQuery.of(c).size.width - 20,
                 decoration: const BoxDecoration(
@@ -286,6 +287,7 @@ class MyPage extends StatelessWidget {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.only(top: 10, left: 10),
                 height: 100,
                 width: MediaQuery.of(c).size.width - 20,
                 decoration: const BoxDecoration(
@@ -298,6 +300,7 @@ class MyPage extends StatelessWidget {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.only(top: 10, left: 10),
                 width: MediaQuery.of(c).size.width - 20,
                 height: 100,
                 decoration: const BoxDecoration(

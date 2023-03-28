@@ -192,4 +192,36 @@ class ApiService {
       return false;
     }
   }
+  Future<dynamic> addMail(String id, username, password, host, port) async{
+    try {
+      final url = Uri.parse('$baseUrl/mailbox/add');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+          {
+            "id": id,
+            "username": username,
+            "password" : password,
+            "host" : host,
+            "port" : port,
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        logger.d(jsonDecode(response.body.toString()));
+        return true;
+      }
+     else {
+        logger.d('오류 ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      logger.d("Error : ${e.toString()}");
+    }
+  }
 }

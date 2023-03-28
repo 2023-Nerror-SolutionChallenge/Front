@@ -78,8 +78,8 @@ class MyApp extends StatelessWidget {
         "/change_pw1": (context) => ChangePw1(),
         "/change_pw2": (context) => ChangePw2(),
         "/add_mail": (context) => const AddMailPage(),
-        "/add_mailaddress": (context) => const AddMailAddressPage(),
-        "/mail_server": (context) => const AddMailServerPage(),
+        "/add_mailaddress": (context) =>  AddMailAddressPage(),
+        "/mail_server": (context) =>  AddMailServerPage(),
       },
     );
   }
