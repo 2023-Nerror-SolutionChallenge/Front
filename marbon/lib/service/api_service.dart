@@ -226,4 +226,22 @@ class ApiService {
       logger.d("Error : ${e.toString()}");
     }
   }
+
+  Future<bool> deleteMailAccount(String id) async {
+    try {
+      final url = Uri.parse('$baseUrl/mailbox/deleteMailbox?username=$id');
+      final response = await http.get(url);
+
+      logger.d(url);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return false;
+    }
+  }
 }

@@ -8,6 +8,8 @@ import 'package:marbon/screens/mypage/profile_img.dart';
 import 'package:marbon/screens/mypage/setting_box.dart';
 import 'package:marbon/widgets/myPage/add_mail_container.dart';
 import 'package:marbon/widgets/logo_img.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tab_container/tab_container.dart';
 
 import '../../controller/nickController.dart';
@@ -268,24 +270,32 @@ class _MyPageState extends State<MyPage> {
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
-      // 삭제할거냐 묻고한다면 메일삭제 api -> 성공시 지우고 성공못하면 Quickalert
-      // confirmDismiss: (direction) {
-      //   QuickAlert.show(
-      //     context: c,
-      //     type: QuickAlertType.confirm,
-      //     onConfirmBtnTap: () {
-
-      //     },
-      //   );
-      // },
-      // onDismissed: (direction) {
-
-      // },
+      //삭제할거냐 묻고한다면 메일삭제 api -> 성공시 지우고 성공못하면 Quickalert
+      confirmDismiss: (direction) async {
+        QuickAlert.show(
+          context: c,
+          type: QuickAlertType.confirm,
+          title: "${Get.find<UserController>().id}",
+          confirmBtnColor: const Color.fromARGB(255, 120, 210, 191),
+          confirmBtnText: "Delete",
+          onConfirmBtnTap: () async {
+            bool flag = await ApiService()
+                .deleteMailAccount(Get.find<UserController>().id);
+            if (flag) {
+              return Navigator.of(c).pop(true);
+            } else {
+              return Navigator.of(c).pop(false);
+            }
+          },
+        );
+        return false;
+      },
+      onDismissed: (direction) {},
       background: Container(color: transparent_color),
       secondaryBackground: Container(
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 30.0),
-        margin: const EdgeInsets.only(top: 5, bottom: 5),
+        margin: const EdgeInsets.only(bottom: 22, top: 2),
         color: green_color,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
