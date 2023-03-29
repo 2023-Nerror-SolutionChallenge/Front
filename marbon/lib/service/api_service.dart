@@ -217,6 +217,8 @@ class ApiService {
       );
       if (response.statusCode == 200) {
         logger.d(jsonDecode(response.body.toString()));
+        //accountList totalCount 받아와서 갱신
+        //리턴을 map 형식
         return true;
       } else {
         logger.d('오류 ${response.statusCode}');

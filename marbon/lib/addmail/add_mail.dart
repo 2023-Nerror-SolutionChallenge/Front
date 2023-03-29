@@ -72,7 +72,7 @@ class AddMailPage extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, "/add_mailaddress");
+                    Navigator.pushNamed(context, "/add_gmail_address");
                   },
                   icon: const Icon(Icons.navigate_next_outlined),
                   iconSize: 30,

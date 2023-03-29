@@ -7,6 +7,35 @@ class AddMailAddressPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   AddMailAddressPage({super.key});
+  renderTextFormField({
+    required String label,
+    required FormFieldSetter onSaved,
+    required FormFieldValidator validator,
+
+  }) {
+    assert(onSaved != null);
+    assert(validator != null);
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+        TextFormField(
+          onSaved: onSaved,
+          validator: validator,
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,21 +126,27 @@ class AddMailAddressPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          // TextFormField(
-          //   decoration: const InputDecoration(
-          //     labelText: "email address"
-          //
-          //   ),
-          // ),
+
+
           Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                InputField("Your Email Address", "email address", emailController),
-              ],
-            ),
-          )
-        ])
+              key: this._formKey,
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                  renderTextFormField(
+                  label: 'Email Address',
+                  onSaved: (val) {},
+                  validator: (val) {
+                    return null;
+                  },
+                ),
+    ],
+    ),
+              ),
+    ),
+
+    ])
     );
   }
 
