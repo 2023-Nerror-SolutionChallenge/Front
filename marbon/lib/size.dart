@@ -13,6 +13,8 @@ const double two_line_text_box = 50;
 const double toolbar_height = 50;
 const double title_txt_gap = 40;
 
+const int minNick = 2;
+
 // smartscan
 const double smartscan_title_left = 30;
 const double mail_list_height = 80;

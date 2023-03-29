@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 
-Widget logoImage(String company) {
+Widget logoImage(String company, double logoSize) {
   return ClipRRect(
-    borderRadius: BorderRadius.circular(40),
+    borderRadius: BorderRadius.circular(logoSize),
     child: Image.asset(
       "assets/img/$company.png",
-      width: 40,
-      height: 40,
+      width: logoSize,
+      height: logoSize,
       fit: BoxFit.fill,
     ),
   );
