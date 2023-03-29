@@ -94,6 +94,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  flutter_dismissible_tile:
+    dependency: "direct main"
+    description:
+      name: flutter_dismissible_tile
+      sha256: "0879d0ec9cbc12799ecd827ea771329c24b40bf126b599d5a80c419a72ab4ea4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   flutter_lints:
     dependency: "direct dev"
     description:

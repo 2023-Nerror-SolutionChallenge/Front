@@ -1,15 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../service/api_service.dart';
+import '../../widgets/input_field.dart';
 
 class AddMailAddressPage extends StatelessWidget {
-  const AddMailAddressPage({Key? key}) : super(key: key);
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  AddMailAddressPage({super.key});
+  renderTextFormField({
+    required String label,
+    required FormFieldSetter onSaved,
+    required FormFieldValidator validator,
+
+  }) {
+    assert(onSaved != null);
+    assert(validator != null);
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+        TextFormField(
+          onSaved: onSaved,
+          validator: validator,
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    final String authCode = arguments["code"];
+    final String email = arguments["email"];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(
         ),
+        actions: <Widget>[
+          IconButton(
+
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                String authCode = await ApiService()
+                    .postEmail(emailController.text.toString());
+                Navigator.pushNamed(
+                  context,
+                  "/mail_server",
+                  arguments: {
+                    "code": authCode,
+                    "email": emailController.text.toString(),
+                  },
+                );
+              }
+            },
+            icon: const Icon(Icons.check),
+            iconSize: 30,
+    ),
+        ],
       ),
       body:
       ListView(
@@ -63,31 +123,50 @@ class AddMailAddressPage extends StatelessWidget {
           const SizedBox(
             height: 50,
           ),
-
-          const Text(
-            "이메일 주소 ",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                fontSize: 15,
-          ),
-          ),
           const SizedBox(
             height: 20,
           ),
-          TextFormField(
-            decoration: const InputDecoration(
-              labelText: "email address"
 
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/mail_server");
-            },
-            icon: const Icon(Icons.check),
-            iconSize: 30,
-          ),
-        ])
+
+          Form(
+              key: this._formKey,
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                  renderTextFormField(
+                  label: 'Email Address',
+                  onSaved: (val) {},
+                  validator: (val) {
+                    return null;
+                  },
+                ),
+    ],
+    ),
+              ),
+    ),
+
+    ])
     );
   }
+
 }
+
+
+class EmailAddController extends GetxController{
+  List<String> _email = [];
+  get email => _email;
+
+  void upadateEmail(
+      {
+        required List<String> email
+      }) {
+
+    _email = email;
+  }
+
+}
+
+// Get.find<EmailAddController>().upadateEmail(
+// email: returnData["email"],
+// );

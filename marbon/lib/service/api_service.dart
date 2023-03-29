@@ -46,8 +46,8 @@ class ApiService {
               (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
         }
 
-        logger.d("Login Nick => ${data["nickname"]}");
-        logger.d("deleteCount ${data['deletedCount']}");
+        logger.d(data);
+        logger.d("Login Nick => ${data["accountList"]}");
 
         return {
           "flag": true,
@@ -192,6 +192,40 @@ class ApiService {
     } catch (e) {
       logger.d(e.toString());
       return false;
+    }
+  }
+
+  Future<dynamic> addMail(String id, username, password, host, port) async {
+    try {
+      final url = Uri.parse('$baseUrl/mailbox/add');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+          {
+            "id": id,
+            "username": username,
+            "password": password,
+            "host": host,
+            "port": port,
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        logger.d(jsonDecode(response.body.toString()));
+        //accountList totalCount 받아와서 갱신
+        //리턴을 map 형식
+        return true;
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      logger.d("Error : ${e.toString()}");
     }
   }
 }
