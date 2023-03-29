@@ -275,13 +275,14 @@ class _MyPageState extends State<MyPage> {
         QuickAlert.show(
           context: c,
           type: QuickAlertType.confirm,
-          title: "${Get.find<UserController>().id}",
+          title: account,
           confirmBtnColor: const Color.fromARGB(255, 120, 210, 191),
           confirmBtnText: "Delete",
           onConfirmBtnTap: () async {
-            bool flag = await ApiService()
-                .deleteMailAccount(Get.find<UserController>().id);
+            bool flag = await ApiService().deleteMailAccount(account);
             if (flag) {
+              Get.find<UserController>().deleteAccount(account);
+              logger.d(Get.find<UserController>().mailAccounts);
               return Navigator.of(c).pop(true);
             } else {
               return Navigator.of(c).pop(false);

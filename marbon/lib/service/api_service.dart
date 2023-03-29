@@ -46,9 +46,6 @@ class ApiService {
               (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
         }
 
-        logger.d(data);
-        logger.d("Login Nick => ${data["accountList"]}");
-
         return {
           "flag": true,
           "id": data['id'],
@@ -227,13 +224,14 @@ class ApiService {
     }
   }
 
-  Future<bool> deleteMailAccount(String id) async {
+  Future<bool> deleteMailAccount(String deleteMail) async {
     try {
-      final url = Uri.parse('$baseUrl/mailbox/deleteMailbox?username=$id');
+      final url =
+          Uri.parse('$baseUrl/mailbox/deleteMailbox?username=$deleteMail');
       final response = await http.get(url);
 
-      logger.d(url);
       if (response.statusCode == 200) {
+        logger.d(response.body.toString());
         return true;
       } else {
         logger.d('오류 ${response.statusCode}');

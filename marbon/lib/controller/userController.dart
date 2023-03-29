@@ -52,4 +52,9 @@ class UserController extends GetxController {
     _nick = nick;
     update();
   }
+
+  void deleteAccount(String account) {
+    _mailAccounts.remove(account);
+    update();
+  }
 }
