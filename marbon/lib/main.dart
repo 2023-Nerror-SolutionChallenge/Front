@@ -21,8 +21,8 @@ import 'package:marbon/screens/smartscan/smartscan_delete.dart';
 import 'package:marbon/screens/smartscan/smartscan_detail.dart';
 import 'package:provider/provider.dart';
 
-import 'addmail/add_mailaddress.dart';
-import 'addmail/add_mailserver.dart';
+import 'addmail/add_mail_address.dart';
+import 'addmail/add_mail_server.dart';
 import 'controller/userController.dart';
 
 final GlobalKey<NavigatorState> navigatorKey =
@@ -79,8 +79,8 @@ class MyApp extends StatelessWidget {
         "/change_pw1": (context) => ChangePw1(),
         "/change_pw2": (context) => ChangePw2(),
         "/add_mail": (context) => const AddMailPage(),
-        "/add_mailaddress": (context) =>  AddMailAddressPage(),
-        "/mail_server": (context) =>  AddMailServerPage(),
+        "/add_mail_address": (context) => AddMailAddressPage(),
+        "/add_mail_server": (context) => AddMailServerPage(),
       },
     );
   }

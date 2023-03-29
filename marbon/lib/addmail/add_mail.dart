@@ -8,8 +8,6 @@ class AddMailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWith = MediaQuery.of(context).size.width;
-    print(screenWith);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
