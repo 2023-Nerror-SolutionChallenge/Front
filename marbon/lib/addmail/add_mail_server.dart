@@ -27,7 +27,7 @@ class AddMailServerPage extends StatelessWidget {
 
     switch (mailCompany) {
       case "naver":
-        imap = "Naver";
+        imap = "imap.naver.com";
         port = "993";
         break;
       case "gmail":
@@ -35,11 +35,11 @@ class AddMailServerPage extends StatelessWidget {
         port = "993";
         break;
       case "hanmail":
-        imap = "Daum";
+        imap = "smtp.daum.net";
         port = "993";
         break;
       case "icloud":
-        imap = "iCloud";
+        imap = "imap.mail.me.com";
         port = "993";
         break;
       case "mac":
