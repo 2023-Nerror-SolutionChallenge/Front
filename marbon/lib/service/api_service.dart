@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
+import '../models/mail_category.dart';
+
 var logger = Logger();
 
 class ApiService {
@@ -191,6 +193,113 @@ class ApiService {
     } catch (e) {
       logger.d(e.toString());
       return false;
+    }
+  }
+
+  // 스마트 스캔 수행 (accountList의 한계정만 가능)
+  Future<dynamic> getSmartScan(String userName) async {
+    try {
+      final url = Uri.parse('$baseUrl/scan?username=$userName');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        List<MailCategory> mailCategories = [];
+
+        for (var mailData in data) {
+          mailCategories.add(MailCategory.fromJson(mailData));
+        }
+
+        logger.d(mailCategories.toString());
+        return mailCategories;
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return [];
+    }
+  }
+
+  // 스마트스캔 후 메일 삭제 요청
+  Future<bool> postSmartScanDelete(
+      String userName, List<int> deleteMailList) async {
+    try {
+      final url = Uri.parse('$baseUrl/scan/delete');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+          {
+            "username": userName,
+            "deleteIdList": deleteMailList,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        logger.d(response.body.toString());
+        return true;
+      } else {
+        logger.d((response.body).toString());
+        return false;
+      }
+    } catch (e) {
+      logger.d("Error : ${e.toString()}");
+      return false;
+    }
+  }
+
+  // 메일 수신 및 저장 ---> 메일 회사 추가할때 수행할 것
+  Future<int> getMails(String id) async {
+    try {
+      final url = Uri.parse('$baseUrl/mailbox/save?id=$id');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        logger.d(data.toString());
+        return data["totalCount"];
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return 0;
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return 0;
+    }
+  }
+
+  // 새로고침  --> 계정과 연결된 새로운 메일 모두 수신 (로그인시 실행할 것)
+  Future<dynamic> getRefresh(String id) async {
+    try {
+      final url = Uri.parse('$baseUrl/mailbox/refresh?id=$id');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        logger.d(data.toString());
+
+        return {
+          "id": data["id"],
+          "nickname": data["nickname"],
+          "deleteCount": data["deletedCount"],
+          "currentLevel": data["currentLevel"],
+          "totalCount": data["totalCount"],
+          // 뱃지 리스트도 같이 주세용
+        };
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return {};
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return {};
     }
   }
 }

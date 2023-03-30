@@ -13,8 +13,9 @@ class SmartScanDetail extends StatefulWidget {
 }
 
 class _SmartScanDetailState extends State<SmartScanDetail> {
+  // smartsan에서 인자로 보낸 mailcategorys 를 mail이라고 할것임
   final List<MailCategory> _mails = generateMailCategory(jsonMailData);
-  int mailCount = 0;
+  late int mailCount;
 
   @override
   void initState() {
@@ -135,7 +136,28 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
             // Vertical viewport was given unbounded height error 방지
             child: SingleChildScrollView(
               child: Container(
-                child: _buildExpansionPanel(),
+                child: Column(
+                  children: [
+                    _buildExpansionPanel(),
+                    Container(
+                      // 위쪽커브
+                      color: color_list[3],
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: color_list[4],
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(50.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: color_list[4],
+                      height: 90,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -247,9 +269,7 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
                 ),
                 Container(
                   // 아랫쪽커브
-                  color: color_list[headerIndex < _mails.length
-                      ? headerIndex + 1
-                      : headerIndex],
+                  color: color_list[headerIndex + 1],
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
@@ -326,20 +346,20 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      mails.author!,
+                      mails.sender!,
                       style: const TextStyle(
                         fontSize: 15,
                         color: text_green_color,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(mails.title!,
+                    Text(mails.subject!,
                         style: const TextStyle(
                           fontSize: 15,
                           color: text_green_color,
                         ),
                         overflow: TextOverflow.ellipsis),
-                    Text(mails.content!,
+                    Text(mails.contents!,
                         style: const TextStyle(
                           fontSize: 15,
                           color: placeholder_color,
@@ -486,37 +506,6 @@ List<dynamic> jsonMailData = [
       }
     ]
   },
-  {
-    "category": "From pinterest",
-    "mails": [
-      {
-        "id": 13,
-        "author": "WISET",
-        "title": "네이버페이와 삼성페이가 손잡을 줄이야",
-        "content": "안녕하세요, 요즘IT입니다. 👋"
-      },
-      {
-        "id": 14,
-        "author": "GDSC Event Platform",
-        "title": "You're now registered for GDSC Sookmyung 10분 세미나 ",
-        "content":
-            "You have successfully registered for GDSC Sookmyung 10분 세미나 + 팀별 "
-      },
-      {
-        "id": 15,
-        "author": "프로그래머스",
-        "title": "[프로그래머스] 이용약관 개정 안내",
-        "content": "안녕하세요, 프로그래머스입니다."
-      },
-      {
-        "id": 16,
-        "author": "GitKraken",
-        "title": "Only a few days left in your GitKraken Client trial!",
-        "content":
-            "Enjoying the GitKraken Client trial? Consider exploring these features next:"
-      }
-    ]
-  }
 ];
 
 // json 형태의 자료를 mailCategory 모델로 변환

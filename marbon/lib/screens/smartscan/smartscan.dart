@@ -82,8 +82,18 @@ class SmartScan extends StatelessWidget {
                             fontSize: 18,
                             fontWeight: FontWeight.w600),
                       ),
-                      onPressed: () =>
-                          {Navigator.pushNamed(context, "/smartscan_detail")}),
+                      onPressed: () {
+                        // 스마트스캔 api 호출 후 다되면 smartscan detail에 인자로 결과 넘겨주기
+                        // 만약 회사별로 한다면 Future.wait(회사별 스마트스캔 api 호출) 한꺼번에 받아서
+                        // 카테고리별로 찢어서 다 합쳐야함
+
+                        // 따라서 mail 모델에 username이 인자로 더 들어가야함
+
+                        // 삭제할때도 리스트에 id, username 형태로 들어간 후 삭제 요청은
+                        // username별로 묶어서 그걸로 요청 여러개 보내야함
+
+                        Navigator.pushNamed(context, "/smartscan_detail");
+                      }),
                 ),
               ],
             ),
