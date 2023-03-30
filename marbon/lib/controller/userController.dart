@@ -57,4 +57,9 @@ class UserController extends GetxController {
     _mailAccounts.remove(account);
     update();
   }
+
+  void setMailAccounts(List<dynamic> accounts) {
+    _mailAccounts = accounts;
+    update();
+  }
 }

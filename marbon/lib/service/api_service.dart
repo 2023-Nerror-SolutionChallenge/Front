@@ -93,6 +93,7 @@ class ApiService {
         var head = response.headers;
         String accessToken = head["access_token"].toString();
         String refreshToken = head["refresh_token"].toString();
+        logger.d(jsonDecode(response.body.toString()));
         return {"accessToken": accessToken, "refreshToken": refreshToken};
       } else if (response.statusCode == 409) {
         logger.d("중복 닉네임 혹은 이미 가입되어 있음");
@@ -192,6 +193,82 @@ class ApiService {
     }
   }
 
+  // MyPage 이메일 계정 추가 API
+  Future<dynamic> addMail(String email, username, password, host, port) async {
+    try {
+      final url = Uri.parse('$baseUrl/mailbox/add');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+          {
+            "id": email,
+            "username": username,
+            "password": password,
+            "host": host,
+            "port": port,
+          },
+        ),
+      );
+      // addmail  응답 리턴 -> accountList totalCount 받아와서 갱신
+      logger.d(response.body.toString());
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        var accountList =
+            data["accountList"]; //List<String>의 값을 accountList에 넣어주어야함
+        logger.d(data);
+        return {"accountList": accountList};
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return {"accountList": []};
+      }
+    } catch (e) {
+      logger.d("Error : ${e.toString()}");
+    }
+  }
+
+  // 메일 수신 및 저장 ---> 메일 회사 추가할때 수행할 것
+  Future<dynamic> getSaveMail(String id) async {
+    try {
+      final url = Uri.parse('$baseUrl/mailbox/save?id=$id');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        logger.d("메일들을 DB에 불러옴 총개수 : ${data.toString()}");
+        return {"flag": true, "totalCount": data["totalCount"]};
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return {"flag": false};
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return {"flag": false};
+    }
+  }
+
+  Future<bool> deleteMailAccount(String deleteMail) async {
+    try {
+      final url =
+          Uri.parse('$baseUrl/mailbox/deleteMailbox?username=$deleteMail');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        logger.d(response.body.toString());
+        return true;
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return false;
+    }
+  }
+
   // 스마트 스캔 수행
   Future<dynamic> getSmartScan(String id) async {
     try {
@@ -248,26 +325,6 @@ class ApiService {
     } catch (e) {
       logger.d("Error : ${e.toString()}");
       return false;
-    }
-  }
-
-  // 메일 수신 및 저장 ---> 메일 회사 추가할때 수행할 것
-  Future<int> getMails(String id) async {
-    try {
-      final url = Uri.parse('$baseUrl/mailbox/save?id=$id');
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        var data = jsonDecode(utf8.decode(response.bodyBytes));
-        logger.d(data.toString());
-        return data["totalCount"];
-      } else {
-        logger.d('오류 ${response.statusCode}');
-        return 0;
-      }
-    } catch (e) {
-      logger.d(e.toString());
-      return 0;
     }
   }
 

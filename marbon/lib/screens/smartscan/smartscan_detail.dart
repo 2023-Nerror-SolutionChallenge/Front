@@ -20,23 +20,23 @@ var logger = Logger();
 class _SmartScanDetailState extends State<SmartScanDetail> {
   // smartsan에서 인자로 보낸 mailcategorys 를 mail이라고 할것임
   final List<MailCategory> _mails = generateMailCategory(jsonMailData1);
-  late int mailCount;
   final List<dynamic> accounts = Get.find<UserController>().mailAccounts;
 
   @override
   void initState() {
-    // 초기에 메일갯수 셈
+    context.read<Checks>().settingMap(accounts);
     super.initState();
-    for (int i = 0; i < _mails.length; i++) {
-      mailCount += _mails.elementAt(i).mails!.length;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-    context.read<Checks>().settingMap(accounts);
+        <String, dynamic>{}) as Map; // _mails에 arguments["mails"]넣어서 해야할것
+    //final List<MailCategory> _mails = arguments["mails"];
+    int mailCount = 0;
+    for (int i = 0; i < _mails.length; i++) {
+      mailCount += _mails.elementAt(i).mails!.length;
+    }
 
     //final String mails = arguments["mails"];  // 스마트스캔 결과임  _mails에 해당함
     final List<MailCategory> mails = generateMailCategory(jsonMailData1);
@@ -62,7 +62,8 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
                     }
                     mails.elementAt(i).isChecked = false;
                   }
-                  context.read<Checks>().clearItem();
+                  context.read<Checks>().settingMap(accounts);
+                  logger.d(context.read<Checks>()._data);
                 });
               },
               icon: const Icon(Icons.cancel_presentation_outlined)),
@@ -70,8 +71,7 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
               // 선택 삭제
               onPressed: () {
                 //  context.read<Checks> 에 있는 값들 삭제요청 보낸 후 안의 data값 삭제
-
-                logger.d(context.read<Checks>()._data);
+                logger.d("@@@ ${context.read<Checks>()._data}");
                 Navigator.pushNamed(context, "/smartscan_delete",
                     arguments: {"deleteData": context.read<Checks>()._data});
               },
@@ -339,6 +339,7 @@ class _SmartScanDetailState extends State<SmartScanDetail> {
 
                     // 체크상태 업데이트
                     if (mails.isChecked) {
+                      logger.d("${mails.id} ${mails.username}");
                       // 해당 메일 체크 및 전체 체크면 카테고리의 체크도 킬 것 & provider의 값 조정
                       context.read<Checks>().addItem(mails.username, mails.id);
                       var flag = true;
@@ -606,7 +607,6 @@ class Checks extends ChangeNotifier {
   void settingMap(accountList) {
     for (String username in accountList) {
       data[username] = [];
-      logger.d(data);
     }
   }
 
@@ -614,8 +614,11 @@ class Checks extends ChangeNotifier {
   void addItem(String username, int value) {
     // data에 없는 경우에만 mail리스트에 추가
     var flag = data[username]!.contains(value);
+    logger.d("dsafdfsasd $data");
+
     if (!flag) {
       data[username]!.add(value);
+      logger.d(data);
       notifyListeners();
     }
   }
@@ -626,6 +629,7 @@ class Checks extends ChangeNotifier {
     if (flag) {
       data[username]!.remove(value);
     }
+    logger.d(data);
     notifyListeners();
   }
 
