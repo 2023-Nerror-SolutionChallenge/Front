@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:marbon/addmail/add_mail.dart';
 import 'package:marbon/color.dart';
@@ -15,7 +14,6 @@ import 'package:marbon/screens/login/register_page.dart';
 import 'package:marbon/screens/mainscreen/main_screen.dart';
 import 'package:marbon/screens/mypage/change_pw1.dart';
 import 'package:marbon/screens/mypage/change_pw2.dart';
-import 'package:marbon/screens/mypage/my_page.dart';
 
 import 'package:marbon/screens/smartscan/smartscan.dart';
 import 'package:marbon/screens/smartscan/smartscan_delete.dart';
@@ -23,8 +21,8 @@ import 'package:marbon/screens/smartscan/smartscan_detail.dart';
 import 'package:provider/provider.dart';
 
 import 'addmail/add_gmail_address.dart';
-import 'addmail/add_mailaddress.dart';
-import 'addmail/add_mailserver.dart';
+import 'addmail/add_mail_address.dart';
+import 'addmail/add_mail_server.dart';
 import 'controller/userController.dart';
 
 final GlobalKey<NavigatorState> navigatorKey =
@@ -81,9 +79,8 @@ class MyApp extends StatelessWidget {
         "/change_pw1": (context) => ChangePw1(),
         "/change_pw2": (context) => ChangePw2(),
         "/add_mail": (context) => const AddMailPage(),
-        "/add_mailaddress": (context) =>  AddMailAddressPage(),
-        "/mail_server": (context) =>  AddMailServerPage(),
-        "/mypage": (context) => MyPage(),
+        "/add_mail_address": (context) => AddMailAddressPage(),
+        "/add_mail_server": (context) => AddMailServerPage(),
         "/add_gmail_address": (context) => AddGMailAddressPage(),
       },
     );

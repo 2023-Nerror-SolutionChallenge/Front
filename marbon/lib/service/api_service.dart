@@ -48,9 +48,6 @@ class ApiService {
               (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
         }
 
-        logger.d(data);
-        logger.d("Login Nick => ${data["accountList"]}");
-
         return {
           "flag": true,
           "id": data['id'],
@@ -126,7 +123,6 @@ class ApiService {
           },
         ),
       );
-
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         logger.d(data["AuthenticationCode"]);
