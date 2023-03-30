@@ -7,7 +7,7 @@ Widget logoImage(String company, double logoSize) {
       "assets/img/$company.png",
       width: logoSize,
       height: logoSize,
-      fit: BoxFit.fill,
+      fit: BoxFit.contain,
     ),
   );
 }

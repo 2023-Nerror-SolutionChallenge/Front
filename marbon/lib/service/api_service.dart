@@ -46,9 +46,6 @@ class ApiService {
               (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
         }
 
-        logger.d(data);
-        logger.d("Login Nick => ${data["accountList"]}");
-
         return {
           "flag": true,
           "id": data['id'],
@@ -125,7 +122,6 @@ class ApiService {
           },
         ),
       );
-
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         logger.d(data["AuthenticationCode"]);
@@ -195,7 +191,8 @@ class ApiService {
     }
   }
 
-  Future<dynamic> addMail(String id, username, password, host, port) async {
+  // MyPage 이메일 계정 추가 API
+  Future<dynamic> addMail(String email, username, password, host, port) async {
     try {
       final url = Uri.parse('$baseUrl/mailbox/add');
       final response = await http.post(
@@ -207,7 +204,7 @@ class ApiService {
         },
         body: jsonEncode(
           {
-            "id": id,
+            "id": email,
             "username": username,
             "password": password,
             "host": host,
@@ -215,17 +212,75 @@ class ApiService {
           },
         ),
       );
+      // addmail  응답 리턴 -> accountList totalCount 받아와서 갱신
+      logger.d(response.body.toString());
       if (response.statusCode == 200) {
-        logger.d(jsonDecode(response.body.toString()));
-        //accountList totalCount 받아와서 갱신
-        //리턴을 map 형식
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        var accountList = data["accountList"].toString();
+        logger.d(data);
+        return {"accountList": accountList};
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return {"accountList": []};
+      }
+    } catch (e) {
+      logger.d("Error : ${e.toString()}");
+    }
+  }
+
+  Future<dynamic> getSaveMail(
+      String email, username, password, host, port) async {
+    try {
+      final url = Uri.parse('$baseUrl//mailbox/save?id=$email');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+          {
+            "id": email,
+            "username": username,
+            "password": password,
+            "host": host,
+            "port": port,
+          },
+        ),
+      );
+      // addmail  응답 리턴 -> accountList totalCount 받아와서 갱신
+      logger.d(response.body);
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        int totalCount = data["totalCount"];
+        logger.d(data);
+        return {"flag": true, "totalCoun": totalCount};
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return {"flag": false};
+      }
+    } catch (e) {
+      logger.d("Error : ${e.toString()}");
+      return {"flag": false};
+    }
+  }
+
+  Future<bool> deleteMailAccount(String deleteMail) async {
+    try {
+      final url =
+          Uri.parse('$baseUrl/mailbox/deleteMailbox?username=$deleteMail');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        logger.d(response.body.toString());
         return true;
       } else {
         logger.d('오류 ${response.statusCode}');
         return false;
       }
     } catch (e) {
-      logger.d("Error : ${e.toString()}");
+      logger.d(e.toString());
+      return false;
     }
   }
 }

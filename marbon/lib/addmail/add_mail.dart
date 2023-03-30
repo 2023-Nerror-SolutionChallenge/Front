@@ -1,5 +1,7 @@
- import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../color.dart';
+import '../widgets/myPage/mail_company_item.dart';
 
 class AddMailPage extends StatelessWidget {
   const AddMailPage({Key? key}) : super(key: key);
@@ -9,192 +11,35 @@ class AddMailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(
-        ),
-
+        shadowColor: transparent_color,
+        iconTheme: const IconThemeData(),
       ),
-      body:
-      ListView(
+      body: ListView(
+        padding: const EdgeInsets.only(left: 10, right: 10),
         children: [
-          Positioned(
-            top: 100,
-            left: 0,
-            height: 400,
-            child: Container(
-              height: 200,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/img/mail.png"),
-                      fit: BoxFit.none)),
-            ),
+          const SizedBox(height: 20),
+          Image.asset(
+            "assets/img/mail.png",
+            width: 100,
+            height: 100,
+            fit: BoxFit.contain,
           ),
+          const SizedBox(height: 40),
           const Text(
             "이메일 설정",
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 35,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 35, fontWeight: FontWeight.w800),
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(width: 500,
-              child: Divider(color: Colors.black, thickness: 3.0)),
-          const SizedBox(
-            height: 20,
-          ),
-
-
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-
-                   // ClipRect(
-                   //      child:
-                   //      Image.asset("assets/img/google.png"),
-                   //
-                   //  ),
-
-                    Text(
-                      "Google",
-                      style: TextStyle(fontSize: 17),
-                    ),
-
-
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/add_gmail_address");
-                  },
-                  icon: const Icon(Icons.navigate_next_outlined),
-                  iconSize: 30,
-                ),
-              ],
-            ),
-
-          ),
-          Container(width: 500,
-              child: Divider(color: Colors.grey, thickness: 1.0)),
-          SizedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-
-                    Text(
-                      "iCloud",
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/add_mailaddress");
-                  },
-                  icon: const Icon(Icons.navigate_next_outlined),
-                  iconSize: 30,
-                ),
-              ],
-            ),
-
-          ),
-          Container(width: 500,
-              child: Divider(color: Colors.grey, thickness: 1.0)),
-          SizedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: const [
-                    Text(
-                      "Naver",
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/add_mailaddress");
-                  },
-                  icon: const Icon(Icons.navigate_next_outlined),
-                  iconSize: 30,
-                ),
-              ],
-            ),
-
-          ),
-          Container(width: 500,
-              child: Divider(color: Colors.grey, thickness: 1.0)),
-
-
-          SizedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: const [
-                    Text(
-                      "Daum",
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/add_mailaddress");
-                  },
-                  icon: const Icon(Icons.navigate_next_outlined),
-                  iconSize: 30,
-                ),
-              ],
-            ),
-
-          ),
-          Container(width: 500,
-              child: Divider(color: Colors.grey, thickness: 1.0)),
-
-
-
-
-          SizedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: const [
-                    Text(
-                      "IMAP",
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  onPressed: () async {
-
-                    Navigator.pushNamed(context, "/add_mailaddress");
-                  },
-                  icon: const Icon(Icons.navigate_next_outlined),
-                  iconSize: 30,
-                ),
-              ],
-            ),
-
-          ),
-          Container(width: 500,
-              child: Divider(color: Colors.grey, thickness: 1.0)),
+          const SizedBox(height: 20),
+          const Divider(color: text_green_color, thickness: 2.5),
+          const SizedBox(height: 20),
+          mailCompanyItem(context, "Google", "google"),
+          mailCompanyItem(context, "iCloud", "apple"),
+          mailCompanyItem(context, "Naver", "naver"),
+          mailCompanyItem(context, "Daum", "daum"),
+          mailCompanyItem(context, "IMAP", "imap"),
         ],
       ),
-
     );
   }
 }
-
