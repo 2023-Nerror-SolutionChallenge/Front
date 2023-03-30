@@ -70,7 +70,7 @@ class AddGMailAddressPage extends StatelessWidget {
         children: [
           const SizedBox(height: 20),
           Image.asset(
-            "assets/img/mail.png",
+            "assets/img/gmail.png",
             width: 100,
             height: 100,
             fit: BoxFit.contain,
@@ -83,7 +83,7 @@ class AddGMailAddressPage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           const Divider(color: text_green_color, thickness: 2.5),
-          const SizedBox(height: 50),
+          const SizedBox(height: 20),
           Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,22 +91,74 @@ class AddGMailAddressPage extends StatelessWidget {
                 Text(
                   //textAlign: TextAlign.center,
                   "GMAIL",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
                 ),
                 Text(
                   textAlign: TextAlign.center,
-                  "2단계 인증과 앱 비밀번호",
-                  style: TextStyle(fontSize: 15),
+                  "계정 보호를 위해 Google 에서 2단계 인증을 진행합니다.",
+                  style: TextStyle(fontSize: 16),
+                ),
+
+                const SizedBox(
+                  height: 40,
+                ),
+
+                Text(
+                  textAlign: TextAlign.center,
+                  "1. Google 계정에 로그인 후 'Google 계정' ",
+                  style: TextStyle(fontSize: 16),
+                ),
+
+                Text(
+                  textAlign: TextAlign.center,
+                  "(https://myaccount.google.com/) 으로 이동합니다.",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                Text(
+                  textAlign: TextAlign.center,
+                  "2. 왼쪽에서 '보안' 탭으로 이동합니다.",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                Text(
+                  textAlign: TextAlign.center,
+                  "3. 2단계 인증을 사용 설정합니다.",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                Text(
+                  textAlign: TextAlign.center,
+                  "4. '앱 비밀번호 설정'으로 이동합니다. ",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Text(
                   textAlign: TextAlign.center,
-                  "설정하는 과정 설명",
-                  style: TextStyle(fontSize: 15),
+                  "5. (사진) '앱 선택'에서 '메일'을 선택하고, 사용자의 기기를",
+                  style: TextStyle(fontSize: 16),
+                ),
+
+                Text(
+                  textAlign: TextAlign.center,
+                  "선택하여 비밀번호를 발급하고 로그인합니다.",
+                  style: TextStyle(fontSize: 16),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 40),
           Container(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Form(
