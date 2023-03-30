@@ -269,25 +269,46 @@ class _MyPageState extends State<MyPage> {
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       //삭제할거냐 묻고한다면 메일삭제 api -> 성공시 지우고 성공못하면 Quickalert
-      // confirmDismiss: (direction) async {
-      //   QuickAlert.show(
-      //     context: c,
-      //     type: QuickAlertType.confirm,
-      //     title: account,
-      //     confirmBtnColor: const Color.fromARGB(255, 120, 210, 191),
-      //     confirmBtnText: "Delete",
-      //     onConfirmBtnTap: () async {
-      //       bool flag = await ApiService().deleteMailAccount(account);
-      //       if (flag) {
-      //         Get.find<UserController>().deleteAccount(account);
-      //         return Navigator.of(c).pop(true);
-      //       } else {
-      //         return Navigator.of(c).pop(false);
-      //       }
-      //     },
-      //   );
-      //   return false;
-      // },
+      confirmDismiss: (direction) async {
+        return showDialog(
+            context: context,
+            builder: (ctx) {
+              return AlertDialog(
+                title: Text(account),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      return Navigator.of(context).pop(false);
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: placeholder_color,
+                    ),
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(color: text_green_color),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      bool flag = await ApiService().deleteMailAccount(account);
+                      if (flag) {
+                        Get.find<UserController>().deleteAccount(account);
+                        logger.d(Get.find<UserController>().mailAccounts);
+                        return Navigator.of(context).pop(true);
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: green_color,
+                    ),
+                    child: const Text(
+                      'Delete',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            });
+      },
       onDismissed: (direction) {},
       background: Container(color: transparent_color),
       secondaryBackground: Container(
