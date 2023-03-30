@@ -70,19 +70,25 @@ class AddMailServerPage extends StatelessWidget {
                 final returnData = await ApiService().addMail(
                     Get.find<UserController>().id,
                     mailAddress,
-                    passwordController.value.toString(),
+                    passwordController.text.toString(),
                     imap,
                     port);
                 if (returnData["accountList"] != []) {
-                  final totalCount = await ApiService()
-                      .getSaveMail(Get.find<UserController>().id);
-                  // 메일 계정 리스트 없데이트
+                  final totalCount = await ApiService().getSaveMail(
+                      Get.find<UserController>().id,
+                      mailAddress,
+                      passwordController.text.toString(),
+                      imap,
+                      port);
+                  // 메일 계정 리스트 업데이트
 
                   Get.find<UserController>()
                       .setMailAccounts(returnData["accountList"]);
 
                   if (totalCount["flag"] == true) {
                     // 메일계정 추가 & 메일 저장 끝
+                    Get.find<UserController>()
+                        .setTotalCount(totalCount["totalCount"]);
 
                     await QuickAlert.show(
                       context: context,
