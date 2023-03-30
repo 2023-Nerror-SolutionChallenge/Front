@@ -104,7 +104,6 @@ class ApiService {
       logger.d(e.toString());
     }
   }
-
   // 이메일 인증 요청 (로그 나오는거 보고 리턴값 String으로 변환할것 Future<String>으로)
   Future<dynamic> postEmail(String email) async {
     try {
@@ -122,7 +121,6 @@ class ApiService {
           },
         ),
       );
-
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         logger.d(data["AuthenticationCode"]);
@@ -135,6 +133,7 @@ class ApiService {
       logger.d("Error : ${e.toString()}");
     }
   }
+
 
   Future<bool> modifyPassword(String email, password) async {
     try {
@@ -163,7 +162,6 @@ class ApiService {
       return false;
     }
   }
-
   Future<bool> modifyNick(String email, nick) async {
     try {
       final url = Uri.parse('$baseUrl/auth/modify/nickname');
@@ -192,7 +190,9 @@ class ApiService {
     }
   }
 
-  Future<dynamic> addMail(String id, username, password, host, port) async {
+
+  // MyPage 이메일 계정 추가 API
+  Future<dynamic> addMail(String email, username, password, host, port) async {
     try {
       final url = Uri.parse('$baseUrl/mailbox/add');
       final response = await http.post(
@@ -204,7 +204,7 @@ class ApiService {
         },
         body: jsonEncode(
           {
-            "id": id,
+            "id": email,
             "username": username,
             "password": password,
             "host": host,
@@ -212,9 +212,13 @@ class ApiService {
           },
         ),
       );
+      // addmail  응답 리턴 -> accountList totalCount 받아와서 갱신
       if (response.statusCode == 200) {
+        var head = response.headers;
+        String accountList = head["accountList"].toString();
+        String totalCount = head["totalCount"].toString();
         logger.d(jsonDecode(response.body.toString()));
-        return true;
+        return {"accountList": accountList, "totalCount": totalCount};
       } else {
         logger.d('오류 ${response.statusCode}');
         return false;
@@ -224,12 +228,13 @@ class ApiService {
     }
   }
 
+
+
   Future<bool> deleteMailAccount(String deleteMail) async {
     try {
       final url =
           Uri.parse('$baseUrl/mailbox/deleteMailbox?username=$deleteMail');
       final response = await http.get(url);
-
       if (response.statusCode == 200) {
         logger.d(response.body.toString());
         return true;

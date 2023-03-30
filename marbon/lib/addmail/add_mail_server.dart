@@ -4,14 +4,18 @@ import '../color.dart';
 class AddMailServerPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController imapController = TextEditingController();
+  TextEditingController portController = TextEditingController();
   AddMailServerPage({super.key});
+
 
   @override
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
     final String mailAddress =
-        arguments["mailAddress"]; //mailAddress가 내가 등록한 이메일 ㅈ소임
+        arguments["mailAddress"]; //mailAddress가 내가 등록한 이메일 주소
 
     print(mailAddress);
     return Scaffold(
@@ -25,8 +29,25 @@ class AddMailServerPage extends StatelessWidget {
               backgroundColor: transparent_color,
               foregroundColor: dark_green_color,
             ),
-            onPressed: () {
+            onPressed: () async {
               // 메일 추가 api
+              // Navigator.pushNamed(
+              //   context,
+              //   "/add_mail",
+              //   arguments: {
+              //     "email": emailController.text.toString(),
+              //   },
+              // );
+
+              // if (address == "") {
+              //   address = companyController.text.toString();
+              // }
+              // if (_formKey.currentState!.validate()) {
+              //   Navigator.pushNamed(context, "/bottom_tab_bar", arguments: {
+              //     "mailAddress": "${emailController.text.toString()}@$address"
+              //   });
+              // }
+
             },
             child: const Text(
               "NEXT",
@@ -58,16 +79,74 @@ class AddMailServerPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Form(
               key: _formKey,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  // 폼에 맞는 Textformfield 넣어주쇼
-                  //
-                ],
-              ),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Your Nickname',
+                          labelText: '사용자이름',
+                        ),
+
+                      keyboardType: TextInputType.name,
+                      controller: emailController,
+                      validator: (value) {
+                        if ((value?.length)! < 1) {
+                          return "값을 입력하세요";
+                        }
+                        return null;
+                      }
+                      ),
+                    const SizedBox(height: 40),
+                    TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Your Password',
+                          labelText: '비밀번호',
+                        ),
+                        keyboardType: TextInputType.name,
+                        controller: passwordController,
+                        validator: (value) {
+                          if ((value?.length)! < 1) {
+                            return "값을 입력하세요";
+                          }
+                          return null;
+                        }
+                    ),
+                    const SizedBox(height: 40),
+                    TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'IMAP Server',
+                          labelText: 'IMAP 서버',
+                        ),
+                        keyboardType: TextInputType.name,
+                        controller: imapController,
+                        validator: (value) {
+                          if ((value?.length)! < 1) {
+                            return "값을 입력하세요";
+                          }
+                          return null;
+                        }
+                    ),
+                    const SizedBox(height: 40),
+                    TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'PORT',
+                          labelText: '포트',
+                        ),
+                        keyboardType: TextInputType.name,
+                        controller: portController,
+                        validator: (value) {
+                          if ((value?.length)! < 1) {
+                            return "값을 입력하세요";
+                          }
+                          return null;
+                        }
+                    ),
+              ]),
             ),
           ),
-        ],
+    )],
       ),
     );
   }

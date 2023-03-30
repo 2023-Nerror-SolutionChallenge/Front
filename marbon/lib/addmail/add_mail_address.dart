@@ -30,7 +30,6 @@ class AddMailAddressPage extends StatelessWidget {
       default:
         address = "";
     }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
