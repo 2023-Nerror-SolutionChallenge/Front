@@ -38,6 +38,8 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     Get.put(NickController());
+
+    logger.d("NICK  : ${Get.find<UserController>().nick}");
     if (Get.find<UserController>().nick != null) {
       Get.find<NickController>().setNick(Get.find<UserController>().nick);
     }

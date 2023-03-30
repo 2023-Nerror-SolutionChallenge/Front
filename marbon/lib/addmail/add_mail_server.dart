@@ -74,12 +74,12 @@ class AddMailServerPage extends StatelessWidget {
                     imap,
                     port);
                 if (returnData["accountList"] != []) {
-                  final totalCount = await ApiService().getSaveMail(
-                      Get.find<UserController>().id,
-                      mailAddress,
-                      passwordController.value.toString(),
-                      imap,
-                      port);
+                  final totalCount = await ApiService()
+                      .getSaveMail(Get.find<UserController>().id);
+                  // 메일 계정 리스트 없데이트
+
+                  Get.find<UserController>()
+                      .setMailAccounts(returnData["accountList"]);
 
                   if (totalCount["flag"] == true) {
                     // 메일계정 추가 & 메일 저장 끝
@@ -90,6 +90,7 @@ class AddMailServerPage extends StatelessWidget {
                       confirmBtnColor: text_green_color,
                       text: "Mail account added successfully",
                     );
+                    // 메일 갯수 업데이트
 
                     Navigator.popUntil(
                         context, ModalRoute.withName('/bottom_tab_bar'));

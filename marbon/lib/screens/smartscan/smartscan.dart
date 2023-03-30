@@ -82,8 +82,21 @@ class SmartScan extends StatelessWidget {
                             fontSize: 18,
                             fontWeight: FontWeight.w600),
                       ),
-                      onPressed: () =>
-                          {Navigator.pushNamed(context, "/smartscan_detail")}),
+                      onPressed: () async {
+                        // 스마트스캔 api 호출 후 다되면 smartscan detail에 인자로 결과 넘겨주기
+                        // final mails = await ApiService()
+                        //     .getSmartScan(Get.find<UserController>().id);
+                        // if (mails != []) {
+                        //   Navigator.pushNamed(context, "/smartscan_detail",
+                        //       arguments: {"mails": mails});
+                        // } else {
+                        //   logger.d("스마트스캔 실패");
+                        // }
+                        Navigator.pushNamed(
+                          context,
+                          "/smartscan_detail",
+                        );
+                      }),
                 ),
               ],
             ),

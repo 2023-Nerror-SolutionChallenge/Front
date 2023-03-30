@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
+import '../models/mail_category.dart';
+
 var logger = Logger();
 
 class ApiService {
@@ -216,7 +218,8 @@ class ApiService {
       logger.d(response.body.toString());
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
-        var accountList = data["accountList"].toString();
+        var accountList =
+            data["accountList"]; //List<String>의 값을 accountList에 넣어주어야함
         logger.d(data);
         return {"accountList": accountList};
       } else {
@@ -228,40 +231,22 @@ class ApiService {
     }
   }
 
-  Future<dynamic> getSaveMail(
-      String email, username, password, host, port) async {
+  // 메일 수신 및 저장 ---> 메일 회사 추가할때 수행할 것
+  Future<dynamic> getSaveMail(String id) async {
     try {
-      final url = Uri.parse('$baseUrl//mailbox/save?id=$email');
-      final response = await http.post(
-        url,
-        headers: <String, String>{
-          "Access-Control-Allow-Origin": "*",
-          'Accept': '*/*',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(
-          {
-            "id": email,
-            "username": username,
-            "password": password,
-            "host": host,
-            "port": port,
-          },
-        ),
-      );
-      // addmail  응답 리턴 -> accountList totalCount 받아와서 갱신
-      logger.d(response.body);
+      final url = Uri.parse('$baseUrl/mailbox/save?id=$id');
+      final response = await http.get(url);
+
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
-        int totalCount = data["totalCount"];
-        logger.d(data);
-        return {"flag": true, "totalCoun": totalCount};
+        logger.d("메일들을 DB에 불러옴 총개수 : ${data.toString()}");
+        return {"flag": true, "totalCount": data["totalCount"]};
       } else {
         logger.d('오류 ${response.statusCode}');
         return {"flag": false};
       }
     } catch (e) {
-      logger.d("Error : ${e.toString()}");
+      logger.d(e.toString());
       return {"flag": false};
     }
   }
@@ -281,6 +266,93 @@ class ApiService {
     } catch (e) {
       logger.d(e.toString());
       return false;
+    }
+  }
+
+  // 스마트 스캔 수행
+  Future<dynamic> getSmartScan(String id) async {
+    try {
+      final url = Uri.parse('$baseUrl/scan?username=$id');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        List<MailCategory> mailCategories = [];
+
+        for (var mailData in data) {
+          mailCategories.add(MailCategory.fromJson(mailData));
+        }
+
+        logger.d(mailCategories.toString());
+        return mailCategories;
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return [];
+    }
+  }
+
+  // 스마트스캔 후 메일 삭제 요청
+  Future<bool> postSmartScanDelete(
+      String userName, List<int> deleteMailList) async {
+    try {
+      final url = Uri.parse('$baseUrl/scan/delete');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+          {
+            "username": userName,
+            "deleteIdList": deleteMailList,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        logger.d(response.body.toString());
+        return true;
+      } else {
+        logger.d((response.body).toString());
+        return false;
+      }
+    } catch (e) {
+      logger.d("Error : ${e.toString()}");
+      return false;
+    }
+  }
+
+  // 새로고침  --> 계정과 연결된 새로운 메일 모두 수신 (로그인시 실행할 것)
+  Future<dynamic> getRefresh(String id) async {
+    try {
+      final url = Uri.parse('$baseUrl/mailbox/refresh?id=$id');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        logger.d(data.toString());
+
+        return {
+          "id": data["id"],
+          "nickname": data["nickname"],
+          "deleteCount": data["deletedCount"],
+          "currentLevel": data["currentLevel"],
+          "totalCount": data["totalCount"],
+          // 뱃지 리스트도 같이 주세용
+        };
+      } else {
+        logger.d('오류 ${response.statusCode}');
+        return {};
+      }
+    } catch (e) {
+      logger.d(e.toString());
+      return {};
     }
   }
 }
