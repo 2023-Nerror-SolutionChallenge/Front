@@ -53,6 +53,11 @@ class UserController extends GetxController {
     update();
   }
 
+  void setTotalCount(int total) {
+    _totalCount = total;
+    update();
+  }
+
   void deleteAccount(String account) {
     _mailAccounts.remove(account);
     update();
