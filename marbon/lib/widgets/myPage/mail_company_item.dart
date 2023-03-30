@@ -30,8 +30,11 @@ Widget mailCompanyItem(BuildContext c, String mailCompany, String mailImg) {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(c, "/add_mail_address",
-                      arguments: {"mailCompany": mailCompany});
+                  mailCompany == "Google"
+                      ? Navigator.pushNamed(c, "/add_gmail_address",
+                          arguments: {"mailCompany": mailCompany})
+                      : Navigator.pushNamed(c, "/add_mail_address",
+                          arguments: {"mailCompany": mailCompany});
                 },
                 icon: const Icon(Icons.navigate_next_outlined),
                 iconSize: 30,

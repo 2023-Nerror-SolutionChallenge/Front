@@ -8,8 +8,6 @@ import 'package:marbon/screens/mypage/profile_img.dart';
 import 'package:marbon/screens/mypage/setting_box.dart';
 import 'package:marbon/widgets/myPage/add_mail_container.dart';
 import 'package:marbon/widgets/logo_img.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tab_container/tab_container.dart';
 
 import '../../controller/nickController.dart';
@@ -271,26 +269,25 @@ class _MyPageState extends State<MyPage> {
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       //삭제할거냐 묻고한다면 메일삭제 api -> 성공시 지우고 성공못하면 Quickalert
-      confirmDismiss: (direction) async {
-        QuickAlert.show(
-          context: c,
-          type: QuickAlertType.confirm,
-          title: account,
-          confirmBtnColor: const Color.fromARGB(255, 120, 210, 191),
-          confirmBtnText: "Delete",
-          onConfirmBtnTap: () async {
-            bool flag = await ApiService().deleteMailAccount(account);
-            if (flag) {
-              Get.find<UserController>().deleteAccount(account);
-              logger.d(Get.find<UserController>().mailAccounts);
-              return Navigator.of(c).pop(true);
-            } else {
-              return Navigator.of(c).pop(false);
-            }
-          },
-        );
-        return false;
-      },
+      // confirmDismiss: (direction) async {
+      //   QuickAlert.show(
+      //     context: c,
+      //     type: QuickAlertType.confirm,
+      //     title: account,
+      //     confirmBtnColor: const Color.fromARGB(255, 120, 210, 191),
+      //     confirmBtnText: "Delete",
+      //     onConfirmBtnTap: () async {
+      //       bool flag = await ApiService().deleteMailAccount(account);
+      //       if (flag) {
+      //         Get.find<UserController>().deleteAccount(account);
+      //         return Navigator.of(c).pop(true);
+      //       } else {
+      //         return Navigator.of(c).pop(false);
+      //       }
+      //     },
+      //   );
+      //   return false;
+      // },
       onDismissed: (direction) {},
       background: Container(color: transparent_color),
       secondaryBackground: Container(

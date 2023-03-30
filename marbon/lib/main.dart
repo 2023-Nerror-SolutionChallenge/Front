@@ -20,9 +20,11 @@ import 'package:marbon/screens/smartscan/smartscan_delete.dart';
 import 'package:marbon/screens/smartscan/smartscan_detail.dart';
 import 'package:provider/provider.dart';
 
+import 'addmail/add_gmail_address.dart';
 import 'addmail/add_mail_address.dart';
 import 'addmail/add_mail_server.dart';
 import 'controller/userController.dart';
+
 final GlobalKey<NavigatorState> navigatorKey =
     GlobalKey<NavigatorState>(); //추가!
 void main() {
@@ -79,6 +81,7 @@ class MyApp extends StatelessWidget {
         "/add_mail": (context) => const AddMailPage(),
         "/add_mail_address": (context) => AddMailAddressPage(),
         "/add_mail_server": (context) => AddMailServerPage(),
+        "/add_gmail_address": (context) => AddGMailAddressPage(),
       },
     );
   }
