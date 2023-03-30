@@ -196,10 +196,10 @@ class ApiService {
     }
   }
 
-  // 스마트 스캔 수행 (accountList의 한계정만 가능)
-  Future<dynamic> getSmartScan(String userName) async {
+  // 스마트 스캔 수행
+  Future<dynamic> getSmartScan(String id) async {
     try {
-      final url = Uri.parse('$baseUrl/scan?username=$userName');
+      final url = Uri.parse('$baseUrl/scan?username=$id');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {

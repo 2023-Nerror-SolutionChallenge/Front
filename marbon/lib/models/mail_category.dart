@@ -31,14 +31,15 @@ class MailCategory {
 }
 
 class Mails {
-  int? id;
-  int? msgNum;
-  int? msgId;
-  String? sender;
-  String? subject;
-  String? contents;
-  String? tag;
-  String? recivedDate;
+  late int id;
+  late int msgNum;
+  late int msgId;
+  late String sender;
+  late String subject;
+  late String contents;
+  late String tag;
+  late String recivedDate;
+  late String username;
   bool isChecked = false;
 
   //       "attachmentSize": 0,
@@ -46,13 +47,14 @@ class Mails {
 
   Mails(
       {required this.id,
-      this.msgNum,
-      this.msgId,
-      this.sender,
-      this.subject,
-      this.contents,
-      this.tag,
-      this.recivedDate,
+      required this.msgId,
+      required this.msgNum,
+      required this.sender,
+      required this.subject,
+      required this.contents,
+      required this.tag,
+      required this.recivedDate,
+      required this.username,
       this.isChecked = true});
 
   Mails.fromJson(Map<String, dynamic> json) {
@@ -64,6 +66,7 @@ class Mails {
     contents = json['contents'];
     tag = json['tag'];
     recivedDate = json['recivedDate'];
+    username = json['username'];
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +79,7 @@ class Mails {
     data['contents'] = contents;
     data['tag'] = tag;
     data['recivedDate'] = recivedDate;
+    data['username'] = username;
     return data;
   }
 }
