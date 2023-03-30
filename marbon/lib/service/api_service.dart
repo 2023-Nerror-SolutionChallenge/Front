@@ -46,7 +46,8 @@ class ApiService {
               (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
         }
 
-        logger.d("deleteCount ${data['deletedCount']}");
+        logger.d(data);
+        logger.d("Login Nick => ${data["accountList"]}");
 
         return {
           "flag": true,

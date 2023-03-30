@@ -3,31 +3,47 @@ import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
-import 'package:marbon/widgets/input_field.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:marbon/screens/mypage/pencil_icon.dart';
+import 'package:marbon/screens/mypage/profile_img.dart';
+import 'package:marbon/screens/mypage/setting_box.dart';
+import 'package:marbon/widgets/myPage/add_mail_container.dart';
+import 'package:marbon/widgets/logo_img.dart';
 import 'package:tab_container/tab_container.dart';
 
 import '../../controller/nickController.dart';
 import '../../controller/userController.dart';
 import '../../service/api_service.dart';
+import '../../widgets/myPage/badge_img.dart';
+import '../../widgets/myPage/badge_img_lock.dart';
+import '../../widgets/myPage/nickModal.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
+  const MyPage({super.key});
+
+  @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
   var nick = "nickname".obs;
 
   var logger = Logger();
+
   final List<int> HaveBadge = Get.find<UserController>().badges;
 
+  final List<dynamic> tmp = Get.find<UserController>().mailAccounts;
+
   final _lightController = ValueNotifier<bool>(false);
-  MyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     Get.put(NickController());
 
+    logger.d("NICK  : ${Get.find<UserController>().nick}");
     if (Get.find<UserController>().nick != null) {
       Get.find<NickController>().setNick(Get.find<UserController>().nick);
     }
+
     return LayoutBuilder(
       builder: (context, constrains) => Column(
         children: [
@@ -64,8 +80,11 @@ class MyPage extends StatelessWidget {
                   children: [
                     _BuildBadgeContainer(
                         constrains.maxHeight * 0.6, constrains.maxWidth * 0.9),
-                    _BuildMymailsContainer(constrains.maxHeight * 0.6,
-                        constrains.maxWidth * 0.9, context),
+                    _BuildMymailsContainer(
+                      constrains.maxHeight * 0.6,
+                      constrains.maxWidth * 0.9,
+                      context,
+                    ),
                     _BuildSettingsContainer(constrains.maxHeight * 0.6,
                         constrains.maxWidth * 0.9, context),
                   ],
@@ -78,6 +97,7 @@ class MyPage extends StatelessWidget {
     );
   }
 
+  // 상단 프로필 관련 컨테이너
   Widget _BuildProfileContainer(double h, double w, BuildContext context) {
     const double imgSizePercent = 0.45;
     return Container(
@@ -88,15 +108,7 @@ class MyPage extends StatelessWidget {
       child: Center(
           child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(w * imgSizePercent),
-            child: Image.asset(
-              'assets/img/signup_default.png',
-              width: w * imgSizePercent,
-              height: w * imgSizePercent,
-              fit: BoxFit.fill,
-            ),
-          ),
+          profileImg(w, imgSizePercent, 'assets/img/signup_default.png'),
           const SizedBox(
             height: 15,
           ),
@@ -114,20 +126,9 @@ class MyPage extends StatelessWidget {
               }),
               IconButton(
                 onPressed: () {
-                  _BuildNickModal(context);
+                  nickModal(context);
                 },
-                icon: Container(
-                  width: 25,
-                  height: 25,
-                  decoration: const BoxDecoration(
-                      color: placeholder_color,
-                      borderRadius: BorderRadius.all(Radius.circular(25))),
-                  child: const Icon(
-                    Icons.edit_rounded,
-                    color: text_green_color,
-                    size: 18,
-                  ),
-                ),
+                icon: pencilIcon(25, 18),
               ),
             ],
           )
@@ -136,66 +137,7 @@ class MyPage extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _BuildNickModal(BuildContext context) {
-    String newNick = '';
-    return QuickAlert.show(
-      context: context,
-      type: QuickAlertType.custom,
-      barrierDismissible: true,
-      confirmBtnText: 'Save',
-      confirmBtnColor: text_green_color,
-      widget: TextFormField(
-        decoration: const InputDecoration(
-          alignLabelWithHint: true,
-          hintText: 'Enter Your Nickname',
-          prefixIcon: Icon(
-            Icons.person_outline,
-            color: text_green_color,
-          ),
-        ),
-        textInputAction: TextInputAction.next,
-        keyboardType: TextInputType.name,
-        onChanged: (value) => newNick = value,
-      ),
-      onConfirmBtnTap: () async {
-        if (newNick.length < minNick) {
-          await QuickAlert.show(
-            context: context,
-            type: QuickAlertType.error,
-            confirmBtnColor: text_green_color,
-            text: 'Please input something',
-          );
-          return;
-        }
-        Navigator.pop(context);
-        await Future.delayed(const Duration(milliseconds: 500));
-        if ((newNick.length) > minNick) {
-          bool flag = await ApiService()
-              .modifyNick(Get.find<UserController>().id, newNick);
-
-          if (flag) {
-            await QuickAlert.show(
-              context: context,
-              type: QuickAlertType.success,
-              confirmBtnColor: text_green_color,
-              confirmBtnText: "OK",
-              text: "Your Nickname has been saved!",
-            );
-            Get.find<NickController>().setNick(newNick);
-            Get.find<UserController>().setNick(newNick);
-          } else {
-            await QuickAlert.show(
-              context: context,
-              type: QuickAlertType.error,
-              confirmBtnColor: text_green_color,
-              text: 'Failed to modify nickname',
-            );
-          }
-        }
-      },
-    );
-  }
-
+  // 뱃지 관련 컨테이너
   Widget _BuildBadgeContainer(double h, double w) {
     return Container(
       padding: EdgeInsets.only(top: h * 0.16, bottom: h * 0.11),
@@ -207,7 +149,7 @@ class MyPage extends StatelessWidget {
             children: List.generate(3, (index) {
               return Center(
                 child: HaveBadge[index] == 0
-                    ? LockBadgeImage(index + 1, w)
+                    ? BadgeImageLock(index + 1, w)
                     : BadgeImage(index + 1, w),
               );
             }),
@@ -217,7 +159,7 @@ class MyPage extends StatelessWidget {
             children: List.generate(3, (index) {
               return Center(
                 child: HaveBadge[index + 3] == 0
-                    ? LockBadgeImage(index + 4, w)
+                    ? BadgeImageLock(index + 4, w)
                     : BadgeImage(index + 4, w),
               );
             }),
@@ -227,211 +169,166 @@ class MyPage extends StatelessWidget {
     );
   }
 
-  Widget LockBadgeImage(int idx, double w) {
-    return Stack(
-      children: [
-        // 잠긴 이미지의 경우
-        Image.asset(
-          'assets/img/badges$idx.png',
-          width: w * 0.25,
-          height: w * 0.25,
-        ),
-        Positioned(
-          child: Container(
-            width: w * 0.25,
-            height: w * 0.25,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(155, 158, 158, 158),
-              borderRadius: BorderRadius.circular(w * 0.25),
-            ),
-          ),
-        ),
-        Positioned(
-          top: w * 0.072,
-          left: w * 0.075,
-          child: const Icon(
-            Icons.lock_outline_sharp,
-            color: Color.fromARGB(251, 255, 254, 254),
-            size: 35,
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget BadgeImage(int idx, double w) {
-    return Image.asset(
-      'assets/img/badges$idx.png',
-      width: w * 0.25,
-      height: w * 0.25,
-    );
-  }
-
+  // 메일 추가 관련 컨테이너
   Widget _BuildMymailsContainer(double h, double w, BuildContext c) {
-    return Scaffold(
-      backgroundColor: const Color(0xffedeedd),
-      body: Stack(
-        children: [
-          Positioned(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                height: 100,
-                width: MediaQuery.of(c).size.width - 20,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-              ),
-              Container(
-                height: 100,
-                width: MediaQuery.of(c).size.width - 20,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(c).size.width - 20,
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    backgroundColor: const Color(0xffffffff),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(c, "/add_mail");
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/img/plus.png"),
-                            fit: BoxFit.none)),
-                  ),
-
-                  // const Text(
-                  //   "+ Add Mail",
-                  //   textAlign: TextAlign.center,
-                  //   style: TextStyle(
-                  //       color: Colors.black,
-                  //       fontSize: 18,
-                  //       fontWeight: FontWeight.w700),
-                  // ),
-                ),
-              )
-            ],
-          ))
-        ],
-      ),
+    final List<dynamic> accounts = tmp.reversed.toList();
+    List<int> items = List<int>.generate(accounts.length, (int index) => index);
+    return ListView.builder(
+      itemCount: accounts.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        return index < accounts.length
+            ? _mailContainer(w, accounts[index], index, items, c)
+            : addMailContainer(w, c, "/add_mail");
+      },
     );
   }
 
+  // Setting 관련 컨테이너
   Widget _BuildSettingsContainer(double h, double w, BuildContext c) {
     return Container(
       padding: EdgeInsets.only(left: w * 0.1, right: w * 0.1, top: h * 0.06),
       child: Column(
         children: [
-          SizedBox(
-            height: h * 0.15,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Icon(
-                      Icons.lock_outline,
-                      size: 26,
-                      color: yellow_green_color,
-                    ),
-                    SizedBox(width: 20),
-                    Text(
-                      "Change Password",
-                      style: TextStyle(
-                        fontSize: 17,
-                        color: yellow_green_color,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  onPressed: () async {
-                    String authCode = await ApiService()
-                        .postEmail(Get.find<UserController>().id);
-                    if (authCode != "") {
-                      logger
-                          .d("${Get.find<UserController>().id}  :  $authCode");
-                      Navigator.pushNamed(
-                        c,
-                        "/change_pw1",
-                        arguments: {"code": authCode},
-                      );
-                    } else {
-                      logger.d("인증코드가 정상적으로 오지 않았음");
-                    }
-                  },
-                  icon: const Icon(Icons.navigate_next_outlined),
-                  iconSize: 30,
-                  color: yellow_green_color,
-                ),
-              ],
+          settingBox(
+            h: h,
+            leftIcon: Icons.lock_outline,
+            content: "Change Password",
+            rightWidget: IconButton(
+              onPressed: () async {
+                String authCode =
+                    await ApiService().postEmail(Get.find<UserController>().id);
+                if (authCode != "") {
+                  logger.d("${Get.find<UserController>().id}  :  $authCode");
+                  Navigator.pushNamed(
+                    c,
+                    "/change_pw1",
+                    arguments: {"code": authCode},
+                  );
+                } else {
+                  logger.d("인증코드가 정상적으로 오지 않았음");
+                }
+              },
+              icon: const Icon(Icons.navigate_next_outlined),
+              iconSize: 30,
+              color: yellow_green_color,
             ),
           ),
-          SizedBox(
-            height: h * 0.15,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Icon(
-                      Icons.dark_mode_outlined,
-                      size: 26,
-                      color: yellow_green_color,
-                    ),
-                    SizedBox(width: 20),
-                    Text(
-                      "Dark Mode",
-                      style: TextStyle(
-                        fontSize: 17,
-                        color: yellow_green_color,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                AdvancedSwitch(
-                  controller: _lightController,
-                  height: 25,
-                  width: 40,
-                  activeColor: yellow_green_color,
-                )
-              ],
+          settingBox(
+            h: h,
+            leftIcon: Icons.dark_mode_outlined,
+            content: "Dark Mode",
+            rightWidget: AdvancedSwitch(
+              controller: _lightController,
+              height: 25,
+              width: 40,
+              activeColor: yellow_green_color,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // 내 메일 한개한개 담고있는 컨테이너
+  Widget _mailContainer(double width, String account, int index,
+      List<int> items, BuildContext c) {
+    // 메일 회사에 맞는 회사 및 로고 이미지 지정
+    late String company;
+    late Widget logo;
+    double logoSize = 35;
+    String mailCompany = account.contains("@")
+        ? account.substring(account.indexOf("@") + 1, account.indexOf("."))
+        : "";
+
+    switch (mailCompany) {
+      case "naver":
+        company = "Naver";
+        logo = logoImage("naver", logoSize);
+        break;
+      case "gmail":
+        company = "Google";
+        logo = logoImage("google", logoSize);
+        break;
+      case "hanmail":
+        company = "Daum";
+        logo = logoImage("daum", logoSize);
+        break;
+      case "icloud":
+        company = "iCloud";
+        logo = logoImage("apple", logoSize);
+        break;
+      case "mac":
+        company = "iCloud";
+        logo = logoImage("apple", logoSize);
+        break;
+      default:
+        company = "기타(IMAP)";
+        logo = logoImage("imap", logoSize);
+    }
+
+    // 스와이프 가능한 메일 패널 생성
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      // 삭제할거냐 묻고한다면 메일삭제 api -> 성공시 지우고 성공못하면 Quickalert
+      // confirmDismiss: (direction) {
+      //   QuickAlert.show(
+      //     context: c,
+      //     type: QuickAlertType.confirm,
+      //     onConfirmBtnTap: () {
+
+      //     },
+      //   );
+      // },
+      // onDismissed: (direction) {
+
+      // },
+      background: Container(color: transparent_color),
+      secondaryBackground: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 30.0),
+        margin: const EdgeInsets.only(top: 5, bottom: 5),
+        color: green_color,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: const [
+            Icon(Icons.delete, color: Colors.white),
+            SizedBox(width: 10),
+            Text("Delete",
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Colors.white)),
+          ],
+        ),
+      ),
+      child: Container(
+        height: 115,
+        alignment: Alignment.topCenter,
+        child: Container(
+          height: 90,
+          width: width,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(width: 40),
+              logo,
+              const SizedBox(width: 25),
+              Text(
+                company,
+                style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

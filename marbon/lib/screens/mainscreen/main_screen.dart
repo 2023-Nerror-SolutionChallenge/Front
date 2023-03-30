@@ -137,7 +137,7 @@ class _MainScreenState extends State<MainScreen> {
           width: line_img_width,
           height: total_delete_height,
           child: Image.asset(
-            'assets/img/line.png',
+            'assets/img/divide.png',
             fit: BoxFit.contain,
           ),
         ),

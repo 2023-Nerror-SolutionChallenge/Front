@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../service/api_service.dart';
-import '../../widgets/input_field.dart';
-class AddMailServerPage extends StatelessWidget {
+
+class AddGMailAddressPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController imapController = TextEditingController();
-  TextEditingController portController = TextEditingController();
-  AddMailServerPage({super.key});
-
+  AddGMailAddressPage({super.key});
   renderTextFormField({
     required String label,
     required FormFieldSetter onSaved,
     required FormFieldValidator validator,
-
   }) {
     assert(onSaved != null);
     assert(validator != null);
@@ -53,13 +48,14 @@ class AddMailServerPage extends StatelessWidget {
           ),
           actions: <Widget>[
             IconButton(
+
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   String authCode = await ApiService()
                       .postEmail(emailController.text.toString());
                   Navigator.pushNamed(
                     context,
-                    "/add_mail",
+                    "/mail_server",
                     arguments: {
                       "code": authCode,
                       "email": emailController.text.toString(),
@@ -70,7 +66,6 @@ class AddMailServerPage extends StatelessWidget {
               icon: const Icon(Icons.check),
               iconSize: 30,
             ),
-
           ],
         ),
         body:
@@ -93,19 +88,19 @@ class AddMailServerPage extends StatelessWidget {
                 ),
               ),
               const Text(
-                "수신 서버 설정",
+                "이메일 주소 추가",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(
-                height: 5,
+                height: 20,
               ),
               Container(width: 500,
                   child: Divider(color: Colors.black, thickness: 3.0)),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               SizedBox(
                 child: Row(
@@ -114,17 +109,48 @@ class AddMailServerPage extends StatelessWidget {
                     Row(
                       children: const [
                         Text(
-                          "Google",
-                          style: TextStyle(fontSize: 27),
+                          "GMAIL",
+                          style: TextStyle(fontSize: 23),
                         ),
                       ],
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox (
 
               ),
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      //textAlign: TextAlign.center,
+                      "GMAIL",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900),
+                    ),
+                    const Text(
+                      textAlign: TextAlign.center,
+                      "2단계 인증과 앱 비밀번호",
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    const Text(
+                      textAlign: TextAlign.center,
+                      "설정하는 과정 설명",
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
 
-              //Form 안에 TextFormField
+              ),
+              const SizedBox(
+                height: 30,
+              ),
               Form(
                 key: this._formKey,
                 child: Padding(
@@ -132,78 +158,30 @@ class AddMailServerPage extends StatelessWidget {
                   child: Column(
                     children: [
                       renderTextFormField(
-                        label: '사용자이름',
+                        label: 'Email Address',
                         onSaved: (val) {},
                         validator: (val) {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 30),
-                      renderTextFormField(
-                        label: '비밀번호',
-                        onSaved: (val) {},
-                        validator: (val) {
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      renderTextFormField(
-                        label: 'IMAP서버',
-                        onSaved: (val) {},
-                        validator: (val) {
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      renderTextFormField(
-                        label: '포트',
-                        onSaved: (val) {},
-                        validator: (val) {
-                          return null;
-                        },
-                      ),
-
-                      const SizedBox(height: 30),
                     ],
                   ),
                 ),
               ),
-
             ])
-
     );
   }
 }
-
 class EmailAddController extends GetxController{
-  String _id = "";
-  String _username = "";
-  String _pw = "";
-  String _host = "";
-  String _port = "";
-
   List<String> _email = [];
   get email => _email;
-  get id => _id;
-  get pw => _pw;
-  get username => _username;
-  get host => _host;
-  get port => _port;
-
   void upadateEmail(
       {
-        required String id,
-        required String username,
-        required String host,
-        required String port,
-        required List<String> email,
-
+        required List<String> email
       }) {
-
-    _id = id;
-    _username = username;
-    _pw = pw;
-    _host = host;
-    _port = port;
+    _email = email;
   }
 }
+// Get.find<EmailAddController>().upadateEmail(
+// email: returnData["email"],
+// );
