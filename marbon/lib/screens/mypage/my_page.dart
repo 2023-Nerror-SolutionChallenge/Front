@@ -37,9 +37,8 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     Get.put(NickController());
-
-    logger.d("NICK  : ${Get.find<UserController>().nick}");
     if (Get.find<UserController>().nick != null) {
       Get.find<NickController>().setNick(Get.find<UserController>().nick);
     }
@@ -276,7 +275,7 @@ class _MyPageState extends State<MyPage> {
             context: context,
             builder: (ctx) {
               return AlertDialog(
-                title: Text(account),
+                title: Text(account, style: const TextStyle(fontSize: 15)),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {

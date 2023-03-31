@@ -11,10 +11,10 @@ class MailCategory {
       this.isChecked = false});
 
   MailCategory.fromJson(Map<String, dynamic> json) {
-    category = json['category'];
-    if (json["removableMailList"] != null) {
+    category = json["category"];
+    if (json["smartScanResult"] != null) {
       mails = <Mails>[];
-      json["removableMailList"].forEach((v) {
+      json["smartScanResult"].forEach((v) {
         mails!.add(Mails.fromJson(v));
       });
     }
@@ -22,9 +22,9 @@ class MailCategory {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['category'] = category;
+    data["category"] = category;
     if (mails != null) {
-      data["removableMailList"] = mails!.map((v) => v.toJson()).toList();
+      data["smartScanResult"] = mails!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -58,12 +58,12 @@ class Mails {
       this.isChecked = true});
 
   Mails.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['mailId'];
     msgNum = json['mgsNum'];
     msgId = json['msgId'];
     sender = json['sender'];
     subject = json['subject'];
-    contents = json['contents'];
+    contents = json['contents'].toString();
     tag = json['tag'];
     recivedDate = json['recivedDate'];
     username = json['username'];
@@ -71,7 +71,7 @@ class Mails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
+    data['mailId'] = id;
     data['mgsNum'] = msgNum;
     data['msgId'] = msgId;
     data['author'] = sender;

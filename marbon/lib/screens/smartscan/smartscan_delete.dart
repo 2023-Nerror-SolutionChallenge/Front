@@ -1,7 +1,10 @@
 import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:marbon/service/api_service.dart';
 
 import '../../color.dart';
+import '../../controller/userController.dart';
 import '../../size.dart';
 import '../../widgets/title_painter.dart';
 
@@ -10,7 +13,9 @@ class SmartScanDelete extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int mailCount = 100;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    final int totalDelte = arguments["totalDelete"];
 
     return LayoutBuilder(
       builder: (context, constrains) => Container(
@@ -60,7 +65,7 @@ class SmartScanDelete extends StatelessWidget {
                             height: 15,
                           ),
                           Text(
-                            "총 $mailCount건의 메일이 삭제되었습니다.",
+                            "총 $totalDelte건의 메일이 삭제되었습니다.",
                             style: const TextStyle(
                               color: text_green_color,
                               fontSize: 18,
@@ -106,9 +111,28 @@ class SmartScanDelete extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.popUntil(
-                            context, ModalRoute.withName('/bottom_tab_bar'));
+                      onPressed: () async {
+                        var refreshData = await ApiService()
+                            .getRefresh(Get.find<UserController>().id);
+                        var returnData = await ApiService().postLogin(
+                            Get.find<UserController>().id,
+                            Get.find<UserController>().pw);
+
+                        Get.find<UserController>()
+                            .setBadges(returnData["badgeList"]);
+                        Get.find<UserController>()
+                            .setDeleteCount(refreshData["deletedCount"]);
+                        Get.find<UserController>()
+                            .setLevel(returnData["currentLevel"]);
+                        Get.find<UserController>()
+                            .setTotalCount(refreshData["totalCount"]);
+
+                        if (refreshData['flag']) {
+                          Navigator.popUntil(
+                              context, ModalRoute.withName('/bottom_tab_bar'));
+                        } else {
+                          logger.d("새로고침 실패");
+                        }
                       }),
                 ),
               ],

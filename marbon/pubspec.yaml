@@ -40,6 +40,7 @@ dependencies:
   tab_container: ^2.0.0
   flutter_advanced_switch: ^3.0.1
   flutter_dismissible_tile: ^1.0.2
+  html: ^0.15.2
 
 
   # The following adds the Cupertino Icons font to your application.
