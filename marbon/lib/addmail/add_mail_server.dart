@@ -66,38 +66,43 @@ class AddMailServerPage extends StatelessWidget {
               // 메일 추가 api
 
               if (_formKey.currentState!.validate()) {
-                // final returnData = await ApiService().addMail(
-                //     Get.find<UserController>().id,
-                //     mailAddress,
-                //     passwordController.text.toString(),
-                //     imap,
-                //     port);
-                // if (returnData["accountList"] != []) {
-                //   final totalCount = await ApiService()
-                //       .getSaveMail(Get.find<UserController>().id);
-                //   // 메일 계정 리스트 없데이트
+                final returnData = await ApiService().addMail(
+                    Get.find<UserController>().id,
+                    mailAddress,
+                    passwordController.text.toString(),
+                    imap,
+                    port);
+                if (returnData["accountList"] != []) {
+                  final totalCount = await ApiService().getSaveMail(
+                      Get.find<UserController>().id,
+                      mailAddress,
+                      passwordController.text.toString(),
+                      imap,
+                      port);
+                  // 메일 계정 리스트 업데이트
 
-                //   Get.find<UserController>()
-                //       .setMailAccounts(returnData["accountList"]);
+                   Get.find<UserController>()
+                       .setMailAccounts(returnData["accountList"]);
 
-                // if (totalCount["flag"] == true) {
-                // 메일계정 추가 & 메일 저장 끝
+if (totalCount["flag"] == true) {
+                    // 메일계정 추가 & 메일 저장 끝
+                    Get.find<UserController>()
+                        .setTotalCount(totalCount["totalCount"]);
 
-                await QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.success,
-                  confirmBtnColor: text_green_color,
-                  text: "Mail account added successfully",
-                );
-                // Get.find<UserController>()
-                //     .setTotalCount(totalCount["totalCount"]);
+                    await QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.success,
+                      confirmBtnColor: text_green_color,
+                      text: "Mail account added successfully",
+                    );
+                    // 메일 갯수 업데이트
 
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/bottom_tab_bar'));
+                    Navigator.popUntil(
+                        context, ModalRoute.withName('/bottom_tab_bar'));
+                  }
+                }
               }
             },
-            //}
-            //},
             child: const Text(
               "NEXT",
               style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17),

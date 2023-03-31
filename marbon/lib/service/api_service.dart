@@ -232,14 +232,15 @@ class ApiService {
   }
 
   // 메일 수신 및 저장 ---> 메일 회사 추가할때 수행할 것
-  Future<dynamic> getSaveMail(String id) async {
+  Future<dynamic> getSaveMail(
+      String email, username, password, host, port) async {
     try {
-      final url = Uri.parse('$baseUrl/mailbox/save?id=$id');
+      final url = Uri.parse('$baseUrl/mailbox/save?id=$email');
+      // 안돼면 헤더 붙이기
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
-        logger.d("메일들을 DB에 불러옴 총개수 : ${data.toString()}");
         return {"flag": true, "totalCount": data["totalCount"]};
       } else {
         logger.d('오류 ${response.statusCode}');
