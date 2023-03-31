@@ -1,12 +1,15 @@
 import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
 import 'package:marbon/widgets/title_painter.dart';
 
+import '../../controller/userController.dart';
+import '../../service/api_service.dart';
+
 class SmartScan extends StatelessWidget {
   const SmartScan({super.key});
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -84,18 +87,15 @@ class SmartScan extends StatelessWidget {
                       ),
                       onPressed: () async {
                         // 스마트스캔 api 호출 후 다되면 smartscan detail에 인자로 결과 넘겨주기
-                        // final mails = await ApiService()
-                        //     .getSmartScan(Get.find<UserController>().id);
-                        // if (mails != []) {
-                        //   Navigator.pushNamed(context, "/smartscan_detail",
-                        //       arguments: {"mails": mails});
-                        // } else {
-                        //   logger.d("스마트스캔 실패");
-                        // }
-                        Navigator.pushNamed(
-                          context,
-                          "/smartscan_detail",
-                        );
+                        final mails = await ApiService()
+                            .getSmartScan(Get.find<UserController>().id);
+
+                        if (mails != []) {
+                          Get.find<UserController>().setMailCategory(mails);
+                          Navigator.pushNamed(context, "/smartscan_detail");
+                        } else {
+                          logger.d("스마트스캔 실패");
+                        }
                       }),
                 ),
               ],

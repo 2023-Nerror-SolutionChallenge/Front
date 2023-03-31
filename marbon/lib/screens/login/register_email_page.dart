@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:marbon/color.dart';
 import 'package:marbon/size.dart';
 import 'package:marbon/widgets/two_line_text.dart';
 import 'package:quickalert/quickalert.dart';
+import '../../controller/userController.dart';
 import '../../service/api_service.dart';
 import '../../widgets/input_field.dart';
 
@@ -108,12 +110,38 @@ class RegisterEmailPage extends StatelessWidget {
                                     );
                                   } else {
                                     // 가입성공
+
+                                    final returnData =
+                                        await ApiService().postLogin(email, pw);
+                                    if (returnData["flag"]) {
+                                      Get.find<UserController>()
+                                          .upadateUserInform(
+                                              id: returnData["id"],
+                                              nick: returnData["nick"],
+                                              pw: pw,
+                                              accessToken:
+                                                  returnData["accessToken"],
+                                              refreshToken:
+                                                  returnData["refreshToken"],
+                                              deleteCount:
+                                                  returnData["deletedCount"],
+                                              totalCount:
+                                                  returnData['totalCount'],
+                                              currentLevel:
+                                                  returnData['currentLevel'],
+                                              badges: returnData["badgeList"],
+                                              mailAccounts:
+                                                  returnData["mailAccounts"],
+                                              mailCategory: []);
+                                    }
+
                                     QuickAlert.show(
                                       context: context,
                                       type: QuickAlertType.success,
                                       text: "Signup Completed Successfully",
                                       onConfirmBtnTap: () {
-                                        Navigator.pushNamed(context, "/login");
+                                        Navigator.pushNamed(
+                                            context, "/bottom_tab_bar");
                                       },
                                     );
                                   }

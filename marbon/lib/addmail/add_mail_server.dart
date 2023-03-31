@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:marbon/service/api_service.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../color.dart';
@@ -82,10 +81,10 @@ class AddMailServerPage extends StatelessWidget {
                       port);
                   // 메일 계정 리스트 업데이트
 
-                  Get.find<UserController>()
-                      .setMailAccounts(returnData["accountList"]);
+                   Get.find<UserController>()
+                       .setMailAccounts(returnData["accountList"]);
 
-                  if (totalCount["flag"] == true) {
+if (totalCount["flag"] == true) {
                     // 메일계정 추가 & 메일 저장 끝
                     Get.find<UserController>()
                         .setTotalCount(totalCount["totalCount"]);

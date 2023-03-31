@@ -80,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
               const SizedBox(height: total_delete_container_gap),
               _buildPercentContainer(
                   constrains,
-                  "${double.parse(deletePercent.toStringAsFixed(3)) * 100} %",
+                  "${double.parse(deletePercent.toStringAsFixed(2)) * 100} %",
                   "전체메일에서 삭제된 메일 만큼의 비율",
                   deletePercent),
               Row(
@@ -158,7 +158,7 @@ class _MainScreenState extends State<MainScreen> {
                 height: total_delete_text_gap,
               ),
               Text(
-                "${(Get.find<CountController>().deleteCount.value) * 0.004}  kg",
+                "${((Get.find<CountController>().deleteCount.value) * 4) / 1000}  kg",
                 style: const TextStyle(
                     color: green_color,
                     fontSize: 18,

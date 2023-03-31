@@ -86,22 +86,28 @@ class LoginPage extends StatelessWidget {
                             //로그인 성공시 해당 정보들을 받아서 getX에 등록하기
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
+                                var refreshData = await ApiService().getRefresh(
+                                    emailController.text.toString());
                                 final returnData = await ApiService().postLogin(
                                     emailController.text.toString(),
                                     passwordController.text.toString());
+                                // 새로고침 api 불러오기
                                 if (returnData["flag"]) {
+                                  var refreshData = await ApiService()
+                                      .getRefresh(
+                                          emailController.text.toString());
                                   Get.find<UserController>().upadateUserInform(
-                                    id: returnData["id"],
-                                    nick: returnData["nick"],
-                                    pw: returnData["pw"],
-                                    accessToken: returnData["accessToken"],
-                                    refreshToken: returnData["refreshToken"],
-                                    deleteCount: returnData["deleteCount"],
-                                    totalCount: returnData['totalCount'],
-                                    currentLevel: returnData['currentLevel'],
-                                    badges: returnData["badgeList"],
-                                    mailAccounts: returnData["mailAccounts"],
-                                  );
+                                      id: returnData["id"],
+                                      nick: returnData["nick"],
+                                      pw: passwordController.text.toString(),
+                                      accessToken: returnData["accessToken"],
+                                      refreshToken: returnData["refreshToken"],
+                                      deleteCount: returnData["deletedCount"],
+                                      totalCount: refreshData['totalCount'],
+                                      currentLevel: returnData['currentLevel'],
+                                      badges: returnData["badgeList"],
+                                      mailAccounts: returnData["mailAccounts"],
+                                      mailCategory: []);
                                   Navigator.pushNamed(
                                       context, "/bottom_tab_bar");
                                   // Navigator.pushNamed(context, "/bottomBar", arguments: returnData);

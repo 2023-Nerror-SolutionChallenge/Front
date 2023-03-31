@@ -7,8 +7,7 @@ import '../models/mail_category.dart';
 var logger = Logger();
 
 class ApiService {
-  static const String baseUrl = "http://34.64.46.40/api/v1";
-  //static const String baseUrl = https://localhost:8080/api/v1
+  static const String baseUrl = " https://localhost:8080/api/v1";
 
   // Post Login
   Future<dynamic> postLogin(String email, password) async {
@@ -43,17 +42,19 @@ class ApiService {
           "EARTH_TUTELARY",
           "MARBON_MARATHONER"
         ];
-        if (data['badgeList'] != null) {
-          data['badgeList'].forEach(
-              (String badge) => {badgeList[badgeMatch.indexOf(badge)] = 1});
-        }
 
+        if (data["badge"] != null) {
+          for (String bg in data["badge"]) {
+            badgeList[badgeMatch.indexOf(bg)] = 1;
+          }
+        }
+        logger.d(data);
         return {
           "flag": true,
           "id": data['id'],
           "nick": data['nickname'],
           "pw": data['password'],
-          "deleteCount": data["deletedCount"],
+          "deletedCount": data["deletedCount"],
           "totalCount": data['totalCount'],
           "currentLevel": data['currentLevel'],
           "mailAccounts": data["accountList"],
@@ -215,12 +216,11 @@ class ApiService {
         ),
       );
       // addmail  응답 리턴 -> accountList totalCount 받아와서 갱신
-      logger.d(response.body.toString());
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
+
         var accountList =
             data["accountList"]; //List<String>의 값을 accountList에 넣어주어야함
-        logger.d(data);
         return {"accountList": accountList};
       } else {
         logger.d('오류 ${response.statusCode}');
@@ -273,18 +273,16 @@ class ApiService {
   // 스마트 스캔 수행
   Future<dynamic> getSmartScan(String id) async {
     try {
-      final url = Uri.parse('$baseUrl/scan?username=$id');
+      final url = Uri.parse('$baseUrl/scan?id=$id');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
         List<MailCategory> mailCategories = [];
-
         for (var mailData in data) {
           mailCategories.add(MailCategory.fromJson(mailData));
         }
 
-        logger.d(mailCategories.toString());
         return mailCategories;
       } else {
         logger.d('오류 ${response.statusCode}');
@@ -335,25 +333,24 @@ class ApiService {
       final url = Uri.parse('$baseUrl/mailbox/refresh?id=$id');
       final response = await http.get(url);
 
+      logger.d("refreshdata => ${response.body}");
+
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
-        logger.d(data.toString());
-
+        logger.d("refreshdata => $data");
         return {
-          "id": data["id"],
-          "nickname": data["nickname"],
-          "deleteCount": data["deletedCount"],
+          "flag": true,
+          "deletedCount": data["deletedCount"],
           "currentLevel": data["currentLevel"],
-          "totalCount": data["totalCount"],
-          // 뱃지 리스트도 같이 주세용
+          "totalCount": data["totalCount"]
         };
       } else {
         logger.d('오류 ${response.statusCode}');
-        return {};
+        return {"flag": false};
       }
     } catch (e) {
       logger.d(e.toString());
-      return {};
+      return {"flag": false};
     }
   }
 }

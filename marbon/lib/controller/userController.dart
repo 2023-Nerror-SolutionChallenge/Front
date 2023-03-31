@@ -1,5 +1,7 @@
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
+import '../models/mail_category.dart';
+
 class UserController extends GetxController {
   String _id = "";
   String _nick = "";
@@ -11,6 +13,7 @@ class UserController extends GetxController {
   int _currentLevel = 0;
   List<int> _badges = [];
   List<dynamic> _mailAccounts = [];
+  List<MailCategory> _mailCategory = [];
 
   get id => _id;
   get nick => _nick;
@@ -22,6 +25,7 @@ class UserController extends GetxController {
   get currentLevel => _currentLevel;
   get badges => _badges;
   get mailAccounts => _mailAccounts;
+  get mailCategory => _mailCategory;
 
   void upadateUserInform(
       {required String id,
@@ -33,7 +37,8 @@ class UserController extends GetxController {
       required int totalCount,
       required int currentLevel,
       required List<int> badges,
-      required List<dynamic> mailAccounts}) {
+      required List<dynamic> mailAccounts,
+      required List<MailCategory> mailCategory}) {
     _id = id;
     _nick = nick;
     _pw = pw;
@@ -44,7 +49,7 @@ class UserController extends GetxController {
     _currentLevel = currentLevel;
     _badges = badges;
     _mailAccounts = mailAccounts;
-
+    _mailCategory = mailCategory;
     update();
   }
 
@@ -65,6 +70,31 @@ class UserController extends GetxController {
 
   void setMailAccounts(List<dynamic> accounts) {
     _mailAccounts = accounts;
+    update();
+  }
+
+  void setMailCategory(List<MailCategory> mails) {
+    _mailCategory = mails;
+    update();
+  }
+
+  void setBadges(List<int> badgeList) {
+    _badges = badgeList;
+    update();
+  }
+
+  void setDeleteCount(int delete) {
+    _deleteCount = delete;
+    update();
+  }
+
+  void setLevel(int lv) {
+    _currentLevel = lv;
+    update();
+  }
+
+  void setTotalCount(int total) {
+    _totalCount = total;
     update();
   }
 }
