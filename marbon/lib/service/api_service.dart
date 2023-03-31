@@ -7,8 +7,7 @@ import '../models/mail_category.dart';
 var logger = Logger();
 
 class ApiService {
-  static const String baseUrl = "http://34.64.46.40/api/v1";
-  //static const String baseUrl = https://localhost:8080/api/v1
+  static const String baseUrl = " https://localhost:8080/api/v1";
 
   // Post Login
   Future<dynamic> postLogin(String email, password) async {
